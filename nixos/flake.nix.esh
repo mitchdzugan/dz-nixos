@@ -1,5 +1,5 @@
 {
-  description = "NixOS configuration for <% hostname %>";
+  description = "NixOS configuration for <%= $(hostname) %>";
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
     sddm-dz.url = "github:mitchdzugan/sddm-dz";
@@ -11,9 +11,9 @@
     ssbm.url = "github:mitchdzugan/ssbm-nix";
   };
   outputs = { self, nixpkgs, nur, ... }@attrs: {
-    nixosConfigurations.<% hostname %> = nixpkgs.lib.nixosSystem {
+    nixosConfigurations.<%= $(hostname) %> = nixpkgs.lib.nixosSystem {
       system = "x86_64-linux";
-      specialArgs = attrs // { hostname = <% hostname %> };
+      specialArgs = attrs // { hostname = "<%= $(hostname) %>"; };
       modules = [ nur.nixosModules.nur ./configuration.nix ];
     };
   };

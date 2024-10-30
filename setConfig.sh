@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-eshPath=$(which esh)
+eshBin=$(which esh)
 if [ $? -ne 0 ]; then
 	exit 1
 fi
@@ -16,6 +16,8 @@ function copyFiles() {
 		if [[ -d $file ]]; then
 			mkdir -p "$finalDir/$relfile"
 			copyFiles $file
+		elif [[ $file == *.esh ]]; then
+			cp <($eshBin $file) "$finalDir/${relfile%.*}"
 		else
 			cp $file "$finalDir/$relfile"
 		fi
