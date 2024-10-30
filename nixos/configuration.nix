@@ -104,6 +104,7 @@ let
   };
   byHostname = {
     mitch-desktop = {
+      musicDir = "/VOID/Media/Music";
       kernalPackages = pkgs.linuxPackages_rt_5_10;
       nvidia = {
         modesetting.enable = true;
@@ -114,6 +115,7 @@ let
       };
     };
     mitch-gazelle = {
+      musicDir = "/Music";
       kernalPackages = pkgs.linuxPackages_xanmod_latest;
       nvidia = {
         modesetting.enable = true;
@@ -134,6 +136,7 @@ let
       };
     };
   };
+  musicDir = byHostname.${hostname}.musicDir;
 in {
   imports =
     [ # Include the results of the hardware scan.
@@ -637,10 +640,10 @@ text-color=#ff6767ff
     extensionPackages = [ pkgs.mopidy-iris pkgs.mopidy-local pkgs.mopidy-mpd ];
     configuration = ''
       [local]
-      media_dir = /VOID/Media/Music
+      media_dir = ${musicDir}
 
       [m3u]
-      playlists_dir = /VOID/Media/Music/Playlists
+      playlists_dir = ${musicDir}/Playlists
 
       [audio]
       output = pulsesink server=127.0.0.1
