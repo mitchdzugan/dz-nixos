@@ -193,6 +193,12 @@ in {
   # Enable the KDE Plasma Desktop Environment.
   # services.displayManager.ly.enable = true;
   services.displayManager.sddm.enable = true;
+  services.displayManager.sddm.settings = {
+    Theme = {
+      CursorSize = 24;
+      CursorTheme = "Bibata-Modern-Ice";
+    };
+  };
   services.xserver.displayManager.setupCommands = "${pkgs.autorandr}/bin/autorandr -c";
   services.displayManager.sddm.theme = "sddm-dz";
   # services.displayManager.sddm.theme = "Elegant";
@@ -517,6 +523,7 @@ text-color=#ff6767ff
   environment.systemPackages = with pkgs; [
     alsa-utils
     bc
+    bibata-cursors
     brightnessctl
     cargo
     cava
