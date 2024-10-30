@@ -422,7 +422,7 @@ bspwm-reset-monitors
           polybar_cava = pkgs.writeShellApplication {
             name = "polybar_cava";
             runtimeInputs = [ pkgs.coreutils pkgs.cava pkgs.gnused ];
-            text = builtins.readFile ./polybar_cava.sh;
+            text = builtins.readFile ./polybar/cava.sh;
           };
         in {
           enable = true;
@@ -433,7 +433,7 @@ bspwm-reset-monitors
             pulseSupport = true;
             mpdSupport = true;
           });
-          config = ./polybar.ini;
+          config = ./polybar/config.ini;
           script = ''
 export PATH=$PATH:${lib.makeBinPath [ pkgs.coreutils pkgs.pamixer pkgs.pulseaudio polybar_cava ]}
 
