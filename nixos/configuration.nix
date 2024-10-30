@@ -2,7 +2,7 @@
 # your system.  Help is available in the configuration.nix(5) man page
 # and in the NixOS manual (accessible by running ‘nixos-help’).
 
-{ hyprland, config, pkgs, lib, home-manager, ssbm, sddm-dz, ... }:
+{ config, pkgs, lib, hostname, home-manager, hyprland, ssbm, sddm-dz, ... }:
 
 let
   lg_hdmi_fingerprint = "00ffffffffffff001e6d6e77f48c0400041f010380462778ea8cb5af4f43ab260e5054210800d1c06140010101010101010101010101e9e800a0a0a0535030203500b9882100001a000000fd0030901ee63c000a202020202020000000fc004c4720554c545241474541520a000000ff003130344e544a4a38533232380a01b8020349f1230907074d100403011f13123f5d5e5f60616d030c002000b83c20006001020367d85dc401788003e30f00186d1a00000205309000045a445a44e305c000e60605015a5a446fc200a0a0a0555030203500b9882100001a5aa000a0a0a0465030203a00b9882100001a565e00a0a0a0295030203500b9882100001aed";
@@ -124,7 +124,7 @@ in {
       fsType = "ext4";
     };
 
-  networking.hostName = "mitch-desktop"; # Define your hostname.
+  networking.hostName = hostname; # Define your hostname.
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
 
   # Configure network proxy if necessary
