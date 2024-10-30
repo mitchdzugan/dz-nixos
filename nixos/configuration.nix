@@ -600,7 +600,7 @@ text-color=#ff6767ff
   # Or disable the firewall altogether.
   # networking.firewall.enable = false;
 
-  hardware.system76.enableAll = true;
+  hardware.system76.enableAll = hostname == "mitch-desktop";
 
   hardware.graphics.enable = true;
 
