@@ -102,6 +102,38 @@ let
       };
     };
   };
+  byHostname = {
+    mitch-desktop = {
+      kernalPackages = pkgs.linuxPackages_rt_5_10;
+      nvidia = {
+        modesetting.enable = true;
+        powerManagement.finegrained = false;
+        open = false;
+        nvidiaSettings = true;
+        package = config.boot.kernelPackages.nvidiaPackages.legacy_470;
+      };
+    };
+    mitch-gazelle = {
+      kernalPackages = pkgs.linuxPackages_xanmod_latest;
+      nvidia = {
+        modesetting.enable = true;
+        powerManagement.finegrained = false;
+        open = false;
+        nvidiaSettings = true;
+        package = config.boot.kernelPackages.nvidiaPackages.beta;
+        prime = {
+          # sync.enable = true;
+          offload = {
+            enable = true;
+            enableOffloadCmd = true;
+          };
+          # Make sure to use the correct Bus ID values for your system!
+          nvidiaBusId = "PCI:1:0:0";
+          intelBusId = "PCI:0:2:0";
+        };
+      };
+    };
+  };
 in {
   imports =
     [ # Include the results of the hardware scan.
@@ -114,15 +146,15 @@ in {
   # Bootloader.
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
-  boot.kernelPackages = pkgs.linuxPackages_rt_5_10;
+  boot.kernelPackages = byHostname.${hostname}.kernalPackages;
   boot.extraModulePackages = with config.boot.kernelPackages; [ gcadapter-oc-kmod ];
-  boot.kernelModules = [ "gcadapter-oc" "nvidia" "nvidia_modeset" "nvidia_uvm" "nvidia_drm" ];
-  boot.kernelParams = [ "threadirqs" "nvidia-drm.modeset=1" "nvidia-drm.fbdev=1" ];
+  boot.kernelModules = [ "gcadapter-oc" ];
+  boot.kernelParams = [ "threadirqs" ];
 
-  fileSystems."/VOID" =
-    { device = "/dev/disk/by-uuid/2f9c67b5-e2d4-4ddf-a3be-496255b3fb16";
-      fsType = "ext4";
-    };
+  fileSystems."/VOID" = lib.mkIf (hostname == "mitch-desktop") {
+    device = "/dev/disk/by-uuid/2f9c67b5-e2d4-4ddf-a3be-496255b3fb16";
+    fsType = "ext4";
+  };
 
   networking.hostName = hostname; # Define your hostname.
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
@@ -574,13 +606,7 @@ text-color=#ff6767ff
 
   services.xserver.videoDrivers = ["nvidia"];
 
-  hardware.nvidia = {
-    modesetting.enable = true;
-    powerManagement.finegrained = false;
-    open = false;
-    nvidiaSettings = true;
-    package = config.boot.kernelPackages.nvidiaPackages.legacy_470;
-  };
+  hardware.nvidia = byHostname.${hostname}.nvidia;
 
   programs.gamemode.enable = true;
 
