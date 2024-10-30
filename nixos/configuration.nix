@@ -189,7 +189,7 @@ in {
   };
   systemd.services.sddm = { after = [ "sddm-avatar.service" ]; };
   services.xserver.windowManager.bspwm.enable = true;
-  # services.desktopManager.plasma6.enable = true;
+  services.desktopManager.plasma6.enable = true;
   # services.xserver.desktopManager.plasma5.enable = true;
   # services.xserver.desktopManager.xfce.enable = true;
   # services.xserver.desktopManager.cinnamon.enable = true;
