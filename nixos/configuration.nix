@@ -490,6 +490,35 @@ done
         latitude = 41.86;
         longitude = -88.12;
       };
+
+      picom = {
+        enable = hostname == "mitch-gazelle";
+        backend = "glx";
+        vSync = true;
+        settings = {
+          shadow = true;
+          shadow-radius = 50;
+          shadow-opacity = 0.35;
+          shadow-offset-x = -49;
+          shadow-offset-y = -47;
+          shadow-color = "#00020b";
+          frame-opacity = 0.95;
+          frame-opacity-for-same-colors = true;
+          inner-border-width = 1;
+          corner-radius = 13;
+          blur-method = "dual_kawase";
+          blur-background = true;
+          blur-background-frame = true;
+          dithered-present = false;
+          detect-client-opacity = true;
+          detect-transient = true;
+          detect-client-leader = true;
+          glx-no-stencil = true;
+          glx-no-rebind-pixmap = true;
+          use-damage = true;
+          xrender-sync-fence = true;
+        };
+      };
     };
 
     # The state version is required and should stay at the version you
