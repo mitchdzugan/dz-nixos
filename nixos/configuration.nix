@@ -484,22 +484,11 @@ done
           '';
         };
 
-      mako = {
-        enable = false;
-        icons = true;
-        # anchor = "center";
-        layer = "top";
-        defaultTimeout = 4000;
-        extraConfig = ''
-text-alignment=center
-background-color=#1E1F2988
-border-size=2
-border-radius=10
-border-color=#BD93F9FF
-
-[body~=.*󰖁.*]
-text-color=#ff6767ff
-        '';
+      redshift = {
+        enable = true;
+        tray = true;
+        latitude = 41.86;
+        longitude = -88.12;
       };
     };
 
