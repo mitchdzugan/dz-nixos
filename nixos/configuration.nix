@@ -548,6 +548,7 @@ done
     cavalier
     coreutils
     discord
+    esh
     file
     ffmpeg
     gh
