@@ -328,7 +328,10 @@ ACTION=="change", SUBSYSTEM=="drm", RUN+="${pkgs.autorandr}/bin/autorandr -c"
       };
       packages = [ pkgs.gimp pkgs.mpv ];
       ## sessionVariables.QT_QPA_PLATFORM = "wayland";
-      sessionPath = [ "/home/dz/Projects/dz-bin" ];
+      sessionPath = [
+        "/home/dz/Projects/dz-bin"
+        "/home/dz/Projects/dz-bspwm/bin"
+      ];
     };
 
     gtk.enable = true;
