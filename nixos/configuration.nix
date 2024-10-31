@@ -12,10 +12,10 @@ let
   autorandr_profiles = {
     "gazelle_solo" = {
       fingerprint = {
-        "eDP1-1" = gazelle_fingerprint;
+        "eDP-1" = gazelle_fingerprint;
       };
       config = {
-        "eDP1-1" = {
+        "eDP-1" = {
           enable = true;
           primary = false;
           position = "0x0";
@@ -27,11 +27,11 @@ let
     };
     "gazelle_dual" = {
       fingerprint = {
-        "eDP1-1" = gazelle_fingerprint;
+        "eDP-1" = gazelle_fingerprint;
         "HDMI-1" = acer_hdmi_fingerprint;
       };
       config = {
-        "eDP1-1" = {
+        "eDP-1" = {
           enable = true;
           primary = false;
           position = "0x0";
