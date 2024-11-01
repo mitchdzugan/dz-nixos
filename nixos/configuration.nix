@@ -106,6 +106,8 @@ let
     mitch-desktop = {
       musicDir = "/VOID/Media/Music";
       kernalPackages = pkgs.linuxPackages_rt_5_10;
+      bspwmExtraConfig = ''
+      '';
       nvidia = {
         modesetting.enable = true;
         powerManagement.finegrained = false;
@@ -117,6 +119,9 @@ let
     mitch-gazelle = {
       musicDir = "/Music";
       kernalPackages = pkgs.linuxPackages_xanmod_latest;
+      bspwmExtraConfig = ''
+xinputSetTouchpadNaturalScroll
+      '';
       nvidia = {
         modesetting.enable = true;
         powerManagement.finegrained = false;
@@ -397,19 +402,20 @@ ACTION=="change", SUBSYSTEM=="drm", RUN+="${pkgs.autorandr}/bin/autorandr -c"
 
     xsession.windowManager.bspwm = {
       enable = true;
-      extraConfigEarly = ''
+      extraConfigEarly = byHostname.${hostname}.bspwmExtraConfig + ''
 autorandr -c
 xsetroot -cursor_name left_ptr
 xset s off -dpms
-systemctl --user restart polybar
+systemctl --user start picom
+systemctl --user start polybar
+systemctl --user start redshift
+systemctl --user start bspwm-polybar
 nitrogen --restore
-## picom &
 blueman-applet &
 nm-applet &
-## xinput set-prop 12 344 1
       '';
       extraConfig = ''
-bspwm-reset-monitors
+bspwm-reset-monitors.js
       '';
       settings = {
         focus_follows_pointer = true;
@@ -433,7 +439,17 @@ bspwm-reset-monitors
           "super + w" = "firefox";
           "super + e" = "thunar";
           "super + {t,shift + t,f,m}" = "bspc node -t {tiled,pseudo_tiled,floating,fullscreen}";
-          "super + {_,shift + }{1-9,0}" = "bspc {desktop -f,node -d} '^{1-9,10}'";
+          # "super + {_,shift + }{1-9,0}" = "{bspwm-focus-desktop.js,bspc node -d} '^{1-9,10}'";
+          "super + 1" = "bspwm-focus-desktop.js 1";
+          "super + 2" = "bspwm-focus-desktop.js 2";
+          "super + 3" = "bspwm-focus-desktop.js 3";
+          "super + 4" = "bspwm-focus-desktop.js 4";
+          "super + 5" = "bspwm-focus-desktop.js 5";
+          "super + 6" = "bspwm-focus-desktop.js 6";
+          "super + 7" = "bspwm-focus-desktop.js 7";
+          "super + 8" = "bspwm-focus-desktop.js 8";
+          "super + 9" = "bspwm-focus-desktop.js 9";
+          "super + 0" = "bspwm-focus-desktop.js 10";
           "super + {Left,Right,Up,Down}" = "bspc node -f {west,east,north,south}";
           "XF86MonBrightnessUp" = "brightnessUp";
           "XF86MonBrightnessDown" = "brightnessDown";
@@ -479,7 +495,7 @@ bspwm-reset-monitors
           });
           config = ./polybar/config.ini;
           script = ''
-export PATH=$PATH:${lib.makeBinPath [ pkgs.coreutils pkgs.pamixer pkgs.pulseaudio polybar_cava ]}
+export PATH=$PATH:/home/dz/Projects/dz-bspwm/bin:${lib.makeBinPath [ pkgs.coreutils pkgs.which pkgs.bspwm pkgs.nodejs pkgs.pamixer pkgs.pulseaudio polybar_cava ]}
 
 for m in $(polybar --list-monitors | cut -d":" -f1); do
     MONITOR=$m polybar --reload example &
@@ -495,7 +511,7 @@ done
       };
 
       picom = {
-        enable = hostname == "mitch-gazelle";
+        enable = true;
         backend = "glx";
         vSync = true;
         settings = {
@@ -528,7 +544,23 @@ done
     # originally installed.
     home.stateVersion = "24.05";
   };
+
   users.groups.voiders.members = [ "dz" "mopidy" ];
+
+  systemd.user.services.picom.wantedBy = [];
+  systemd.user.services.polybar.wantedBy = [];
+  systemd.user.services.redshift.wantedBy = [];
+  systemd.user.services.bspwm-polybar = {
+    enable = true;
+    description = "control dzbspwm polybar module";
+    serviceConfig = {
+      Type = "exec";
+      ExecStart = "/home/dz/Projects/dz-bin/bspwm-polybar-watch";
+      Restart = "on-failure";
+      Environment="PATH=$PATH:${lib.makeBinPath [ pkgs.coreutils pkgs.bash pkgs.which pkgs.ps pkgs.nodejs pkgs.bspwm pkgs.polybar ]}:/home/dz/Projects/dz-bin:/home/dz/Projects/dz-bspwm/bin";
+    };
+    wantedBy = [];
+  };
 
   programs.dconf.enable = true;
 
@@ -560,6 +592,7 @@ done
     grim
     gtk4
     htop
+    jq
     killall
     kitty
     libnotify
@@ -610,6 +643,7 @@ done
         wlrobs
       ];
     })
+    xorg.xev
     yarn
   ];
 
