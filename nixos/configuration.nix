@@ -431,8 +431,8 @@ bspwm-reset-monitors.js
           center = true;
         };
         Ztr = {
-          border = "off";
-          focus = "off";
+          border = false;
+          focus = false;
           state = "floating";
           center = true;
         };
