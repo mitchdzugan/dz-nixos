@@ -380,6 +380,16 @@ ACTION=="change", SUBSYSTEM=="drm", RUN+="${pkgs.autorandr}/bin/autorandr -c"
         vimdiffAlias = true;
       };
 
+      neovide = {
+        enable = true;
+        settings = {
+          font = {
+            normal = ["MonaspiceKr Nerd Font Mono"];
+            size = 10.0;
+          };
+        };
+      };
+
       firefox = {
         enable = true;
         policies = {
@@ -643,6 +653,7 @@ done
     ssbm.packages.x86_64-linux.slippi-netplay
     ssbm.packages.x86_64-linux.slippi-playback
     transmission_4-qt
+    ttyd
     unzip
     vim
     vlc
