@@ -372,6 +372,14 @@ ACTION=="change", SUBSYSTEM=="drm", RUN+="${pkgs.autorandr}/bin/autorandr -c"
         nix-direnv.enable = true;
       };
 
+      neovim = {
+        enable = true;
+        defaultEditor = true;
+        viAlias = true;
+        vimAlias = true;
+        vimdiffAlias = true;
+      };
+
       firefox = {
         enable = true;
         policies = {
@@ -417,6 +425,18 @@ nm-applet &
       extraConfig = ''
 bspwm-reset-monitors.js
       '';
+      rules = {
+        ztr = {
+          state = "floating";
+          center = true;
+        };
+        Ztr = {
+          border = "off";
+          focus = "off";
+          state = "floating";
+          center = true;
+        };
+      };
       settings = {
         focus_follows_pointer = true;
         pointer_follows_focus = true;
@@ -440,16 +460,7 @@ bspwm-reset-monitors.js
           "super + e" = "thunar";
           "super + {t,shift + t,f,m}" = "bspc node -t {tiled,pseudo_tiled,floating,fullscreen}";
           # "super + {_,shift + }{1-9,0}" = "{bspwm-focus-desktop.js,bspc node -d} '^{1-9,10}'";
-          "super + 1" = "bspwm-focus-desktop.js 1";
-          "super + 2" = "bspwm-focus-desktop.js 2";
-          "super + 3" = "bspwm-focus-desktop.js 3";
-          "super + 4" = "bspwm-focus-desktop.js 4";
-          "super + 5" = "bspwm-focus-desktop.js 5";
-          "super + 6" = "bspwm-focus-desktop.js 6";
-          "super + 7" = "bspwm-focus-desktop.js 7";
-          "super + 8" = "bspwm-focus-desktop.js 8";
-          "super + 9" = "bspwm-focus-desktop.js 9";
-          "super + 0" = "bspwm-focus-desktop.js 10";
+          "super + {1-9,0}" = "bspwm-focus-desktop.js {1-9,10}";
           "super + {Left,Right,Up,Down}" = "bspc node -f {west,east,north,south}";
           "XF86MonBrightnessUp" = "brightnessUp";
           "XF86MonBrightnessDown" = "brightnessDown";
@@ -514,6 +525,7 @@ done
         enable = true;
         backend = "glx";
         vSync = true;
+        extraArgs = ["--config" "/home/dz/.config/picom/final.conf"];
         settings = {
           shadow = true;
           shadow-radius = 50;
@@ -586,11 +598,15 @@ done
     esh
     file
     ffmpeg
-    gh
     gcc
+    gh
+    gjs
     gnused
     grim
+    gtk3
+    gtk3-x11
     gtk4
+    heroku
     htop
     jq
     killall
@@ -601,9 +617,11 @@ done
     networkmanagerapplet
     nitrogen
     nodejs
+    nwjs-sdk
     pamixer
     pavucontrol
     pcmanfm
+    perl
     picom
     # picom-pijulius
     pkg-config
@@ -613,6 +631,7 @@ done
       python-pkgs.dmenu-python
       python-pkgs.mpd2
       python-pkgs.requests
+      python-pkgs.xlib
     ]))
     rofi
     ### Need the thing
@@ -634,6 +653,8 @@ done
     wev
     wget
     wl-clipboard
+    wmctrl
+    wmutils-core
     wofi
     wpaperd
     (pkgs.wrapOBS {
@@ -643,6 +664,8 @@ done
         wlrobs
       ];
     })
+    xdo
+    xdotool
     xorg.xev
     yarn
   ];
