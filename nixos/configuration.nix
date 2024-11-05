@@ -378,6 +378,72 @@ ACTION=="change", SUBSYSTEM=="drm", RUN+="${pkgs.autorandr}/bin/autorandr -c"
         viAlias = true;
         vimAlias = true;
         vimdiffAlias = true;
+        coc = {
+          enable = true;
+        };
+        extraConfig = builtins.readFile ./nvim/init.vim;
+        extraLuaConfig = builtins.readFile ./nvim/init.lua;
+        plugins = let
+          nvim-treesitter-with-plugins = pkgs.vimPlugins.nvim-treesitter.withPlugins (treesitter-plugins:
+            with treesitter-plugins; [
+              bash
+              c
+              clojure
+              cmake
+              cpp
+              css
+              csv
+              dhall
+              dockerfile
+              elixir
+              erlang
+              gitignore
+              graphql
+              haskell
+              html
+              ini
+              javascript
+              json
+              latex
+              lua
+              luadoc
+              make
+              markdown
+              markdown_inline
+              menhir
+              nix
+              ocaml
+              ocaml_interface
+              ocamllex
+              org
+              purescript
+              python
+              rasi
+              regex
+              ruby
+              rust
+              scala
+              scss
+              sql
+              toml
+              typescript
+              vim
+              xml
+              yaml
+            ]);
+        in with pkgs.vimPlugins; [
+          dracula-nvim
+          image-nvim
+          nui-nvim
+          nvim-lspconfig
+          nvim-tree-lua
+          nvim-treesitter-with-plugins
+          nvim-web-devicons
+          plenary-nvim
+          rainbow-delimiters-nvim
+          telescope-nvim
+          venn-nvim
+        ];
       };
 
       neovide = {
@@ -464,13 +530,15 @@ bspwm-reset-monitors.js
         keybindings = {
           "super + shift + q" = "bspc quit";
           "super + q" = "bspc node --close";
-          "super + @space" = "openApp";
+          "super + space" = "dzKeyMenu";
+          "super + slash" = "openApp";
           "super + Return" = "kitty";
           "super + w" = "firefox";
           "super + e" = "thunar";
+          "super + grave" = "bspwm-cycle-monitor-focus.js";
           "super + {t,shift + t,f,m}" = "bspc node -t {tiled,pseudo_tiled,floating,fullscreen}";
-          # "super + {_,shift + }{1-9,0}" = "{bspwm-focus-desktop.js,bspc node -d} '^{1-9,10}'";
-          "super + {1-9,0}" = "bspwm-focus-desktop.js {1-9,10}";
+          "super + {1-9,0,equal}" = "bspwm-focus-desktop.js {1-9,10,f}";
+          "super + shift + {1-9,0,plus}" = "bspwm-move-to-desktop.js -d {1-9,10,f}";
           "super + {Left,Right,Up,Down}" = "bspc node -f {west,east,north,south}";
           "XF86MonBrightnessUp" = "brightnessUp";
           "XF86MonBrightnessDown" = "brightnessDown";
@@ -480,6 +548,9 @@ bspwm-reset-monitors.js
           "XF86AudioPlay" = "pause.py";
           "XF86AudioNext" = "next.py";
           "XF86AudioPrev" = "prev.py";
+          "Print" = "ss_dir_scrot";
+          "ctrl + Print" = "ss_dir_scrot --select";
+          "shift + Print" = "ss_dir_scrot -u";
         };
       };
 
@@ -516,7 +587,7 @@ bspwm-reset-monitors.js
           });
           config = ./polybar/config.ini;
           script = ''
-export PATH=$PATH:/home/dz/Projects/dz-bspwm/bin:${lib.makeBinPath [ pkgs.coreutils pkgs.which pkgs.bspwm pkgs.nodejs pkgs.pamixer pkgs.pulseaudio polybar_cava ]}
+export PATH=$PATH:/home/dz/Projects/dz-bspwm/bin:${lib.makeBinPath [ pkgs.coreutils pkgs.systemd pkgs.which pkgs.bspwm pkgs.nodejs pkgs.pamixer pkgs.pulseaudio polybar_cava ]}
 
 for m in $(polybar --list-monitors | cut -d":" -f1); do
     MONITOR=$m polybar --reload example &
@@ -644,6 +715,7 @@ done
       python-pkgs.xlib
     ]))
     rofi
+    scrot
     ### Need the thing
     sddm-chili-theme
     ####

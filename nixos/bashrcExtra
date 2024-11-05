@@ -73,3 +73,11 @@ then
     alias egrep='egrep --colour=auto'
     alias fgrep='fgrep --colour=auto'
 fi
+
+function cdproj() {
+	cd $(codeProject.py) "$@"
+}
+
+function pushdproj() {
+	pushd $(codeProject.py) "$@"
+}
