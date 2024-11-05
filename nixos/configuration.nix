@@ -372,89 +372,8 @@ ACTION=="change", SUBSYSTEM=="drm", RUN+="${pkgs.autorandr}/bin/autorandr -c"
         nix-direnv.enable = true;
       };
 
-      neovim = {
-        enable = true;
-        defaultEditor = true;
-        viAlias = true;
-        vimAlias = true;
-        vimdiffAlias = true;
-        coc = {
-          enable = true;
-        };
-        extraConfig = builtins.readFile ./nvim/init.vim;
-        extraLuaConfig = builtins.readFile ./nvim/init.lua;
-        plugins = let
-          nvim-treesitter-with-plugins = pkgs.vimPlugins.nvim-treesitter.withPlugins (treesitter-plugins:
-            with treesitter-plugins; [
-              bash
-              c
-              clojure
-              cmake
-              cpp
-              css
-              csv
-              dhall
-              dockerfile
-              elixir
-              erlang
-              gitignore
-              graphql
-              haskell
-              html
-              ini
-              javascript
-              json
-              latex
-              lua
-              luadoc
-              make
-              markdown
-              markdown_inline
-              menhir
-              nix
-              ocaml
-              ocaml_interface
-              ocamllex
-              org
-              purescript
-              python
-              rasi
-              regex
-              ruby
-              rust
-              scala
-              scss
-              sql
-              toml
-              typescript
-              vim
-              xml
-              yaml
-            ]);
-        in with pkgs.vimPlugins; [
-          dracula-nvim
-          image-nvim
-          nui-nvim
-          nvim-lspconfig
-          nvim-tree-lua
-          nvim-treesitter-with-plugins
-          nvim-web-devicons
-          plenary-nvim
-          rainbow-delimiters-nvim
-          telescope-nvim
-          venn-nvim
-        ];
-      };
-
-      neovide = {
-        enable = true;
-        settings = {
-          font = {
-            normal = ["MonaspiceKr Nerd Font Mono"];
-            size = 10.0;
-          };
-        };
-      };
+      neovim = import ./nvim/config.nix { lib = lib; pkgs = pkgs; };
+      neovide = import ./nvim/neovide.nix;
 
       firefox = {
         enable = true;
@@ -747,6 +666,7 @@ done
         wlrobs
       ];
     })
+    xclip
     xdo
     xdotool
     xorg.xev
