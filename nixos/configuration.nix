@@ -633,6 +633,7 @@ done
       python-pkgs.requests
       python-pkgs.xlib
     ]))
+    ripgrep
     rofi
     scrot
     ### Need the thing

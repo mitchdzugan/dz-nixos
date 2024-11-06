@@ -8,16 +8,12 @@ end
 
 local ivy_full = {
   theme = "ivy",
-  layout_config = {
-    height_ratio = 1.0,
-  }
+  -- layout_config = { height_ratio = 1.0 }
 }
   
 local ivy_compact = {
   theme = "ivy",
-  layout_config = {
-    height_ratio = 0.75,
-  }
+  -- layout_config = { height_ratio = 0.75 }
 }
   
 require('telescope').setup{
@@ -383,6 +379,7 @@ require('nvim-cursorline').setup {
   }
 }
 
+require "coq"
 require("tidy").setup {}
 require("ibl").setup()
 require('gitsigns').setup()
