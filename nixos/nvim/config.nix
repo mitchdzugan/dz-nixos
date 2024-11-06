@@ -6,9 +6,9 @@
   viAlias = true;
   vimAlias = true;
   vimdiffAlias = true;
-  coc = {
-    enable = true;
-  };
+  withNodeJs = true;
+  withPython3 = true;
+  withRuby = true;
   extraConfig = builtins.readFile ./init.vim;
   extraLuaConfig = builtins.readFile ./init.lua;
   plugins = let

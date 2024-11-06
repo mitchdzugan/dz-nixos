@@ -379,7 +379,6 @@ require('nvim-cursorline').setup {
   }
 }
 
-require "coq"
 require("tidy").setup {}
 require("ibl").setup()
 require('gitsigns').setup()
