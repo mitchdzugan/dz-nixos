@@ -2,7 +2,7 @@
 # your system.  Help is available in the configuration.nix(5) man page
 # and in the NixOS manual (accessible by running ‘nixos-help’).
 
-{ config, pkgs, lib, hostname, home-manager, hyprland, ssbm, sddm-dz, ... }:
+{ config, pkgs, lib, hostname, home-manager, hyprland, ssbm, sddm-dz, wezterm-flake, ... }:
 
 let
   lg_hdmi_fingerprint = "00ffffffffffff001e6d6e77f48c0400041f010380462778ea8cb5af4f43ab260e5054210800d1c06140010101010101010101010101e9e800a0a0a0535030203500b9882100001a000000fd0030901ee63c000a202020202020000000fc004c4720554c545241474541520a000000ff003130344e544a4a38533232380a01b8020349f1230907074d100403011f13123f5d5e5f60616d030c002000b83c20006001020367d85dc401788003e30f00186d1a00000205309000045a445a44e305c000e60605015a5a446fc200a0a0a0555030203500b9882100001a5aa000a0a0a0465030203a00b9882100001a565e00a0a0a0295030203500b9882100001aed";
@@ -278,7 +278,7 @@ in {
     pulse.enable = false;
     #### # If you want to use JACK applications, uncomment this
     #### #jack.enable = true;
-#### 
+####
     #### # use the example session manager (no others are packaged yet so this is enabled by default,
     #### # no need to redefine it in your config for now)
     #### #media-session.enable = true;
@@ -322,7 +322,7 @@ ACTION=="change", SUBSYSTEM=="drm", RUN+="${pkgs.autorandr}/bin/autorandr -c"
     packages = with pkgs; [ ];
   };
 
-  home-manager.users.dz = { pkgs, ... }: {
+  home-manager.users.dz = hm@{ pkgs, ... }: {
     home = {
       pointerCursor = {
         gtk.enable = true;
@@ -344,6 +344,13 @@ ACTION=="change", SUBSYSTEM=="drm", RUN+="${pkgs.autorandr}/bin/autorandr -c"
     gtk.theme.name = "rose-pine";
     gtk.iconTheme.package = pkgs.dracula-icon-theme;
     gtk.iconTheme.name = "Dracula";
+
+    xdg.configFile = {
+      "nvim/lua" = {
+        source = hm.config.lib.file.mkOutOfStoreSymlink ./nvim/lua;
+        recursive = true;
+      };
+    };
 
     programs = {
       autorandr = {
@@ -370,6 +377,124 @@ ACTION=="change", SUBSYSTEM=="drm", RUN+="${pkgs.autorandr}/bin/autorandr -c"
         enable = true;
         enableBashIntegration = true;
         nix-direnv.enable = true;
+      };
+
+      alacritty = {
+        enable = true;
+        settings = {
+          env.WINIT_X11_SCALE_FACTOR = "1.0";
+          window.opacity = 0.85;
+          colors.transparent_background_colors = true;
+          font.size = 11.0;
+          font.normal = { family = "monospace"; style = "Medium"; };
+          colors.primary = {
+            foreground = "#e0def4";
+            background = "#191724";
+            dim_foreground = "#908caa";
+            bright_foreground = "#e0def4";
+          };
+
+          colors.cursor = {
+            text = "#e0def4";
+            cursor = "#524f67";
+          };
+
+          colors.vi_mode_cursor = {
+            text = "#e0def4";
+            cursor = "#524f67";
+          };
+
+          colors.search.matches = {
+            foreground = "#908caa";
+            background = "#26233a";
+          };
+
+          colors.search.focused_match = {
+            foreground = "#191724";
+            background = "#ebbcba";
+          };
+
+          colors.hints.start = {
+            foreground = "#908caa";
+            background = "#1f1d2e";
+          };
+
+          colors.hints.end = {
+            foreground = "#6e6a86";
+            background = "#1f1d2e";
+          };
+
+          colors.line_indicator = {
+            foreground = "None";
+            background = "None";
+          };
+
+          colors.footer_bar = {
+            foreground = "#e0def4";
+            background = "#1f1d2e";
+          };
+
+          colors.selection = {
+            text = "#e0def4";
+            background = "#403d52";
+          };
+
+          colors.normal = {
+            black = "#26233a";
+            red = "#eb6f92";
+            green = "#31748f";
+            yellow = "#f6c177";
+            blue = "#9ccfd8";
+            magenta = "#c4a7e7";
+            cyan = "#ebbcba";
+            white = "#e0def4";
+          };
+
+          colors.bright = {
+            black = "#6e6a86";
+            red = "#eb6f92";
+            green = "#31748f";
+            yellow = "#f6c177";
+            blue = "#9ccfd8";
+            magenta = "#c4a7e7";
+            cyan = "#ebbcba";
+            white = "#e0def4";
+          };
+
+          colors.dim = {
+            black = "#6e6a86";
+            red = "#eb6f92";
+            green = "#31748f";
+            yellow = "#f6c177";
+            blue = "#9ccfd8";
+            magenta = "#c4a7e7";
+            cyan = "#ebbcba";
+            white = "#e0def4";
+          };
+        };
+      };
+
+      wezterm = {
+        enable = true;
+        package = wezterm-flake.packages."${pkgs.system}".default;
+        enableBashIntegration = true;
+        extraConfig = ''
+          return {
+            color_scheme = "rose-pine",
+            font = wezterm.font_with_fallback({
+              "MonaspiceKr Nerd Font Mono",
+              "ComicShannsMono Nerd Font Mono",
+              "Monaspace Krypton",
+              "Ubuntu Mono derivative Powerline",
+            }),
+            hide_tab_bar_if_only_one_tab = true,
+            window_background_opacity = 0.85,
+            text_background_opacity = 0.45,
+            font_size = 11.0,
+            window_padding = { top = 0, left = 0, right = 0, bottom = 0 },
+            freetype_load_flags = 'NO_HINTING',
+          }
+        '';
       };
 
       neovim = import ./nvim/config.nix { lib = lib; pkgs = pkgs; };
@@ -464,6 +589,9 @@ bspwm-reset-monitors.js
           "XF86AudioRaiseVolume" = "volumeUp";
           "XF86AudioLowerVolume" = "volumeDown";
           "XF86AudioMute" = "volumeToggleMute";
+          "shift + XF86AudioRaiseVolume" = "next.py";
+          "shift + XF86AudioLowerVolume" = "prev.py";
+          "shift + XF86AudioMute" = "pause.py";
           "XF86AudioPlay" = "pause.py";
           "XF86AudioNext" = "next.py";
           "XF86AudioPrev" = "prev.py";
@@ -488,7 +616,7 @@ bspwm-reset-monitors.js
         };
       };
 
-      polybar = 
+      polybar =
         let
           polybar_cava = pkgs.writeShellApplication {
             name = "polybar_cava";
@@ -523,6 +651,7 @@ done
 
       picom = {
         enable = true;
+        package = pkgs.picom;
         backend = "glx";
         vSync = true;
         extraArgs = ["--config" "/home/dz/.config/picom/final.conf"];
@@ -596,11 +725,13 @@ done
     coreutils
     discord
     esh
+    fastfetch
     file
     ffmpeg
     gcc
     gh
     gjs
+    glrnvim
     gnused
     grim
     gtk3
@@ -622,8 +753,6 @@ done
     pavucontrol
     pcmanfm
     perl
-    picom
-    # picom-pijulius
     pkg-config
     pulseaudio
     (python3.withPackages (python-pkgs: [
@@ -646,6 +775,7 @@ done
     ssbm.packages.x86_64-linux.slippi-playback
     transmission_4-qt
     ttyd
+    ueberzugpp
     unzip
     vim
     vlc
@@ -768,8 +898,9 @@ done
     fira-code-symbols
     font-awesome
     liberation_ttf
+    monaspace
     mplus-outline-fonts.githubRelease
-    nerdfonts
+    (nerdfonts.override { fonts = [ "ComicShannsMono" "Monaspace" "NerdFontsSymbolsOnly" ]; })
     noto-fonts
     noto-fonts-cjk-sans
     noto-fonts-emoji

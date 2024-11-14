@@ -21,7 +21,17 @@ set expandtab
 set tabstop=2
 set shiftwidth=2
 
-colorscheme rose-pine-main
+set t_ZH=␛[3m
+set t_ZR=␛[23m
+
+let mapleader = "\\"
+let maplocalleader = ","
+
+autocmd BufReadPost * if @% !~# '\.git[\/\\]COMMIT_EDITMSG$' && line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g`\"" | endif
+
+" catppuccin-latte, catppuccin-frappe, catppuccin-macchiato, catppuccin-mocha
+colorscheme catppuccin-mocha
+" colorscheme rose-pine-main
 
 syntax on
 if has('termguicolors')
@@ -32,6 +42,22 @@ set clipboard+=unnamedplus
 set noshowcmd
 hi MatchParen gui=underline
 
+let g:vim_json_conceal = 0
+let g:vim_markdown_conceal = 0
+
 set guicursor=n-v-c:block,i-ci-ve:ver25,r-cr:hor20,o:hor50
   \,a:blinkwait700-blinkoff400-blinkon250-Cursor/lCursor
   \,sm:block-blinkwait175-blinkoff150-blinkon175
+
+" syn match ZTodoOpen /\[ \]/ conceal cchar=_
+" syn match ZTodoWip /\[-\]/ conceal cchar=o
+" function! SetSyntax()
+  " :syn match ZTodoDoneL contained "\[" conceal cchar=⦗
+  " :syn match ZTodoDoneM contained "x" conceal cchar=🗸
+  " :syn match ZTodoDoneR contained "\]" conceal cchar=⦘
+  " :syn match ZTodoDone "\[x\]" contains=ZTodoDoneL,ZTodoDoneM,ZTodoDoneR
+  " :highlight! link ZTodoDone RenderMarkdownSuccess
+" endfunction
+
+" :command! -nargs=0 SetSyntax :call SetSyntax()
+" set conceallevel=2

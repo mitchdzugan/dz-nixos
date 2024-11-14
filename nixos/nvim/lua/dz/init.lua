@@ -1,0 +1,306 @@
+require("nvim-tree").setup({
+  hijack_cursor = true,
+  hijack_netrw = false,
+  actions = { open_file = { quit_on_open = true } },
+})
+
+require("dz.markdown")
+
+local function ivy_dynamic_height(ratio)
+  return {
+    theme = "ivy",
+    layout_config = {
+      height = function(_, _, max_lines)
+        return math.floor(max_lines * ratio)
+      end
+    }
+  }
+end
+
+local ivy_full = ivy_dynamic_height(1.0)
+local ivy_compact = ivy_dynamic_height(0.75)
+
+require('telescope').setup{
+  defaults = {
+    theme = "ivy",
+    layout_strategy = "vertical",
+    mappings = {
+      i = {
+        ["<esc>"] = "close",
+        ["<C-h>"] = "which_key",
+      }
+    }
+  },
+  pickers = {
+    -- GLOBAL
+    find_files = ivy_compact,
+    live_grep = ivy_full,
+    buffers = ivy_compact,
+    help_tags = ivy_compact,
+    current_buffer_fuzzy_find = ivy_full,
+    treesitter = ivy_full,
+  }
+}
+
+local rainbow_delimiters = require 'rainbow-delimiters'
+
+vim.g.rainbow_delimiters = {
+  strategy = {
+    [''] = rainbow_delimiters.strategy['global'],
+    vim = rainbow_delimiters.strategy['local'],
+  },
+  query = {
+    [''] = 'rainbow-delimiters',
+    lua = 'rainbow-blocks',
+  },
+  highlight = {
+    'RainbowDelimiterRed',
+    'RainbowDelimiterYellow',
+    'RainbowDelimiterBlue',
+    'RainbowDelimiterOrange',
+    'RainbowDelimiterGreen',
+    'RainbowDelimiterViolet',
+    'RainbowDelimiterCyan',
+  },
+}
+
+require('lualine').setup()
+require("nvim-paredit").setup({
+  use_default_keys = false,
+  indent = {
+    enabled = true,
+  }
+})
+
+local function notify(funname, opts)
+  opts.once = vim.F.if_nil(opts.once, false)
+  local level = vim.log.levels[opts.level]
+  if not level then
+    error("Invalid error level", 2)
+  end
+  local notify_fn = opts.once and vim.notify_once or vim.notify
+  notify_fn(string.format("[telescope.%s]: %s", funname, opts.msg), level, {
+    title = "telescope.nvim",
+  })
+end
+
+if (vim.g.dz_dev == nil) then
+  vim.g.dz_dev = {
+    backgrounded = 0,
+    tabs = {},
+    start_picking = function()
+      local dz_dev = vim.g.dz_dev
+      dz_dev.backgrounded = 0
+      vim.g.dz_dev = dz_dev
+    end,
+    stop_picking = function()
+      return nil -- pass for now
+    end,
+    prenav = function (fname, newtab, col, row)
+      local dz_dev =  vim.g.dz_dev
+      local currfile = vim.api.nvim_buf_get_name(0)
+      local tab_id = vim.api.nvim_get_current_tabpage()
+      local tabs = dz_dev.tabs
+      local tab = tabs[tab_id] or {}
+      if (newtab) then
+        tab = dz_dev.newtab or {}
+      end
+      local history = tab.history or {}
+      local position = math.min(tab.position or 0, #history)
+      local new_position = position + 1
+      local new_history = {}
+      for i=1, position do new_history[i] = history[i] end
+      new_history[new_position] = { fname = fname, col = col, row = row }
+      tab.history = new_history
+      tab.position = new_position
+      if (tab.last_position == nil or history[tab.last_position].fname ~= currfile) then
+        tab.last_position = ((new_history[position] == nil) and new_position) or position
+      end
+      if (newtab) then
+        dz_dev.newtab = tab
+      else
+        tabs[tab_id] = tab
+        dz_dev.tabs = tabs
+      end
+      vim.g.dz_dev = dz_dev
+    end
+  }
+end
+
+function handle_enter (ev)
+  local currfile = vim.api.nvim_buf_get_name(0)
+  if (currfile == "") then return end
+  local tab_id = vim.api.nvim_get_current_tabpage()
+  local dz_dev =  vim.g.dz_dev
+  local tabs = dz_dev.tabs
+  local tab = tabs[tab_id]
+  if (tab == nil) then
+    tab = dz_dev.newtab or {}
+  end
+  local history = tab.history or {}
+  local position = math.min(tab.position or 0, #history)
+  local is_set = (history[position] or {}).fname == currfile
+  if (not is_set) then
+    local new_position = position + 1
+    local new_history = {}
+    for i=1, position do new_history[i] = history[i] end
+    new_history[new_position] = { fname = currfile }
+    tab.history = new_history
+    tab.position = new_position
+    if (tab.last_position == nil or history[tab.last_position].fname ~= currfile) then
+      tab.last_position = ((new_history[position] == nil) and new_position) or position
+    end
+  end
+  tabs[tab_id] = tab
+  dz_dev.newtab = nil
+  dz_dev.tabs = tabs
+  vim.g.dz_dev = dz_dev
+end
+
+vim.api.nvim_create_autocmd({"BufEnter"}, {
+  pattern = {"*"},
+  callback = function(ev)
+    handle_enter(ev)
+  end
+})
+
+function move_in_tab_history(amount)
+  local tab_id = vim.api.nvim_get_current_tabpage()
+  local dz_dev =  vim.g.dz_dev
+  local tabs = dz_dev.tabs
+  local tab = tabs[tab_id] or {}
+  local position = tab.position or 1
+  local history = tab.history
+  local new_position = math.min(#history, math.max(1, position + amount))
+  local nav_data = history[new_position]
+  if (new_position == position or nav_data == nil) then return end
+  tab.position = new_position
+  tabs[tab_id] = tab
+  dz_dev.tabs = tabs
+  vim.g.dz_dev = dz_dev
+  vim.cmd("e " .. nav_data.fname)
+  local row = nav_data.row
+  local col = nav_data.col or 0
+  if (row ~= nil) then
+    vim.cmd("call cursor(" .. row .. ", " .. col ")")
+  end
+end
+
+function back_tab_history() move_in_tab_history(-1) end
+function frwd_tab_history() move_in_tab_history( 1) end
+vim.api.nvim_create_user_command("TabHistoryBack", back_tab_history, { nargs = 0 })
+vim.api.nvim_create_user_command("TabHistoryFrwd", frwd_tab_history, { nargs = 0 })
+vim.keymap.set('n', 'H', ':TabHistoryBack<cr>')
+vim.keymap.set('n', 'L', ':TabHistoryFrwd<cr>')
+
+function mru_in_tab()
+  local tab_id = vim.api.nvim_get_current_tabpage()
+  local dz_dev =  vim.g.dz_dev
+  local tabs = dz_dev.tabs
+  local tab = tabs[tab_id] or {}
+  local history = tab.history
+  local position = tab.position or 1
+  local last_position = tab.last_position or 1
+  local nav_data = history[last_position]
+  if (last_position == position or nav_data == nil) then return end
+  tab.position = last_position
+  tab.last_position = position
+  tabs[tab_id] = tab
+  dz_dev.tabs = tabs
+  vim.g.dz_dev = dz_dev
+  vim.cmd("e " .. nav_data.fname)
+  local row = nav_data.row
+  local col = nav_data.col or 0
+  if (row ~= nil) then
+    vim.cmd("call cursor(" .. row .. ", " .. col ")")
+  end
+end
+vim.api.nvim_create_user_command("TabMRU", mru_in_tab, { nargs = 0 })
+
+function print_dev_state ()
+  print(vim.inspect(vim.g.dz_dev))
+end
+
+vim.api.nvim_create_user_command("DevState", print_dev_state, { nargs = 0 })
+
+function apply_bg_tab(cmd)
+  return function (opts)
+    tab_id = vim.api.nvim_get_current_tabpage()
+    vim.cmd("+" .. vim.g.dz_dev.backgrounded .. cmd .. " " .. opts.args .. " | tabn " .. tab_id)
+  end
+end
+
+vim.api.nvim_create_user_command("BGtabedit", apply_bg_tab("tabe"), { nargs = "*" })
+vim.api.nvim_create_user_command("BGtab"    , apply_bg_tab("tab") , { nargs = "*" })
+
+require('nvim-cursorline').setup {
+  cursorline = {
+    enable = false,
+  },
+  cursorword = {
+    enable = true,
+    min_length = 3,
+    hl = { underline = true },
+  }
+}
+
+require("dz.tabline")
+require("dz.wk.init")
+
+require("tidy").setup({ filetype_exclude = { "markdown", "diff" } })
+require("ibl").setup({
+  indent = {
+    highlight = { "LineNr" },
+  },
+  scope = {
+    show_start = false,
+    show_end = false,
+    highlight = { "CursorLineFold" },
+  }
+})
+require('gitsigns').setup()
+require("tokyodark").setup({})
+require("image").setup({ backend = "ueberzug" })
+require("netrw").setup({})
+require('guess-indent').setup({})
+
+require('nvim-treesitter.configs').setup({
+  highlight = { enable = true },
+  incremental_selection = { enable = true },
+  indent = { enable = true },
+  fold = { enable = true },
+})
+
+local cmp = require'cmp'
+cmp.setup({
+  snippet = {
+    -- REQUIRED - you must specify a snippet engine
+    expand = function(args)
+      vim.fn["vsnip#anonymous"](args.body) -- For `vsnip` users.
+      -- require('luasnip').lsp_expand(args.body) -- For `luasnip` users.
+      -- require('snippy').expand_snippet(args.body) -- For `snippy` users.
+      -- vim.fn["UltiSnips#Anon"](args.body) -- For `ultisnips` users.
+      -- vim.snippet.expand(args.body) -- For native neovim snippets (Neovim v0.10+)
+    end,
+  },
+  window = {
+    -- completion = cmp.config.window.bordered(),
+    -- documentation = cmp.config.window.bordered(),
+  },
+  mapping = cmp.mapping.preset.insert({
+    ['<C-b>'] = cmp.mapping.scroll_docs(-4),
+    ['<C-f>'] = cmp.mapping.scroll_docs(4),
+    ['<C-Space>'] = cmp.mapping.complete(),
+    ['<C-e>'] = cmp.mapping.abort(),
+    ['<CR>'] = cmp.mapping.confirm({ select = true }), -- Accept currently selected item. Set `select` to `false` to only confirm explicitly selected items.
+  }),
+  sources = cmp.config.sources({
+    { name = 'nvim_lsp' },
+    { name = 'vsnip' }, -- For vsnip users.
+    -- { name = 'luasnip' }, -- For luasnip users.
+    -- { name = 'ultisnips' }, -- For ultisnips users.
+    -- { name = 'snippy' }, -- For snippy users.
+  }, {
+    { name = 'buffer' },
+  })
+})
