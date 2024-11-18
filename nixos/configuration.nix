@@ -518,7 +518,7 @@ ACTION=="change", SUBSYSTEM=="drm", RUN+="${pkgs.autorandr}/bin/autorandr -c"
               "full-screen-api.ignore-widgets" = true;
               "full-screen-api.exit-on.windowRaise" = false;
             };
-            userChrome = builtins.readFile ./userChrome.css;
+            # userChrome = builtins.readFile ./userChrome.css;
             extensions = with config.nur.repos.rycee.firefox-addons; [
               ublock-origin
               video-downloadhelper
@@ -722,6 +722,7 @@ done
     cargo
     cava
     cavalier
+    clojure-lsp
     coreutils
     discord
     esh
@@ -734,6 +735,7 @@ done
     glrnvim
     gnused
     grim
+    gtk-server
     gtk3
     gtk3-x11
     gtk4
@@ -764,17 +766,21 @@ done
     ]))
     ripgrep
     rofi
+    rust-analyzer
     scrot
     ### Need the thing
     sddm-chili-theme
     ####
     sddm-dz.packages.${pkgs.hostPlatform.system}.sddm-dz
     slurp
-    ssbm.packages.x86_64-linux.slippi-launcher
-    ssbm.packages.x86_64-linux.slippi-netplay
-    ssbm.packages.x86_64-linux.slippi-playback
+    ssbm.packages.${pkgs.hostPlatform.system}.slippi-launcher
+    ssbm.packages.${pkgs.hostPlatform.system}.slippi-netplay
+    ssbm.packages.${pkgs.hostPlatform.system}.slippi-playback
+    stack
     transmission_4-qt
     ttyd
+    typescript
+    typescript-language-server
     ueberzugpp
     unzip
     vim

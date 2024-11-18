@@ -1,7 +1,7 @@
 local wk = require("which-key")
 local wk_leader = require("dz.wk.mapping.leader")
 
-wk.setup({ win = { no_overlap = false }, triggers = {} })
+wk.setup({ win = { no_overlap = false }, triggers = {}, sort = { "manual" } })
 
 local function flattenUntilWkLine(t, res)
   local res = res or {}

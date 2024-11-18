@@ -45,7 +45,7 @@ local function mk_wk_lispk(do_continue_)
     {"L", do_paredit("drag_form_backwards", do_continue), desc = "drag form back" },
     {"f", do_paredit("move_to_next_element", do_continue), desc = "move next" },
     {"F", do_paredit("move_to_prev_element", do_continue), desc = "move prev" },
-    {"<Space>", "!a)zprint<cr>", desc = "format form" },
+    -- {"<Space>", "!a)zprint<cr>", desc = "format form" },
   }
 end
   
@@ -53,9 +53,9 @@ local wk_files = {
   {group = "files" },
   {"p", cmd = "e ~/Projects/", desc = "open projects directory" },
   {"f", cmd = "Telescope find_files", desc = "find file" },
-  {"b", cmd = "Telescope buffers", "open buffers" },
-  {"r", cmd = "Telescope oldfiles", "recent files" },
-  {"g", cmd = "Telescope live_grep grep_current_only=true", "grep current file" },
+  {"b", cmd = "Telescope buffers", desc = "open buffers" },
+  {"r", cmd = "Telescope oldfiles", desc = "recent files" },
+  {"g", cmd = "Telescope live_grep grep_current_only=true", desc = "grep current file" },
   {"c", using = wk_configs },
   {"v", using = wk_nvim_configs },
   {"t", cmd = "NvimTreeFindFile", desc = "show file in file tree" },
@@ -69,16 +69,65 @@ local wk_search = {
   {"o", cmd = "Telescope live_grep grep_open_files=true", desc = "grep open buffers" },
   {"s", cmd = "Telescope current_buffer_fuzzy_find", desc = "swoop in file" },
 }
-  
+
+local function mk_add_section_mappings(section_type)
+  local opts = ({
+    todo = {
+      extra = {{group = "add todo"}},
+      desc_word = "todo",
+      cmd_extra = "Todo",
+      icon = iconTodo,
+    },
+    header = {
+      extra = {{group = "add header"}},
+      desc_word = "header",
+      cmd_extra = "Header",
+      icon = iconReadme,
+    },
+    section = {
+      extra = {},
+      desc_word = "Section",
+      cmd_extra = "",
+      icon = iconReadme,
+    },
+  })[section_type]
+  local mk = function(k, cmd_pre, desc_pre, desc_post)
+    cmd = cmd_pre .. opts.cmd_extra
+    desc = desc_pre .. " " .. opts.desc_word .. " " .. desc_post
+    return { k, cmd = cmd, desc = desc, icon = opts.icon }
+  end
+  return {
+    opts.extra,
+    mk("c", "ZorgInsertChild", "insert new", "child"),
+    mk("C", "ZorgAppendChild", "append new", "child"),
+    mk("s", "ZorgInsertSibling", "insert new", "sibling"),
+    mk("S", "ZorgAppendSibling", "append new", "sibling"),
+  }
+end
+
 local wk_organizing = {
   {group = "organizing", icon = iconReadme },
-  {"t", cmd = "ZorgAddNewRootTodo", desc = "insert root todo section", icon=iconTodo },
+  {"<Enter>", cmd = "TodoOpenToday", desc = "open today's todos", icon=iconTodo },
+  {"<S-Left>", cmd = "TodoOpenDayBefore", desc = "back 1 day's todos", icon=iconTodo },
+  {"<S-Right>", cmd = "TodoOpenDayAfter", desc = "forward 1 day's todos", icon=iconTodo },
+  {"-", cmd = "ZorgAddHr", desc = "add horizontal row line", icon=iconReadme },
   {"b", cmd = "ZorgToggleBullet", desc = "toggle header line bullet", icon=iconReadme },
   {">", cmd = "ZorgIncSectionDepth", desc = "increment section depth", icon=iconReadme },
   {"<", cmd = "ZorgDecSectionDepth", desc = "decrement section depth", icon=iconReadme },
-  {"<Space>", cmd = "TodoOpenToday", desc = "open today's todos", icon=iconTodo },
-  {"<S-Left>", cmd = "TodoOpenDayBefore", desc = "back 1 day's todos", icon=iconTodo },
-  {"<S-Right>", cmd = "TodoOpenDayAfter", desc = "forward 1 day's todos", icon=iconTodo },
+  {"<BS>", cmd = "ZorgRemoveTodoState", desc = "insert root header section", icon=iconReadme },
+  {"C", cmd = "ZorgAlterSectionContent", desc = "alter section header content", icon=iconReadme },
+  {"H", using = mk_add_section_mappings("header")},
+  {"h", cmd = "ZorgAddNewRootHeader", desc = "insert root header section", icon=iconReadme },
+  {"T", using = mk_add_section_mappings("todo")},
+  {"t", cmd = "ZorgAddNewRootTodo", desc = "insert root todo section", icon=iconTodo },
+  {"<tab>", cmd = "ZorgCycleTodoState", desc = "progress todo state", icon=iconTodo },
+  {"<Space>", cmd = "ZorgSetTodo", desc = "set todo state to `todo`", icon=iconTodo },
+  {",", cmd = "ZorgSetWip", desc = "set todo state to `wip`", icon=iconTodo },
+  {".", cmd = "ZorgSetDone", desc = "set todo state to `done`", icon=iconTodo },
+  {"/", cmd = "ZorgSetBlocked", desc = "set todo state to `blocked`", icon=iconTodo },
+  mk_add_section_mappings("section"),
+  {"<Up>", cmd = "ZorgNavSectionUp", desc = "nav to prev section", icon=iconReadme },
+  {"<Down>", cmd = "ZorgNavSectionDown", desc = "nav to next section", icon=iconReadme },
 }
   
 return {
@@ -87,18 +136,18 @@ return {
   {"<Right>", "<C-w><Right>", desc = "navigate windows right" },
   {"<Down>" , "<C-w><Down>" , desc = "navigate windows down"  },
   {"<Left>" , "<C-w><Left>" , desc = "navigate windows left"  },
-  {"[", "%", desc = "goto matching brace" },
   {",", cmd = "WhichKey ;", desc = "filetype specific" },
   {"/", cmd = "noh", desc = "clear search" },
   {"b", cmd = "Telescope buffers", desc = "open buffers" },
+  {"h", cmd = "Telescope help_tags", desc = "help" },
+  {"T", cmd = "Telescope colorscheme", desc = "themes" },
   {"f", using = wk_files },
   {"o", using = wk_organizing },
   {"s", using = wk_search },
-  {"h", cmd = "Telescope help_tags", desc = "help" },
-  {"T", cmd = "Telescope colorscheme", desc = "themes" },
   {"c", using = wk_configs },
   {"v", using = wk_nvim_configs },
   {"l", using = mk_wk_lispk(false)},
   {"L", using = mk_wk_lispk(true)},
+  {"[", "%", desc = "goto matching brace" },
 }
   

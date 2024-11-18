@@ -4,6 +4,8 @@
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
     sddm-dz.url = "github:mitchdzugan/sddm-dz";
     sddm-dz.inputs.nixpkgs.follows = "nixpkgs";
+    gtk-server.url = "github:mitchdzugan/gtk-server_4-nix";
+    gtk-server.inputs.nixpkgs.follows = "nixpkgs";
     wezterm-flake.url = "github:wez/wezterm/main?dir=nix";
     wezterm-flake.inputs.nixpkgs.follows = "nixpkgs";
     home-manager.url = "github:nix-community/home-manager";
