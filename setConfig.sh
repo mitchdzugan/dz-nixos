@@ -7,7 +7,7 @@ fi
 
 dirname=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
 finalDir="/etc/nixos"
-baseDir="$dirname/nixos"
+baseDir="$dirname/config"
 baseLength=$(( ${#baseDir} + 1 ))
 
 function copyFiles() {
@@ -26,4 +26,3 @@ function copyFiles() {
 }
 
 copyFiles $baseDir
-
