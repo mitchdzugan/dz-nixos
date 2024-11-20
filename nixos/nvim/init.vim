@@ -7,6 +7,7 @@ if has('syntax')
   syntax on
 endif
 set showtabline=2
+set scl=yes
 set hlsearch
 set number
 set cursorline

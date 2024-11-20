@@ -1,0 +1,9 @@
+if [ "$1" = "startup" ]; then
+        autorandr -c
+        xsetroot -cursor_name left_ptr
+        xset s off -dpms
+        nitrogen --restore
+        xinputSetTouchpadNaturalScroll
+        xinputSetTouchpadTapping
+        polybar &
+fi

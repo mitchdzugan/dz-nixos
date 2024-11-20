@@ -9,7 +9,23 @@ let
   acer_vga_fingerprint = "00ffffffffffff0004726f04c33a1060011a010368351e78ee0565a756529c270f5054b30c00714f818081c081009500b300d1c00101023a801871382d40582c45000f282100001e000000fd00384b1f4b12000a202020202020000000fc005232343048590a202020202020000000ff005434424141303031323430300a003a";
   acer_hdmi_fingerprint = "00ffffffffffff0004726f04c33a1060011a010380351e78ee0565a756529c270f5054b30c00714f818081c081009500b300d1c00101023a801871382d40582c45000f282100001e000000fd00384b1f4b12000a202020202020000000fc005232343048590a202020202020000000ff005434424141303031323430300a012102031cf1499001030412131f0514230907078301000065030c001000023a801871382d40582c45000f282100001e011d007251d01e206e2855000f282100001e8c0ad08a20e02d10103e96000f2821000018d60980a020e02d10086022000f28210808180000000000000000000000000000000000000000000000000000002e";
   gazelle_fingerprint = "00ffffffffffff0030e44d0700000000001f0104a52213780371c5985e5b8f271b5054000000010101010101010101010101010101015f8780a07038a0463020350058c21000001a000000fd003c90a7a723010a202020202020000000fe004c4720444953504c41590a2020000000fe004c5031353657464a2d53504234014270137900000301145e8700847f079f002f801f0037044c000200040000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000007390";
+  hp_fingerprint = "00ffffffffffff0006af3d4000000000101d0104951f1178029b85925659902920505400000001010101010101010101010101010101663a80b87038684010103e0035ae10000018ef2680b87038684010103e0035ae1000001800000000000000000000000000000000000000000002001048ff0f3c7d490d1b7d202020006f";
   autorandr_profiles = {
+    "hp_solo" = {
+      fingerprint = {
+        "eDP-1" = hp_fingerprint;
+      };
+      config = {
+        "eDP-1" = {
+          enable = true;
+          primary = false;
+          position = "0x0";
+          mode = "1920x1080";
+          rate = "60.01";
+          dpi = 96;
+        };
+      };
+    };
     "gazelle_solo" = {
       fingerprint = {
         "eDP-1" = gazelle_fingerprint;
@@ -108,6 +124,7 @@ let
       kernalPackages = pkgs.linuxPackages_rt_5_10;
       bspwmExtraConfig = ''
       '';
+      videoDrivers = ["nvidia"];
       nvidia = {
         modesetting.enable = true;
         powerManagement.finegrained = false;
@@ -116,12 +133,23 @@ let
         package = config.boot.kernelPackages.nvidiaPackages.legacy_470;
       };
     };
+    mitch-hp = {
+      musicDir = "/Music";
+      kernalPackages = pkgs.linuxPackages_xanmod_latest;
+      bspwmExtraConfig = ''
+xinputSetTouchpadNaturalScroll
+xinputSetTouchpadTapping
+      '';
+      videoDrivers = ["modesetting" "fbdev"];
+      nvidia = {};
+    };
     mitch-gazelle = {
       musicDir = "/Music";
       kernalPackages = pkgs.linuxPackages_xanmod_latest;
       bspwmExtraConfig = ''
 xinputSetTouchpadNaturalScroll
       '';
+      videoDrivers = ["nvidia"];
       nvidia = {
         modesetting.enable = true;
         powerManagement.finegrained = false;
@@ -234,6 +262,26 @@ in {
     };
   };
   systemd.services.sddm = { after = [ "sddm-avatar.service" ]; };
+  services.xserver.windowManager.xmonad =
+    let mk_xmolib = haskellPackages: haskellPackages.mkDerivation {
+      pname = "xmolib";
+      version = "0.0.1";
+      src = ./xmonad/xmoctrl/xmolib;
+      libraryHaskellDepends = with haskellPackages; [
+        base prettyprinter prettyprinter-ansi-terminal process text
+        transformers transformers-compat
+      ];
+      license = lib.licenses.bsd3;
+    }; in {
+      enable = true;
+      enableContribAndExtras = true;
+      extraPackages = haskellPackages: [
+        haskellPackages.dbus
+        haskellPackages.List
+        haskellPackages.monad-logger
+        (mk_xmolib haskellPackages)
+      ];
+    };
   services.xserver.windowManager.bspwm.enable = true;
   # services.desktopManager.plasma6.enable = true;
   # services.xserver.desktopManager.plasma5.enable = true;
@@ -349,6 +397,14 @@ ACTION=="change", SUBSYSTEM=="drm", RUN+="${pkgs.autorandr}/bin/autorandr -c"
       "nvim/lua" = {
         source = hm.config.lib.file.mkOutOfStoreSymlink ./nvim/lua;
         recursive = true;
+      };
+      "xmonad/xmonad.hs" = {
+        source = hm.config.lib.file.mkOutOfStoreSymlink ./xmonad/xmonad.hs;
+        recursive = false;
+      };
+      "xmonad/hooks" = {
+        source = hm.config.lib.file.mkOutOfStoreSymlink ./xmonad/hooks;
+        recursive = false;
       };
     };
 
@@ -498,7 +554,7 @@ ACTION=="change", SUBSYSTEM=="drm", RUN+="${pkgs.autorandr}/bin/autorandr -c"
       };
 
       neovim = import ./nvim/config.nix { lib = lib; pkgs = pkgs; };
-      neovide = import ./nvim/neovide.nix;
+      # neovide = import ./nvim/neovide.nix;
 
       firefox = {
         enable = true;
@@ -620,7 +676,7 @@ bspwm-reset-monitors.js
         let
           polybar_cava = pkgs.writeShellApplication {
             name = "polybar_cava";
-            runtimeInputs = [ pkgs.coreutils pkgs.cava pkgs.gnused ];
+            # runtimeInputs = [ pkgs.coreutils pkgs.cava pkgs.gnused ];
             text = builtins.readFile ./polybar/cava.sh;
           };
         in {
@@ -667,6 +723,7 @@ done
           inner-border-width = 1;
           corner-radius = 13;
           blur-method = "dual_kawase";
+          blur-strength = 10;
           blur-background = true;
           blur-background-frame = true;
           dithered-present = false;
@@ -720,11 +777,12 @@ done
     bibata-cursors
     brightnessctl
     cargo
-    cava
-    cavalier
+    # cava
+    # cavalier
     clojure-lsp
     coreutils
     discord
+    dmenu
     esh
     fastfetch
     file
@@ -733,12 +791,14 @@ done
     gh
     gjs
     glrnvim
+    gnum4
     gnused
     grim
     gtk-server
     gtk3
     gtk3-x11
     gtk4
+    haskell-language-server
     heroku
     htop
     jq
@@ -806,6 +866,7 @@ done
     xclip
     xdo
     xdotool
+    xmonadctl
     xorg.xev
     yarn
   ];
@@ -833,7 +894,7 @@ done
 
   hardware.graphics.enable = true;
 
-  services.xserver.videoDrivers = ["nvidia"];
+  services.xserver.videoDrivers = byHostname.${hostname}.videoDrivers;
 
   hardware.nvidia = byHostname.${hostname}.nvidia;
 
