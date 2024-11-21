@@ -557,6 +557,23 @@ ACTION=="change", SUBSYSTEM=="drm", RUN+="${pkgs.autorandr}/bin/autorandr -c"
       neovim = import ./nvim/config.nix { lib = lib; pkgs = pkgs; };
       # neovide = import ./nvim/neovide.nix;
 
+      tmux = {
+        enable = true;
+        clock24 = true;
+        plugins = with pkgs.tmuxPlugins; [
+          {
+            plugin = rose-pine;
+            extraConfig = ''
+              set -g @rose_pine_variant 'main'
+            '';
+          }
+        ];
+
+        extraConfig = ''
+          set -g mouse on
+        '';
+      };
+
       firefox = {
         enable = true;
         policies = {

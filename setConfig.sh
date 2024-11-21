@@ -31,10 +31,9 @@ function gitFiles() {
 
 i=0
 while read -r rel; do
-	echo $rel
-	# copyFile $rel &
-	# pids[${i}]=$!
-	# i=$(( i + 1 ))
+	copyFile $rel &
+	pids[${i}]=$!
+	i=$(( i + 1 ))
 done < <(gitFiles $baseDir)
 
 for pid in ${pids[*]}; do
