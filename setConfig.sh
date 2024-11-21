@@ -11,14 +11,18 @@ configDir="config"
 baseDir="$selfDir/$configDir"
 pids=()
 
+rm -rf "$finalDir/domain"
+
 function copyFile() {
 	relFile=$1
 	file="$baseDir/$relFile"
-	sudo mkdir -p "$finalDir/$(dirname $relFile)"
-	if [[ $file == *.esh ]]; then
-		$eshBin $file | (sudo cat > "$finalDir/${relFile%.*}")
-	else
-		sudo cp $file "$finalDir/$relFile"
+	if [ -f $file ]; then
+		sudo mkdir -p "$finalDir/$(dirname $relFile)"
+		if [[ $file == *.esh ]]; then
+			$eshBin $file | (sudo cat > "$finalDir/${relFile%.*}")
+		else
+			sudo cp $file "$finalDir/$relFile"
+		fi
 	fi
 }
 

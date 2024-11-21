@@ -13,7 +13,7 @@
     hyprland.url = "github:hyprwm/Hyprland";
     nur.url = "github:nix-community/NUR";
     ssbm.url = "github:mitchdzugan/ssbm-nix";
-    xmoctrl.url = "path:./xmonad/xmoctrl";
+    xmoctrl.url = "path:./domain/xmonad/xmoctrl";
   };
   outputs = { self, nixpkgs, nur, ... }@attrs: {
     nixosConfigurations.<%= $(hostname) %> = nixpkgs.lib.nixosSystem {

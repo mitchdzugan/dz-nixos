@@ -266,7 +266,7 @@ in {
     let mk_xmolib = haskellPackages: haskellPackages.mkDerivation {
       pname = "xmolib";
       version = "0.0.1";
-      src = ./xmonad/xmoctrl/xmolib;
+      src = ./domain/xmonad/xmoctrl/xmolib;
       libraryHaskellDepends = with haskellPackages; [
         base prettyprinter prettyprinter-ansi-terminal process text
         transformers transformers-compat
@@ -396,15 +396,15 @@ ACTION=="change", SUBSYSTEM=="drm", RUN+="${pkgs.autorandr}/bin/autorandr -c"
 
     xdg.configFile = {
       "nvim/lua" = {
-        source = hm.config.lib.file.mkOutOfStoreSymlink ./nvim/lua;
+        source = hm.config.lib.file.mkOutOfStoreSymlink ./domain/nvim/lua;
         recursive = true;
       };
       "xmonad/xmonad.hs" = {
-        source = hm.config.lib.file.mkOutOfStoreSymlink ./xmonad/xmonad.hs;
+        source = hm.config.lib.file.mkOutOfStoreSymlink ./domain/xmonad/xmonad.hs;
         recursive = false;
       };
       "xmonad/hooks" = {
-        source = hm.config.lib.file.mkOutOfStoreSymlink ./xmonad/hooks;
+        source = hm.config.lib.file.mkOutOfStoreSymlink ./domain/xmonad/hooks;
         recursive = false;
       };
     };
@@ -418,7 +418,7 @@ ACTION=="change", SUBSYSTEM=="drm", RUN+="${pkgs.autorandr}/bin/autorandr -c"
       bash = {
         enable = true;
         enableCompletion = true;
-        bashrcExtra = builtins.readFile ./bashrcExtra;
+        bashrcExtra = builtins.readFile ./domain/bash/bashrcExtra;
       };
 
       git = {
@@ -554,8 +554,8 @@ ACTION=="change", SUBSYSTEM=="drm", RUN+="${pkgs.autorandr}/bin/autorandr -c"
         '';
       };
 
-      neovim = import ./nvim/config.nix { lib = lib; pkgs = pkgs; };
-      # neovide = import ./nvim/neovide.nix;
+      neovim = import ./domain/nvim/config.nix { lib = lib; pkgs = pkgs; };
+      # neovide = import ./domain/nvim/neovide.nix;
 
       tmux = {
         enable = true;
@@ -592,7 +592,7 @@ ACTION=="change", SUBSYSTEM=="drm", RUN+="${pkgs.autorandr}/bin/autorandr -c"
               "full-screen-api.ignore-widgets" = true;
               "full-screen-api.exit-on.windowRaise" = false;
             };
-            # userChrome = builtins.readFile ./userChrome.css;
+            # userChrome = builtins.readFile ./domain/firefox/userChrome.css;
             extensions = with config.nur.repos.rycee.firefox-addons; [
               ublock-origin
               video-downloadhelper
@@ -695,7 +695,7 @@ bspwm-reset-monitors.js
           polybar_cava = pkgs.writeShellApplication {
             name = "polybar_cava";
             # runtimeInputs = [ pkgs.coreutils pkgs.cava pkgs.gnused ];
-            text = builtins.readFile ./polybar/cava.sh;
+            text = builtins.readFile ./domain/polybar/cava.sh;
           };
         in {
           enable = true;
@@ -706,7 +706,7 @@ bspwm-reset-monitors.js
             pulseSupport = true;
             mpdSupport = true;
           });
-          config = ./polybar/config.ini;
+          config = ./domain/polybar/config.ini;
           script = ''
 export PATH=$PATH:/home/dz/Projects/dz-bspwm/bin:${lib.makeBinPath [ pkgs.coreutils pkgs.systemd pkgs.which pkgs.bspwm pkgs.nodejs pkgs.pamixer pkgs.pulseaudio polybar_cava ]}
 
