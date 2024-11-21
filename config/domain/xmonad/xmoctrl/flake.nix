@@ -30,12 +30,12 @@
     {
       # Provide some binary packages for selected system types.
       packages = forAllSystems (system: {
-        xmoctrl = nixpkgsFor.${system}.stdenvNoCC.mkDerivation {
+        xmoctrl = nixpkgsFor.${system}.stdenv.mkDerivation {
           pname = "xmoctrl";
           inherit version;
 
           src = nixpkgs.lib.cleanSourceWith {
-            filter = name: type: type != "regular" || !nixpkgs.lib.hasSuffix ".nix" name;
+            filter = name: type: false;
             src = nixpkgs.lib.cleanSource ./.;
           };
 
@@ -64,16 +64,20 @@
 
           dontConfigure = true;
           buildPhase = ''
-            ghc main.hs
+            echo -e \
+              "\nimport qualified Xmolib.Entry.Xmoctrl as Xmolib"\
+              "\nmain :: IO ()"\
+              "\nmain = Xmolib.runXmoctrl" > xmoctrl.hs
+            ghc xmoctrl.hs
           '';
           installPhase = ''
             mkdir -p $out/bin
-            cp main $out/bin/xmoctrl
+            cp xmoctrl $out/bin/xmoctrl
           '';
 
           meta = {
-            description = "Soothing pastel theme for SDDM";
-            homepage = "https://github.com/mitchdzugan/sddm-dz";
+            description = "command runner built on top of xmonadctl";
+            homepage = "https://github.com/mitchdzugan/dz-nixos";
             license = nixpkgs.lib.licenses.mit;
             maintainers = with nixpkgs.lib.maintainers; [ mitchdzugan ];
             platforms = nixpkgs.lib.platforms.linux;
