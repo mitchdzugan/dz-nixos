@@ -41,7 +41,7 @@
             version = "0.0.1";
             src = ./xmolib;
             libraryHaskellDepends = with super; [
-              base prettyprinter prettyprinter-ansi-terminal process text
+              base prettyprinter process text
               transformers transformers-compat
             ];
             license = lib.licenses.bsd3;
