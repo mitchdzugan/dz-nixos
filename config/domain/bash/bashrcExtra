@@ -75,9 +75,8 @@ then
 
 	fastfetch \
 		--separator-output-color black \
-		# --logo-type kitty \
-		# --logo ~/Downloads/pngwing.com.png \
-		# --logo-width 43
+		--logo-type file-raw \
+		--logo ~/.config/fastfetch/logo.nix.ascii
 fi
 
 function cdproj() {

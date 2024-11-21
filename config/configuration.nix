@@ -395,6 +395,10 @@ ACTION=="change", SUBSYSTEM=="drm", RUN+="${pkgs.autorandr}/bin/autorandr -c"
     gtk.iconTheme.name = "Dracula";
 
     xdg.configFile = {
+      "fastfetch" = {
+        source = hm.config.lib.file.mkOutOfStoreSymlink ./domain/fastfetch;
+        recursive = true;
+      };
       "nvim/lua" = {
         source = hm.config.lib.file.mkOutOfStoreSymlink ./domain/nvim/lua;
         recursive = true;
