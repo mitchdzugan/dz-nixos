@@ -22,12 +22,20 @@ function copyFile() {
 	fi
 }
 
+function gitFiles() {
+	: && \
+		cd $1 && \
+		git ls-files . --exclude-standard --no-deleted && \
+		git ls-files . --exclude-standard --no-deleted --others
+}
+
 i=0
 while read -r rel; do
-	copyFile $rel &
-	pids[${i}]=$!
-	i=$(( i + 1 ))
-done < <(cd $baseDir && git ls-files)
+	echo $rel
+	# copyFile $rel &
+	# pids[${i}]=$!
+	# i=$(( i + 1 ))
+done < <(gitFiles $baseDir)
 
 for pid in ${pids[*]}; do
 	wait $pid
