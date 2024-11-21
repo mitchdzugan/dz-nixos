@@ -443,7 +443,7 @@ ACTION=="change", SUBSYSTEM=="drm", RUN+="${pkgs.autorandr}/bin/autorandr -c"
           window.opacity = 0.85;
           colors.transparent_background_colors = true;
           font.size = 11.0;
-          font.normal = { family = "monospace"; style = "Medium"; };
+          font.normal = { family = "MonaspiceKr Nerd Font Mono"; style = "Medium"; };
           colors.primary = {
             foreground = "#e0def4";
             background = "#191724";
