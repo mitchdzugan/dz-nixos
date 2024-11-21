@@ -5,19 +5,19 @@ local iconTodo = { cat="file", name="TODO" }
 
 local wk_nvim_configs = {
   {group = "nvim configs" },
-  {"d", cmd = "e ~/Projects/dz-nixos/nixos/nvim/", desc = "open nvim directory" },
-  {"v", cmd = "e ~/Projects/dz-nixos/nixos/nvim/init.vim", desc = "edit `init.vim`" },
-  {"l", cmd = "e ~/Projects/dz-nixos/nixos/nvim/lua", desc = "open nvim lua directory" },
-  {"c", cmd = "e ~/Projects/dz-nixos/nixos/nvim/config.nix", desc = "edit neovim `config.nix`" },
-  {"g", cmd = "e ~/Projects/dz-nixos/nixos/nvim/neovide.nix", desc = "edit `neovide.nix`" },
+  {"d", cmd = "e ~/Projects/dz-nixos/config/domain/nvim/", desc = "open nvim directory" },
+  {"v", cmd = "e ~/Projects/dz-nixos/config/domain/nvim/init.vim", desc = "edit `init.vim`" },
+  {"l", cmd = "e ~/Projects/dz-nixos/config/domain/nvim/lua", desc = "open nvim lua directory" },
+  {"c", cmd = "e ~/Projects/dz-nixos/config/domain/nvim/config.nix", desc = "edit neovim `config.nix`" },
+  {"g", cmd = "e ~/Projects/dz-nixos/config/domain/nvim/neovide.nix", desc = "edit `neovide.nix`" },
 }
-  
+
 local wk_configs = {
   {group = "configs" },
-  {"d", cmd = "e ~/Projects/dz-nixos/nixos/", desc = "open config directory" },
+  {"d", cmd = "e ~/Projects/dz-nixos/config/", desc = "open config directory" },
   {"v", using = wk_nvim_configs},
 }
-  
+
 local function do_paredit(fn_name, do_continue)
   return function()
     paredit.api[fn_name]()
@@ -26,7 +26,7 @@ local function do_paredit(fn_name, do_continue)
     end
   end
 end
-  
+
 local function mk_wk_lispk(do_continue_)
   local do_continue = do_continue_ == true
   return {
@@ -48,10 +48,10 @@ local function mk_wk_lispk(do_continue_)
     -- {"<Space>", "!a)zprint<cr>", desc = "format form" },
   }
 end
-  
+
 local wk_files = {
   {group = "files" },
-  {"p", cmd = "e ~/Projects/", desc = "open projects directory" },
+  {"p", cmd = "Telescope git_files", desc = "find project file" },
   {"f", cmd = "Telescope find_files", desc = "find file" },
   {"b", cmd = "Telescope buffers", desc = "open buffers" },
   {"r", cmd = "Telescope oldfiles", desc = "recent files" },
@@ -61,7 +61,7 @@ local wk_files = {
   {"t", cmd = "NvimTreeFindFile", desc = "show file in file tree" },
   {"T", cmd = "NvimTreeToggle", desc = "toggle file tree" },
 }
-  
+
 local wk_search = {
   {group = "search" },
   {"p", cmd = "Telescope live_grep", desc = "grep project" },
@@ -129,7 +129,7 @@ local wk_organizing = {
   {"<Up>", cmd = "ZorgNavSectionUp", desc = "nav to prev section", icon=iconReadme },
   {"<Down>", cmd = "ZorgNavSectionDown", desc = "nav to next section", icon=iconReadme },
 }
-  
+
 return {
   {"<tab>", cmd = "TabMRU", desc = "most recent buffer [tab local]" },
   {"<Up>"   , "<C-w><Up>"   , desc = "navigate windows up"    },
@@ -150,4 +150,3 @@ return {
   {"L", using = mk_wk_lispk(true)},
   {"[", "%", desc = "goto matching brace" },
 }
-  

@@ -262,7 +262,14 @@ myLogHook = return ()
 -- per-workspace layout choices.
 --
 -- By default, do nothing.
-myStartupHook = execScriptHook "startup"
+myStartupHook = do
+    spawn "autorandr -c"
+    spawn "xsetroot -cursor_name left_ptr"
+    spawn "xset s off -dpms"
+    spawn "nitrogen --restore"
+    spawn "xinputSetTouchpadNaturalScroll"
+    spawn "xinputSetTouchpadTapping"
+    spawn "systemctl --user start polybar"
 
 ------------------------------------------------------------------------
 -- Now run xmonad with all the defaults we set up.
