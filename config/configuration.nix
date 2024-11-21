@@ -270,6 +270,7 @@ in {
       libraryHaskellDepends = with haskellPackages; [
         base prettyprinter prettyprinter-ansi-terminal process text
         transformers transformers-compat
+        aeson xmonad xmonad-contrib xmonad-dbus xmonad-extras
       ];
       license = lib.licenses.bsd3;
     }; in {

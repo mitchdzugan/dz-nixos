@@ -29,6 +29,7 @@ library
       ghc-options: -Wnoncanonical-monadfail-instances
 
   exposed-modules:     Xmolib.Entry.Xmonad
+                     , Xmolib.Entry.Xmoctrl
 
   build-depends:       base                            >= 4.5 && < 5
                      , text                            >= 1.2
@@ -37,10 +38,12 @@ library
                      , prettyprinter                   >= 1.7 && < 1.8
                      , prettyprinter-ansi-terminal     >= 1.1 && < 1.2
                      , aeson
+                     , containers
                      , xmonad
                      , xmonad-contrib
                      , xmonad-dbus
                      , xmonad-extras
+                     , X11
 
   if flag(process)
     build-depends:     process                         >= 1.0 && < 1.7

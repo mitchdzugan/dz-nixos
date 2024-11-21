@@ -6,6 +6,7 @@
 --
 -- Normally, you'd only override those defaults you care about.
 --
+module Xmolib.Entry.Xmonad (runXmonad) where
 
 import XMonad
 import XMonad.Hooks.DynamicLog

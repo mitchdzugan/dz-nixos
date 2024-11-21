@@ -43,6 +43,7 @@
             libraryHaskellDepends = with super; [
               base prettyprinter process text
               transformers transformers-compat
+              aeson xmonad xmonad-contrib xmonad-dbus xmonad-extras
             ];
             license = lib.licenses.bsd3;
           };
