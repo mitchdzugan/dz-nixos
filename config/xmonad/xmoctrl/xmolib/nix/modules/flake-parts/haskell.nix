@@ -37,9 +37,6 @@
       settings = {
         # gi-gtk = { super, ...}: { custom = _: super.gi-gtk_4; };
         /*
-        ztr = {
-          haddock = false;
-        };
         aeson = {
           check = false;
         };
