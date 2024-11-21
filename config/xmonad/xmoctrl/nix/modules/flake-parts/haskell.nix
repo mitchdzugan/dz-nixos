@@ -35,6 +35,18 @@
 
       # Add your package overrides here
       settings = {
+        xmolib = { super, ... }: {
+          custom = _: super.mkDerivation {
+            pname = "xmolib";
+            version = "0.0.1";
+            src = ./xmolib;
+            libraryHaskellDepends = with super; [
+              base prettyprinter prettyprinter-ansi-terminal process text
+              transformers transformers-compat
+            ];
+            license = lib.licenses.bsd3;
+          };
+        };
         # gi-gtk = { super, ...}: { custom = _: super.gi-gtk_4; };
         /*
         ztr = {

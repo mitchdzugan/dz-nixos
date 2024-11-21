@@ -94,6 +94,6 @@ common shared
   hs-source-dirs:     src
   default-language:   Haskell2010
 
-executable ztr
+executable xmoctrl
   import:  shared
   main-is: Main.hs
