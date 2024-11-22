@@ -2,7 +2,7 @@
 # your system.  Help is available in the configuration.nix(5) man page
 # and in the NixOS manual (accessible by running ‘nixos-help’).
 
-{ config, pkgs, lib, hostname, home-manager, hyprland, ssbm, sddm-dz, ... }:
+{ config, pkgs, lib, hostname, home-manager, hyprland, wezterm-flake, ssbm, sddm-dz, ... }:
 
 let
   lg_hdmi_fingerprint = "00ffffffffffff001e6d6e77f48c0400041f010380462778ea8cb5af4f43ab260e5054210800d1c06140010101010101010101010101e9e800a0a0a0535030203500b9882100001a000000fd0030901ee63c000a202020202020000000fc004c4720554c545241474541520a000000ff003130344e544a4a38533232380a01b8020349f1230907074d100403011f13123f5d5e5f60616d030c002000b83c20006001020367d85dc401788003e30f00186d1a00000205309000045a445a44e305c000e60605015a5a446fc200a0a0a0555030203500b9882100001a5aa000a0a0a0465030203a00b9882100001a565e00a0a0a0295030203500b9882100001aed";
@@ -438,7 +438,12 @@ ACTION=="change", SUBSYSTEM=="drm", RUN+="${pkgs.autorandr}/bin/autorandr -c"
 
       fish = {
         enable = true;
+        functions = {
+          cdproj = "cd $(codeProject.py)";
+        };
         shellInit = ''
+          set -x TERM xterm-256color
+          any-nix-shell fish | source
           function fish_greeting
             fastfetch \
               --separator-output-color black \
@@ -449,7 +454,7 @@ ACTION=="change", SUBSYSTEM=="drm", RUN+="${pkgs.autorandr}/bin/autorandr -c"
             --auto \
             --style=Classic \
             --prompt_colors='True color' \
-            --classic_prompt_color=Dark \
+            --classic_prompt_color=Darkest \
             --show_time='24-hour format' \
             --classic_prompt_separators=Round \
             --powerline_prompt_heads=Sharp \
@@ -609,6 +614,29 @@ ACTION=="change", SUBSYSTEM=="drm", RUN+="${pkgs.autorandr}/bin/autorandr -c"
             white = "#e0def4";
           };
         };
+      };
+
+      wezterm = {
+        enable = true;
+        package = wezterm-flake.packages."${pkgs.system}".default;
+        enableBashIntegration = true;
+        extraConfig = ''
+          return {
+            color_scheme = "rose-pine",
+            font = wezterm.font_with_fallback({
+              "MonaspiceKr Nerd Font Mono",
+              "ComicShannsMono Nerd Font Mono",
+              "Monaspace Krypton",
+              "Ubuntu Mono derivative Powerline",
+            }),
+            hide_tab_bar_if_only_one_tab = true,
+            window_background_opacity = 0.85,
+            text_background_opacity = 0.45,
+            font_size = 11.0,
+            window_padding = { top = 0, left = 0, right = 0, bottom = 0 },
+            freetype_load_flags = 'NO_HINTING',
+          }
+        '';
       };
 
       neovim = import ./domain/nvim/config.nix { lib = lib; pkgs = pkgs; };
@@ -849,6 +877,7 @@ done
   # $ nix search wget
   environment.systemPackages = with pkgs; [
     alsa-utils
+    any-nix-shell
     bat
     bc
     bibata-cursors
@@ -872,6 +901,7 @@ done
     glrnvim
     gnum4
     gnused
+    grc
     grim
     gtk-server
     gtk3
