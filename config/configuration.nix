@@ -181,6 +181,11 @@ xinputSetTouchpadNaturalScroll
     ];
     license = lib.licenses.bsd3;
   };
+  dz_xonsh = pkgs.xonsh.override {
+    extraPackages = ps: [
+      ps.coconut
+    ];
+  };
 in {
   imports =
     [ # Include the results of the hardware scan.
@@ -369,6 +374,7 @@ ACTION=="change", SUBSYSTEM=="drm", RUN+="${pkgs.autorandr}/bin/autorandr -c"
     description = "Mitch Dzugan";
     extraGroups = [ "audio" "networkmanager" "wheel" ];
     packages = with pkgs; [ ];
+    shell = pkgs.fish;
   };
 
   home-manager.users.dz = hm@{ pkgs, ... }: {
@@ -394,6 +400,13 @@ ACTION=="change", SUBSYSTEM=="drm", RUN+="${pkgs.autorandr}/bin/autorandr -c"
     gtk.iconTheme.package = pkgs.dracula-icon-theme;
     gtk.iconTheme.name = "Dracula";
 
+    home.file."${hm.config.home.homeDirectory}/.profile" = {
+      source = pkgs.writeText ".profile" ''
+        . "${hm.config.home.profileDirectory}/etc/profile.d/hm-session-vars.sh"
+      '';
+      recursive = false;
+    };
+
     xdg.configFile = {
       "fastfetch" = {
         source = hm.config.lib.file.mkOutOfStoreSymlink ./domain/fastfetch;
@@ -411,6 +424,10 @@ ACTION=="change", SUBSYSTEM=="drm", RUN+="${pkgs.autorandr}/bin/autorandr -c"
         '';
         recursive = false;
       };
+      "xonsh/rc.d" = {
+        source = hm.config.lib.file.mkOutOfStoreSymlink ./domain/xonsh/rc.d;
+        recursive = true;
+      };
     };
 
     programs = {
@@ -419,11 +436,69 @@ ACTION=="change", SUBSYSTEM=="drm", RUN+="${pkgs.autorandr}/bin/autorandr -c"
         profiles = autorandr_profiles;
       };
 
+      fish = {
+        enable = true;
+        shellInit = ''
+          function fish_greeting
+            fastfetch \
+              --separator-output-color black \
+              --logo-type file-raw \
+              --logo ~/.config/fastfetch/logo.nix.ascii
+          end
+          tide configure \
+            --auto \
+            --style=Classic \
+            --prompt_colors='True color' \
+            --classic_prompt_color=Dark \
+            --show_time='24-hour format' \
+            --classic_prompt_separators=Round \
+            --powerline_prompt_heads=Sharp \
+            --powerline_prompt_tails=Flat \
+            --powerline_prompt_style='One line' \
+            --prompt_spacing=Compact \
+            --icons='Many icons' \
+            --transient=No
+          function st
+            set_color -b $argv[1]; set_color $argv[2]; echo $argv[3]
+          end
+          #et tide_left_prompt_prefix \
+          # $(st $tide_time_bg_color $tide_prompt_color_separator_same_color 🭪)
+          set tide_left_prompt_suffix \
+            $(st $tide_time_bg_color $tide_prompt_color_separator_same_color )
+          set tide_right_prompt_prefix \
+            $(st $tide_time_bg_color $tide_prompt_color_separator_same_color ▌)
+          #et tide_right_prompt_suffix \
+          # $(st $tide_time_bg_color $tide_prompt_color_separator_same_color 🭨)
+        '';
+        plugins = with pkgs.fishPlugins; [
+          { name = "z"; src = z.src; }
+          { name = "grc"; src = grc.src; }
+          { name = "fzf"; src = fzf.src; }
+          { name = "tide"; src = tide.src; }
+          { name = "done"; src = done.src; }
+          { name = "bass"; src = bass.src; }
+          { name = "gruvbox"; src = gruvbox.src; }
+          { name = "autopair"; src = autopair.src; }
+        ];
+      };
+
+      /*
       bash = {
         enable = true;
         enableCompletion = true;
-        bashrcExtra = builtins.readFile ./domain/bash/bashrcExtra;
+        # bashrcExtra = builtins.readFile ./domain/bash/bashrcExtra;
       };
+
+      zsh = {
+        enable = true;
+        autocd = true;
+        autosuggestion.enable = true;
+        history.append = true;
+        history.expireDuplicatesFirst = true;
+        history.extended = true;
+        syntaxHighlighting.enable = true;
+      };
+      */
 
       git = {
         enable = true;
@@ -437,6 +512,7 @@ ACTION=="change", SUBSYSTEM=="drm", RUN+="${pkgs.autorandr}/bin/autorandr -c"
       direnv = {
         enable = true;
         enableBashIntegration = true;
+        enableZshIntegration = true;
         nix-direnv.enable = true;
       };
 
@@ -767,11 +843,13 @@ done
 
 
   ## environment.sessionVariables.NIXOS_OZONE_WL = "1";
+  environment.pathsToLink = [ "/share/zsh" ];
 
   # List packages installed in system profile. To search, run:
   # $ nix search wget
   environment.systemPackages = with pkgs; [
     alsa-utils
+    bat
     bc
     bibata-cursors
     brightnessctl
@@ -784,8 +862,10 @@ done
     dmenu
     esh
     fastfetch
+    fd
     file
     ffmpeg
+    fzf
     gcc
     gh
     gjs
@@ -808,6 +888,7 @@ done
     ncmpcpp
     networkmanagerapplet
     nitrogen
+    nix-prefetch-github
     nodejs
     nwjs-sdk
     pamixer
@@ -818,6 +899,7 @@ done
     pulseaudio
     (python3.withPackages (python-pkgs: [
       python-pkgs.beautifulsoup4
+      python-pkgs.coconut
       python-pkgs.dmenu-python
       python-pkgs.mpd2
       python-pkgs.requests
@@ -936,6 +1018,9 @@ done
   hardware.nvidia = byHostname.${hostname}.nvidia;
 
   programs.gamemode.enable = true;
+
+  programs.fish = { enable = true; };
+    # programs.xonsh = { enable = true; package = dz_xonsh; };
 
   programs.steam = {
     enable = true;
