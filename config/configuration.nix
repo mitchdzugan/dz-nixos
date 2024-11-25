@@ -443,65 +443,6 @@ ACTION=="change", SUBSYSTEM=="drm", RUN+="${pkgs.autorandr}/bin/autorandr -c"
         profiles = autorandr_profiles;
       };
 
-      fish = {
-        enable = true;
-        functions = {
-          cdproj = "cd $(codeProject.py)";
-        };
-        shellInit = ''
-          # any-nix-shell fish | source
-          alias ls "grc ls --color=always"
-          function fish_greeting
-            fastfetch \
-              --separator-output-color black \
-              --logo-width 37 \
-              --logo-height 17 \
-              --logo-padding-left 1 \
-              --logo-padding-top 3 \
-              --logo-padding-right 3 \
-              --logo-type kitty-direct \
-              --logo ~/.config/fastfetch/logo.nix.png
-          end
-          tide configure \
-            --auto \
-            --style=Classic \
-            --prompt_colors='True color' \
-            --classic_prompt_color=Darkest \
-            --show_time='24-hour format' \
-            --classic_prompt_separators=Round \
-            --powerline_prompt_heads=Sharp \
-            --powerline_prompt_tails=Flat \
-            --powerline_prompt_style='One line' \
-            --prompt_spacing=Compact \
-            --icons='Many icons' \
-            --transient=No
-          function st
-            set_color -b $argv[1]; set_color $argv[2]; echo $argv[3]
-          end
-          #et tide_left_prompt_prefix \
-          # $(st $tide_time_bg_color $tide_prompt_color_separator_same_color 🭪)
-          set tide_left_prompt_suffix \
-            $(st $tide_time_bg_color $tide_prompt_color_separator_same_color )
-          set tide_right_prompt_prefix \
-            $(st $tide_time_bg_color $tide_prompt_color_separator_same_color ▌)
-          #et tide_right_prompt_suffix \
-          # $(st $tide_time_bg_color $tide_prompt_color_separator_same_color 🭨)
-        '';
-        plugins = with pkgs.fishPlugins; [
-          { name = "z"; src = z.src; }
-          { name = "grc"; src = grc.src; }
-          { name = "fzf"; src = fzf.src; }
-          { name = "tide"; src = tide.src; }
-          { name = "done"; src = done.src; }
-          { name = "bass"; src = bass.src; }
-          { name = "gruvbox"; src = gruvbox.src; }
-          { name = "autopair"; src = autopair.src; }
-        ];
-      };
-
-      # enabled for posix support of login shell
-      # bash.enable = true;
-
       bash = {
         enable = true;
         enableCompletion = true;
@@ -533,105 +474,6 @@ ACTION=="change", SUBSYSTEM=="drm", RUN+="${pkgs.autorandr}/bin/autorandr -c"
         themeFile = "purpurite";
       };
 
-      /*
-      oh-my-posh = {
-        enable = true;
-        enableBashIntegration = true;
-        useTheme = "mojada";
-      };
-
-      starship = {
-        enable = true;
-        enableBashIntegration = true;
-        settings = {
-          add_newline = false;
-          format = lib.concatStrings [
-            "[](#9A348E)"
-            "$hostname"
-            "[](bg:#DA627D fg:#9A348E)"
-            "$directory"
-            "[](fg:#DA627D bg:#FCA17D)"
-            "$git_branch"
-            "$git_status"
-            "[](fg:#FCA17D bg:#86BBD8)"
-            "$c"
-            "$haskell"
-            "$nodejs"
-            "$rust"
-            "[](fg:#86BBD8 bg:#06969A)"
-            "$time"
-            "[](fg:#06969A)"
-            " "
-          ];
-          hostname = {
-            ssh_only = false;
-            style = "bg:#9A348E";
-            format = "[$ssh_symbol$hostname ]($style)";
-          };
-          os = { disabled = true; };
-          directory = {
-            style = "bg:#DA627D";
-            format = "[ $path ]($style)";
-            truncation_length = 3;
-            truncation_symbol = "…/";
-            substitutions = {
-              Documents = "󰈙 ";
-              Downloads = " ";
-              Music = " ";
-              Pictures = " ";
-            };
-          };
-          c = {
-            symbol = " ";
-            style = "bg:#86BBD8";
-            format = "[ $symbol ($version) ]($style)";
-          };
-          git_branch = {
-            symbol = "";
-            style = "bg:#FCA17D";
-            format = "[ $symbol $branch ]($style)";
-          };
-          git_status = {
-            style = "bg:#FCA17D";
-            format = "[$all_status$ahead_behind ]($style)";
-          };
-          haskell = {
-            symbol = " ";
-            style = "bg:#86BBD8";
-            format = "[ $symbol ($version) ]($style)";
-          };
-          nodejs = {
-            symbol = "";
-            style = "bg:#86BBD8";
-            format = "[ $symbol ($version) ]($style)";
-          };
-          rust = {
-            symbol = " ";
-            style = "bg:#86BBD8";
-            format = "[ $symbol ($version) ]($style)";
-          };
-          time = {
-            disabled = false;
-            time_format = "%R";
-            style = "bg:#06969A";
-            format = "[ ♥ $time ]($style)";
-          };
-        };
-      };
-      */
-
-      /*
-      zsh = {
-        enable = true;
-        autocd = true;
-        autosuggestion.enable = true;
-        history.append = true;
-        history.expireDuplicatesFirst = true;
-        history.extended = true;
-        syntaxHighlighting.enable = true;
-      };
-      */
-
       git = {
         enable = true;
         userName  = "Mitch Dzugan";
@@ -648,146 +490,8 @@ ACTION=="change", SUBSYSTEM=="drm", RUN+="${pkgs.autorandr}/bin/autorandr -c"
         nix-direnv.enable = true;
       };
 
-      alacritty = {
-        enable = true;
-        settings = {
-          env.WINIT_X11_SCALE_FACTOR = "1.0";
-          window.opacity = 0.85;
-          colors.transparent_background_colors = true;
-          font.size = 11.0;
-          font.normal = { family = "MonaspiceKr Nerd Font Mono"; style = "Medium"; };
-          colors.primary = {
-            foreground = "#e0def4";
-            background = "#191724";
-            dim_foreground = "#908caa";
-            bright_foreground = "#e0def4";
-          };
-
-          colors.cursor = {
-            text = "#e0def4";
-            cursor = "#524f67";
-          };
-
-          colors.vi_mode_cursor = {
-            text = "#e0def4";
-            cursor = "#524f67";
-          };
-
-          colors.search.matches = {
-            foreground = "#908caa";
-            background = "#26233a";
-          };
-
-          colors.search.focused_match = {
-            foreground = "#191724";
-            background = "#ebbcba";
-          };
-
-          colors.hints.start = {
-            foreground = "#908caa";
-            background = "#1f1d2e";
-          };
-
-          colors.hints.end = {
-            foreground = "#6e6a86";
-            background = "#1f1d2e";
-          };
-
-          colors.line_indicator = {
-            foreground = "None";
-            background = "None";
-          };
-
-          colors.footer_bar = {
-            foreground = "#e0def4";
-            background = "#1f1d2e";
-          };
-
-          colors.selection = {
-            text = "#e0def4";
-            background = "#403d52";
-          };
-
-          colors.normal = {
-            black = "#26233a";
-            red = "#eb6f92";
-            green = "#31748f";
-            yellow = "#f6c177";
-            blue = "#9ccfd8";
-            magenta = "#c4a7e7";
-            cyan = "#ebbcba";
-            white = "#e0def4";
-          };
-
-          colors.bright = {
-            black = "#6e6a86";
-            red = "#eb6f92";
-            green = "#31748f";
-            yellow = "#f6c177";
-            blue = "#9ccfd8";
-            magenta = "#c4a7e7";
-            cyan = "#ebbcba";
-            white = "#e0def4";
-          };
-
-          colors.dim = {
-            black = "#6e6a86";
-            red = "#eb6f92";
-            green = "#31748f";
-            yellow = "#f6c177";
-            blue = "#9ccfd8";
-            magenta = "#c4a7e7";
-            cyan = "#ebbcba";
-            white = "#e0def4";
-          };
-        };
-      };
-
-      wezterm = {
-        enable = true;
-        package = wezterm-flake.packages."${pkgs.system}".default;
-        enableBashIntegration = true;
-        extraConfig = ''
-          return {
-            color_scheme = "catppuccin-mocha",
-            font = wezterm.font_with_fallback({
-              "MonaspiceKr Nerd Font Mono",
-              "ComicShannsMono Nerd Font Mono",
-              "Monaspace Krypton",
-              "Ubuntu Mono derivative Powerline",
-            }),
-            hide_tab_bar_if_only_one_tab = true,
-            window_background_opacity = 0.85,
-            text_background_opacity = 0.45,
-            font_size = 11.0,
-            window_padding = { top = 0, left = 0, right = 0, bottom = 0 },
-            freetype_load_flags = 'NO_HINTING',
-            unix_domains = {{ name = 'unix' }},
-          }
-        '';
-      };
-
       neovim = import ./domain/nvim/config.nix { lib = lib; pkgs = pkgs; };
       # neovide = import ./domain/nvim/neovide.nix;
-
-      tmux = {
-        enable = true;
-        clock24 = true;
-        plugins = with pkgs.tmuxPlugins; [
-          {
-            plugin = rose-pine;
-            extraConfig = ''
-              set -g @rose_pine_variant 'main'
-              set -gq allow-passthrough on
-              set -g visual-activity off
-            '';
-          }
-        ];
-
-        extraConfig = ''
-          set -g mouse on
-        '';
-      };
 
       firefox = {
         enable = true;
@@ -814,6 +518,283 @@ ACTION=="change", SUBSYSTEM=="drm", RUN+="${pkgs.autorandr}/bin/autorandr -c"
             ];
           };
         };
+      };
+
+      waybar = {
+        enable = true;
+        style = builtins.readFile ./domain/hypr/waybar.style.css;
+        settings = {
+          mainBar = {
+            layer = "top";
+            position = "bottom";
+            height = 32;
+            width = null;
+            margin = "0 0 0 0";
+            spacing = 2;
+            fixed-center = true;
+            modules-left = ["hyprland/workspaces"];
+            modules-center = ["cava" "mpd"];
+            modules-right = ["backlight" "battery" "pulseaudio" "tray" "clock"];
+            "hyprland/workspaces" = {
+              format = " {icon} {windows} ";
+              window-rewrite-default = "󰘔";
+              window-rewrite = {
+                "firefox" = "";
+                ".slippi-netplay-wrapped" = "";
+                "com.obsproject.Studio" = "";
+                "code-url-handler" = "󰨞";
+                "Gimp-2.10" = "";
+                "kitty" = "";
+                "wezterm" = "";
+                "discord" = "󰙯";
+                "thunar" = "";
+                "neovide" = "";
+                "glrnvim" = "";
+                "vlc" = "󰕼";
+              };
+              on-click = "activate";
+              move-to-monitor = true;
+              all-outputs = true;
+              sort-by-number = true;
+              format-icons = {
+                "1" = "1";
+                "2" = "2";
+                "3" = "3";
+                "4" = "4";
+                "5" = "5";
+                "6" = "6";
+                "7" = "7";
+                "8" = "8";
+                "9" = "9";
+                "10" = "10";
+                "focused" = "";
+                "default" = "";
+              };
+              persistent-workspaces = {
+                "*" = [1];
+                "HDMI-A-1" = [2];
+              };
+              on-scroll-up = "hyprctl dispatch workspace e+1";
+              on-scroll-down = "hyprctl dispatch workspace e-1";
+            };
+            "tray" = {
+              icon-spacing = 20;
+              spacing = 5;
+            };
+            "clock" = {
+              tooltip-format = ''
+                <big>{:%A, %d.%B %Y }</big>
+                <tt><small>{calendar}</small></tt>
+              '';
+              format = "{:%a %m/%d %I:%M:%S %p}";
+              interval = 1;
+            };
+            "backlight" = {
+              format = "{icon} {percent: >3}%";
+              format-icons = [""];
+              on-scroll-down = "brightnessctl -c backlight set 1%-";
+              on-scroll-up = "brightnessctl -c backlight set +1%";
+            };
+            "battery" = {
+              format = "{icon} {capacity: >3}%";
+              format-icons = [ "" "" "" "" "" ];
+              states = { warning = 30; critical = 15; };
+            };
+            "pulseaudio" = {
+              format = "{icon} {volume}% {format_source}";
+              format-bluetooth = "{volume}% {icon} {format_source}";
+              format-bluetooth-muted = " {icon} {format_source}";
+              format-muted = " {format_source}";
+              format-source = "";
+              format-source-muted = "";
+              format-icons = {
+                headphone = "";
+                hands-free = "";
+                headset = "";
+                phone = "";
+                portable = "";
+                car = "";
+                default = [ "" "" "" ];
+              };
+              on-click = "pavucontrol-qt";
+              on-click-right = "pactl set-source-mute @DEFAULT_SOURCE@ toggle";
+              scroll-step = 3;
+            };
+            "mpd" = {
+              format =
+                "{title} - {artist}  {stateIcon}  {elapsedTime:%M:%S}/{totalTime:%M:%S}";
+              format-disconnected = "";
+              format-stopped = "";
+              unknown-tag = "N/A";
+              interval = 2;
+              consume-icons = {
+                on = " ";
+              };
+              random-icons = {
+                on = " ";
+              };
+              repeat-icons = {
+                "on" = " ";
+              };
+              single-icons = {
+                "on" = "1 ";
+              };
+              state-icons = {
+                "paused" = "";
+                "playing" = "";
+              };
+              tooltip-format = "mpd (connected)";
+              tooltip-format-disconnected = "mpd (disconnected)";
+              on-click = "mpc toggle";
+              on-click-right = "kitty --class float_kitty sh -c ncmpcpp";
+              artist-len = 20;
+              title-len = 20;
+            };
+            "cava" = {
+              cava_config = "/home/dz/.config/cava/config";
+              hide_on_silence = true;
+              bars = 12;
+              format-icons = [ "▁" "▂" "▃" "▄" "▅" "▆" "▇" "█" ];
+              sleep_timer = 5;
+              bar_delimiter = 0;
+            };
+          };
+        };
+      };
+
+      wpaperd = {
+        enable = true;
+        settings = {
+          default = {
+            path = "/home/dz/Pictures/Wallpapers/default.png";
+          };
+        };
+      };
+    };
+
+    wayland.windowManager.hyprland = {
+      enable = true;
+      settings = {
+        monitor = [
+          "eDP-1, 1920x1080, 0x0, 1.0"
+          "VGA-0, 1920x1080, auto-right, 1.0"
+          "HDMI-A-1, 1920x1080, auto-right, 1.0"
+        ];
+        exec-once = [ "wpaperd" "waybar" "nm-applet" ];
+        env = [
+          "XCURSOR_SIZE,24"
+          "HYPRCURSOR_SIZE,24"
+        ];
+        general = {
+          gaps_in = 4;
+          gaps_out = 12;
+          border_size = 2;
+          "col.active_border" = "rgba(33ccffee) rgba(ff33ccee) rgba(ccff33ee) 45deg";
+          "col.inactive_border" = "rgba(595959aa)";
+          resize_on_border = false;
+          allow_tearing = false;
+          layout = "dwindle";
+        };
+        decoration = {
+          rounding = 10;
+          active_opacity = 1.0;
+          inactive_opacity = 1.0;
+          shadow = {
+            enabled = true;
+            range = 4;
+            render_power = 3;
+            color = "rgba(1a1a1aee)";
+          };
+          blur = {
+            enabled = true;
+            size = 11;
+            passes = 3;
+            vibrancy = 0.1696;
+            vibrancy_darkness = 0.9696;
+          };
+        };
+        animations = {
+          enabled = true;
+        };
+        dwindle = {
+          pseudotile= true;
+          preserve_split = true;
+        };
+        master = {
+          new_status = "master";
+        };
+        misc = {
+          force_default_wallpaper = 0;
+          disable_hyprland_logo = true;
+        };
+        input = {
+          kb_layout = "us";
+          follow_mouse = 1;
+          sensitivity = 0;
+          touchpad = {
+            natural_scroll = true;
+          };
+        };
+        "$mod" = "SUPER";
+        bind = [
+          "$mod, 36, exec, kitty"
+          "$mod, W, exec, firefox"
+          "$mod, Q, killactive,"
+          "$mod, M, exit,"
+          "$mod, E, exec, $fileManager"
+          "$mod, V, togglefloating,"
+          "$mod, F, fullscreen"
+          "$mod, space, exec, dzKeyMenu"
+          "$mod, slash, exec, openApp"
+          "$mod, P, pseudo, # dwindle"
+          "$mod, J, togglesplit, # dwindle"
+          "$mod, left, movefocus, l"
+          "$mod, right, movefocus, r"
+          "$mod, up, movefocus, u"
+          "$mod, down, movefocus, d"
+          "$mod, mouse_down, workspace, e+1"
+          "$mod, mouse_up, workspace, e-1"
+          ",121, exec, bash -c volumeToggleMute"
+        ] ++ (
+          builtins.concatLists (
+            builtins.genList
+              (i:
+                let
+                  ws = i + 1;
+                  k = ws - ((ws / 10) * 10);
+                in [
+                  "$mod, ${toString k}, workspace, ${toString ws}"
+                  "$mod SHIFT, ${toString k}, movetoworkspace, ${toString ws}"
+                ]
+              )
+              10
+          )
+        );
+        binde = [
+          ",122, exec, bash -c volumeDown"
+          ",123, exec, bash -c volumeUp"
+          ",232, exec, bash -c brightnessDown"
+          ",233, exec, bash -c brightnessUp"
+        ];
+        bindm = [
+          "$mod, mouse:272, movewindow"
+          "$mod SHIFT, mouse:272, resizewindow"
+        ];
+        windowrulev2 = [
+          "suppressevent maximize, class:.*"
+          "float, class:(float_.*)"
+          "float, class:(ztr)"
+          "center 1, class:(ztr)"
+        ];
+        layerrule = [
+          "blur , waybar"
+          "ignorezero , waybar"
+          "blur , notifications"
+          "ignorezero , notifications"
+          "blur , rofi"
+          "ignorezero , rofi"
+          "noanim , wpaperd.*"
+        ];
       };
     };
 
@@ -1069,6 +1050,7 @@ done
     nwjs-sdk
     pamixer
     pavucontrol
+    lxqt.pavucontrol-qt
     pcmanfm
     perl
     pkg-config
