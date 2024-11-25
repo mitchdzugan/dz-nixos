@@ -70,7 +70,7 @@
         rev = rev;
       };
     };
-  in 
+  in
     with pkgs.vimPlugins; [
       catppuccin-nvim
       cmp-nvim-lsp
@@ -85,6 +85,7 @@
       indent-blankline-nvim
       lualine-nvim
       mini-icons
+      neoscroll-nvim
       netrw-nvim
       nui-nvim
       nvim-cmp
@@ -103,22 +104,22 @@
       venn-nvim
       vim-vsnip
       which-key-nvim
-      (fromGitHub 
+      (fromGitHub
         "mcauley-penney/tidy.nvim"
         "HEAD"
         "f6c9cfc9ac5a92bb5ba3c354bc2c09a7ffa966f2"
         )
-      (fromGitHub 
+      (fromGitHub
         "Jxstxs/conceal.nvim"
         "HEAD"
         "1aff9fc5d1157aef1c7c88b6df6d6db21268d00a"
         )
-      (fromGitHub 
+      (fromGitHub
         "tiagovla/tokyodark.nvim"
         "HEAD"
         "14bc1b3e596878a10647af7c82de7736300f3322"
         )
-      (fromGitHub 
+      (fromGitHub
         "bluz71/vim-moonfly-colors"
         "HEAD"
         "63f20d657c9fd46ecdd75bd45c321f74ef9b11fe"

@@ -302,11 +302,12 @@ in {
     # enable = true;
     # wrapperFeatures.gtk = true;
   # };
-  # programs.hyprland = {
-    # enable = true;
-    # package = hyprland.packages.${pkgs.stdenv.hostPlatform.system}.hyprland;
-    # portalPackage = hyprland.packages.${pkgs.stdenv.hostPlatform.system}.xdg-desktop-portal-hyprland;
-  # };
+  programs.hyprland = {
+    enable = true;
+    package = hyprland.packages.${pkgs.stdenv.hostPlatform.system}.hyprland;
+    portalPackage =
+      hyprland.packages.${pkgs.stdenv.hostPlatform.system}.xdg-desktop-portal-hyprland;
+  };
   # services.xserver.desktopManager.pantheon.enable = true;
   # services.xserver.displayManager.lightdm.greeters.pantheon.enable = false;
   # services.xserver.displayManager.lightdm.enable = false;
@@ -374,7 +375,7 @@ ACTION=="change", SUBSYSTEM=="drm", RUN+="${pkgs.autorandr}/bin/autorandr -c"
     description = "Mitch Dzugan";
     extraGroups = [ "audio" "networkmanager" "wheel" ];
     packages = with pkgs; [ ];
-    shell = pkgs.fish;
+    shell = pkgs.bash;
   };
 
   home-manager.users.dz = hm@{ pkgs, ... }: {
@@ -400,14 +401,20 @@ ACTION=="change", SUBSYSTEM=="drm", RUN+="${pkgs.autorandr}/bin/autorandr -c"
     gtk.iconTheme.package = pkgs.dracula-icon-theme;
     gtk.iconTheme.name = "Dracula";
 
+    /*
     home.file."${hm.config.home.homeDirectory}/.profile" = {
       source = pkgs.writeText ".profile" ''
         . "${hm.config.home.profileDirectory}/etc/profile.d/hm-session-vars.sh"
       '';
       recursive = false;
     };
+    */
 
     xdg.configFile = {
+      "blesh" = {
+        source = hm.config.lib.file.mkOutOfStoreSymlink ./domain/bash/blesh;
+        recursive = true;
+      };
       "fastfetch" = {
         source = hm.config.lib.file.mkOutOfStoreSymlink ./domain/fastfetch;
         recursive = true;
@@ -442,13 +449,18 @@ ACTION=="change", SUBSYSTEM=="drm", RUN+="${pkgs.autorandr}/bin/autorandr -c"
           cdproj = "cd $(codeProject.py)";
         };
         shellInit = ''
-          set -x TERM xterm-256color
-          any-nix-shell fish | source
+          # any-nix-shell fish | source
+          alias ls "grc ls --color=always"
           function fish_greeting
             fastfetch \
               --separator-output-color black \
-              --logo-type file-raw \
-              --logo ~/.config/fastfetch/logo.nix.ascii
+              --logo-width 37 \
+              --logo-height 17 \
+              --logo-padding-left 1 \
+              --logo-padding-top 3 \
+              --logo-padding-right 3 \
+              --logo-type kitty-direct \
+              --logo ~/.config/fastfetch/logo.nix.png
           end
           tide configure \
             --auto \
@@ -487,13 +499,128 @@ ACTION=="change", SUBSYSTEM=="drm", RUN+="${pkgs.autorandr}/bin/autorandr -c"
         ];
       };
 
-      /*
+      # enabled for posix support of login shell
+      # bash.enable = true;
+
       bash = {
         enable = true;
         enableCompletion = true;
-        # bashrcExtra = builtins.readFile ./domain/bash/bashrcExtra;
+        bashrcExtra = builtins.readFile ./domain/bash/bashrcExtra.sh;
+        initExtra = builtins.readFile ./domain/bash/initExtra.sh;
       };
 
+      kitty = {
+        enable = true;
+        shellIntegration = {
+          enableBashIntegration = true;
+        };
+        settings = {
+          confirm_os_window_close = -1;
+          cursor_trail = 1;
+          cursor_blink_interval = "1.0 ease-in";
+          dynamic_background_opacity = "yes";
+          background_opacity = 0.9;
+          transparent_background_colors = lib.concatStrings [
+            "#604b49@0.9 "
+            "#605955@0.9 "
+            "#385167@0.9 "
+            "#4b4e6c@0.9 "
+            "#11111b@0.8 "
+            "#6c7086@0.8 "
+            "#181825@0.8 "
+          ];
+        };
+        themeFile = "purpurite";
+      };
+
+      /*
+      oh-my-posh = {
+        enable = true;
+        enableBashIntegration = true;
+        useTheme = "mojada";
+      };
+
+      starship = {
+        enable = true;
+        enableBashIntegration = true;
+        settings = {
+          add_newline = false;
+          format = lib.concatStrings [
+            "[](#9A348E)"
+            "$hostname"
+            "[](bg:#DA627D fg:#9A348E)"
+            "$directory"
+            "[](fg:#DA627D bg:#FCA17D)"
+            "$git_branch"
+            "$git_status"
+            "[](fg:#FCA17D bg:#86BBD8)"
+            "$c"
+            "$haskell"
+            "$nodejs"
+            "$rust"
+            "[](fg:#86BBD8 bg:#06969A)"
+            "$time"
+            "[](fg:#06969A)"
+            " "
+          ];
+          hostname = {
+            ssh_only = false;
+            style = "bg:#9A348E";
+            format = "[$ssh_symbol$hostname ]($style)";
+          };
+          os = { disabled = true; };
+          directory = {
+            style = "bg:#DA627D";
+            format = "[ $path ]($style)";
+            truncation_length = 3;
+            truncation_symbol = "…/";
+            substitutions = {
+              Documents = "󰈙 ";
+              Downloads = " ";
+              Music = " ";
+              Pictures = " ";
+            };
+          };
+          c = {
+            symbol = " ";
+            style = "bg:#86BBD8";
+            format = "[ $symbol ($version) ]($style)";
+          };
+          git_branch = {
+            symbol = "";
+            style = "bg:#FCA17D";
+            format = "[ $symbol $branch ]($style)";
+          };
+          git_status = {
+            style = "bg:#FCA17D";
+            format = "[$all_status$ahead_behind ]($style)";
+          };
+          haskell = {
+            symbol = " ";
+            style = "bg:#86BBD8";
+            format = "[ $symbol ($version) ]($style)";
+          };
+          nodejs = {
+            symbol = "";
+            style = "bg:#86BBD8";
+            format = "[ $symbol ($version) ]($style)";
+          };
+          rust = {
+            symbol = " ";
+            style = "bg:#86BBD8";
+            format = "[ $symbol ($version) ]($style)";
+          };
+          time = {
+            disabled = false;
+            time_format = "%R";
+            style = "bg:#06969A";
+            format = "[ ♥ $time ]($style)";
+          };
+        };
+      };
+      */
+
+      /*
       zsh = {
         enable = true;
         autocd = true;
@@ -516,8 +643,8 @@ ACTION=="change", SUBSYSTEM=="drm", RUN+="${pkgs.autorandr}/bin/autorandr -c"
 
       direnv = {
         enable = true;
-        enableBashIntegration = true;
-        enableZshIntegration = true;
+        # enableBashIntegration = true;
+        # enableZshIntegration = true;
         nix-direnv.enable = true;
       };
 
@@ -622,7 +749,7 @@ ACTION=="change", SUBSYSTEM=="drm", RUN+="${pkgs.autorandr}/bin/autorandr -c"
         enableBashIntegration = true;
         extraConfig = ''
           return {
-            color_scheme = "rose-pine",
+            color_scheme = "catppuccin-mocha",
             font = wezterm.font_with_fallback({
               "MonaspiceKr Nerd Font Mono",
               "ComicShannsMono Nerd Font Mono",
@@ -635,6 +762,7 @@ ACTION=="change", SUBSYSTEM=="drm", RUN+="${pkgs.autorandr}/bin/autorandr -c"
             font_size = 11.0,
             window_padding = { top = 0, left = 0, right = 0, bottom = 0 },
             freetype_load_flags = 'NO_HINTING',
+            unix_domains = {{ name = 'unix' }},
           }
         '';
       };
@@ -650,6 +778,8 @@ ACTION=="change", SUBSYSTEM=="drm", RUN+="${pkgs.autorandr}/bin/autorandr -c"
             plugin = rose-pine;
             extraConfig = ''
               set -g @rose_pine_variant 'main'
+              set -gq allow-passthrough on
+              set -g visual-activity off
             '';
           }
         ];
@@ -862,6 +992,19 @@ done
     };
     wantedBy = [];
   };
+  /*
+  systemd.user.services.wezterm-mux = {
+    enable = true;
+    description = "control dzbspwm polybar module";
+    serviceConfig = {
+      Type = "exec";
+      ExecStart = "/home/dz/Projects/dz-bin/bspwm-polybar-watch";
+      Restart = "on-failure";
+      Environment="PATH=$PATH:${lib.makeBinPath [ pkgs.coreutils pkgs.bash pkgs.which pkgs.ps pkgs.nodejs pkgs.bspwm pkgs.polybar ]}:/home/dz/Projects/dz-bin:/home/dz/Projects/dz-bspwm/bin";
+    };
+    wantedBy = [];
+  };
+  */
 
   programs.dconf.enable = true;
 
@@ -878,7 +1021,9 @@ done
   environment.systemPackages = with pkgs; [
     alsa-utils
     any-nix-shell
+    ascii-image-converter
     bat
+    blesh
     bc
     bibata-cursors
     brightnessctl
@@ -911,6 +1056,7 @@ done
     heroku
     htop
     jq
+    jp2a
     killall
     kitty
     libnotify
@@ -935,6 +1081,7 @@ done
       python-pkgs.requests
       python-pkgs.xlib
     ]))
+    qimgv
     ripgrep
     rofi
     rust-analyzer
@@ -1050,7 +1197,20 @@ done
   programs.gamemode.enable = true;
 
   programs.fish = { enable = true; };
-    # programs.xonsh = { enable = true; package = dz_xonsh; };
+  # used as login shell and hijacked by fish for interactive use
+  programs.bash = {
+    /*
+    interactiveShellInit = ''
+      if [[ $(${pkgs.procps}/bin/ps --no-header --pid=$PPID --format=comm) != "fish" && -z ''${BASH_EXECUTION_STRING} ]]
+      then
+        shopt -q login_shell && LOGIN_OPTION='--login' || LOGIN_OPTION=""
+        exec ${pkgs.fish}/bin/fish $LOGIN_OPTION
+      fi
+    '';
+    */
+  };
+
+  programs.xonsh = { enable = true; package = dz_xonsh; };
 
   programs.steam = {
     enable = true;
