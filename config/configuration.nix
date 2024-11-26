@@ -835,6 +835,7 @@ ACTION=="change", SUBSYSTEM=="drm", RUN+="${pkgs.autorandr}/bin/autorandr -c"
           };
         };
       };
+      cliphist = { enable = true; };
     };
 
     # The state version is required and should stay at the version you
@@ -948,7 +949,7 @@ ACTION=="change", SUBSYSTEM=="drm", RUN+="${pkgs.autorandr}/bin/autorandr -c"
     waybox
     wev
     wget
-    wl-clipboard-rs
+    wl-clipboard
     wmctrl
     wmutils-core
     wofi

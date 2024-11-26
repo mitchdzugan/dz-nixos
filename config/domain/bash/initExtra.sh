@@ -109,6 +109,7 @@ alias dnf='grc dnf'
 alias dig='grc dig'
 alias diff='grc diff'
 alias df='grc df'
+# alias wl-copy='wl-copy -f'
 
 fastfetch \
 	--separator-output-color black \
