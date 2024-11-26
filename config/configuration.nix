@@ -508,8 +508,9 @@ ACTION=="change", SUBSYSTEM=="drm", RUN+="${pkgs.autorandr}/bin/autorandr -c"
               "full-screen-api.ignore-widgets" = true;
               "full-screen-api.exit-on.windowRaise" = false;
             };
-            # userChrome = builtins.readFile ./domain/firefox/userChrome.css;
+            userChrome = builtins.readFile ./domain/firefox/userChrome.css;
             extensions = with config.nur.repos.rycee.firefox-addons; [
+              tokyo-night-v2
               ublock-origin
               video-downloadhelper
             ];
@@ -1112,7 +1113,7 @@ done
     ]))
     qimgv
     ripgrep
-    rofi
+    rofi-wayland
     rust-analyzer
     scrot
     ### Need the thing

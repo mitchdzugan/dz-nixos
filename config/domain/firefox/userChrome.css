@@ -55,9 +55,7 @@ toolbaritem#urlbar-container {
 	display: flex !important;
 	flex-direction: column !important;
 	align-items: center !important;
-	/*font-family: "MonaspiceKr Nerd Font Mono" !important;*/
-	font-family: "ComicShannsMono Nerd Font Mono" !important;
-	/*font-family: monospace, monospace !important;*/
+	font-family: monospace, monospace !important;
 	font-size: 1.4rem !important;
 	position: absolute !important;
 	left: 0px !important;
@@ -81,7 +79,7 @@ toolbaritem#urlbar-container {
 }
 
 #urlbar:not([focused]) .urlbar-input-container > *:not(.urlbar-searchmode-and-input-box-container) {
-	display: none !important;
+	opacity: 0 !important;
 }
 
 #urlbar:not([focused]) .urlbar-input-container > .urlbar-searchmode-and-input-box-container {
