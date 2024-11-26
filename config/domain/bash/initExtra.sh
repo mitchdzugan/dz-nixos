@@ -90,6 +90,6 @@ fastfetch \
 	--logo-padding-top 3 \
 	--logo-padding-right 3 \
 	--logo-type kitty-direct \
-	--logo ~/.config/fastfetch/logo.nix.png
+	--logo ~/.config/fastfetch/logo.nix.2.png
 
 [[ ! ${BLE_VERSION-} ]] || ble-attach
