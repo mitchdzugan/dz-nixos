@@ -480,10 +480,12 @@ ACTION=="change", SUBSYSTEM=="drm", RUN+="${pkgs.autorandr}/bin/autorandr -c"
               "browser.tabs.inTitlebar" = 0;
               "full-screen-api.ignore-widgets" = true;
               "full-screen-api.exit-on.windowRaise" = false;
+              "extensions.activeThemeId" = with config.nur.repos.rycee;
+                firefox-addons.dracula-dark-colorscheme.addonId;
             };
             userChrome = builtins.readFile ./domain/firefox/userChrome.css;
             extensions = with config.nur.repos.rycee.firefox-addons; [
-              tokyo-night-v2
+              dracula-dark-colorscheme
               ublock-origin
               video-downloadhelper
             ];
@@ -931,6 +933,7 @@ ACTION=="change", SUBSYSTEM=="drm", RUN+="${pkgs.autorandr}/bin/autorandr -c"
     ssbm.packages.${pkgs.hostPlatform.system}.slippi-netplay
     ssbm.packages.${pkgs.hostPlatform.system}.slippi-playback
     stack
+    traceroute
     transmission_4-qt
     ttyd
     typescript
@@ -945,7 +948,7 @@ ACTION=="change", SUBSYSTEM=="drm", RUN+="${pkgs.autorandr}/bin/autorandr -c"
     waybox
     wev
     wget
-    wl-clipboard
+    wl-clipboard-rs
     wmctrl
     wmutils-core
     wofi

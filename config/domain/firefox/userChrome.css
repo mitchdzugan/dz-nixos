@@ -78,12 +78,14 @@ toolbaritem#urlbar-container {
 	background: var(--toolbar-bgcolor) !important;
 }
 
-#urlbar:not([focused]) .urlbar-input-container > *:not(.urlbar-searchmode-and-input-box-container) {
+#urlbar:not([focused]) .urlbar-input-container > * {
+	display: none !important;
 	opacity: 0 !important;
 }
 
-#urlbar:not([focused]) .urlbar-input-container > .urlbar-searchmode-and-input-box-container {
-	opacity: 0 !important;
+#urlbar:not([focused]) .urlbar-input-container > .urlbar-searchmode-and-input-box-container,
+#urlbar:not([focused]) .urlbar-input-container > .urlbar-input-box {
+	display: flex !important;
 }
 
 tabs#tabbrowser-tabs {
