@@ -237,8 +237,8 @@ in {
   services.xserver.enable = true;
 
   # Enable the KDE Plasma Desktop Environment.
-  # services.displayManager.ly.enable = true;
   services.displayManager.sddm.enable = true;
+  services.displayManager.sddm.theme = "sddm-dz";
   services.displayManager.sddm.settings = {
     Theme = {
       CursorSize = 24;
@@ -246,8 +246,6 @@ in {
     };
   };
   services.xserver.displayManager.setupCommands = "${pkgs.autorandr}/bin/autorandr -c";
-  services.displayManager.sddm.theme = "sddm-dz";
-  # services.displayManager.sddm.theme = "Elegant";
   systemd.services."sddm-avatar" = {
     description = "Service to copy or update users Avatars at startup.";
     wantedBy = [ "multi-user.target" ];
@@ -286,29 +284,13 @@ in {
     ];
   };
   services.xserver.windowManager.bspwm.enable = true;
-  # services.desktopManager.plasma6.enable = true;
-  # services.xserver.desktopManager.plasma5.enable = true;
-  # services.xserver.desktopManager.xfce.enable = true;
-  # services.xserver.desktopManager.cinnamon.enable = true;
-  # services.xserver.displayManager.gdm.enable = true;
   services.xserver.desktopManager.gnome.enable = true;
-  # services.xserver.displayManager.lightdm.enable = true;
-  # services.xserver.windowManager.qtile.enable = true;
-  # programs.river.enable = true;
-  # programs.sway = {
-    # enable = true;
-    # wrapperFeatures.gtk = true;
-  # };
   programs.hyprland = {
     enable = true;
     package = hyprland.packages.${pkgs.stdenv.hostPlatform.system}.hyprland;
     portalPackage =
       hyprland.packages.${pkgs.stdenv.hostPlatform.system}.xdg-desktop-portal-hyprland;
   };
-  # services.xserver.desktopManager.pantheon.enable = true;
-  # services.xserver.displayManager.lightdm.greeters.pantheon.enable = false;
-  # services.xserver.displayManager.lightdm.enable = false;
-  # services.pantheon.apps.enable = false;
 
   # Configure keymap in X11
   services.xserver.xkb = {
@@ -397,15 +379,6 @@ ACTION=="change", SUBSYSTEM=="drm", RUN+="${pkgs.autorandr}/bin/autorandr -c"
     gtk.theme.name = "rose-pine";
     gtk.iconTheme.package = pkgs.dracula-icon-theme;
     gtk.iconTheme.name = "Dracula";
-
-    /*
-    home.file."${hm.config.home.homeDirectory}/.profile" = {
-      source = pkgs.writeText ".profile" ''
-        . "${hm.config.home.profileDirectory}/etc/profile.d/hm-session-vars.sh"
-      '';
-      recursive = false;
-    };
-    */
 
     xdg.configFile = {
       "blesh" = {
@@ -846,81 +819,8 @@ ACTION=="change", SUBSYSTEM=="drm", RUN+="${pkgs.autorandr}/bin/autorandr -c"
       };
     };
 
-    xsession.windowManager.bspwm = {
-      enable = true;
-      extraConfigEarly = byHostname.${hostname}.bspwmExtraConfig + ''
-autorandr -c
-xsetroot -cursor_name left_ptr
-xset s off -dpms
-systemctl --user start picom
-systemctl --user start polybar
-systemctl --user start redshift
-systemctl --user start bspwm-polybar
-nitrogen --restore
-blueman-applet &
-nm-applet &
-      '';
-      extraConfig = ''
-bspwm-reset-monitors.js
-      '';
-      rules = {
-        ztr = {
-          state = "floating";
-          center = true;
-        };
-        Ztr = {
-          border = false;
-          focus = false;
-          state = "floating";
-          center = true;
-        };
-      };
-      settings = {
-        focus_follows_pointer = true;
-        pointer_follows_focus = true;
-        pointer_follows_monitor = true;
-        border_width = 2;
-        normal_border_color  = "#646464";
-        active_border_color  = "#645276";
-        focused_border_color = "#a487c7";
-      };
-    };
-
     services = {
-      sxhkd = {
-        enable = true;
-        keybindings = {
-          "super + shift + q" = "bspc quit";
-          "super + q" = "bspc node --close";
-          "super + space" = "dzKeyMenu";
-          "super + slash" = "openApp";
-          "super + Return" = "kitty";
-          "super + w" = "firefox";
-          "super + e" = "thunar";
-          "super + grave" = "bspwm-cycle-monitor-focus.js";
-          "super + {t,shift + t,f,m}" = "bspc node -t {tiled,pseudo_tiled,floating,fullscreen}";
-          "super + {1-9,0,equal}" = "bspwm-focus-desktop.js {1-9,10,f}";
-          "super + shift + {1-9,0,plus}" = "bspwm-move-to-desktop.js -d {1-9,10,f}";
-          "super + {Left,Right,Up,Down}" = "bspc node -f {west,east,north,south}";
-          "XF86MonBrightnessUp" = "brightnessUp";
-          "XF86MonBrightnessDown" = "brightnessDown";
-          "XF86AudioRaiseVolume" = "volumeUp";
-          "XF86AudioLowerVolume" = "volumeDown";
-          "XF86AudioMute" = "volumeToggleMute";
-          "shift + XF86AudioRaiseVolume" = "next.py";
-          "shift + XF86AudioLowerVolume" = "prev.py";
-          "shift + XF86AudioMute" = "pause.py";
-          "XF86AudioPlay" = "pause.py";
-          "XF86AudioNext" = "next.py";
-          "XF86AudioPrev" = "prev.py";
-          "Print" = "ss_dir_scrot";
-          "ctrl + Print" = "ss_dir_scrot --select";
-          "shift + Print" = "ss_dir_scrot -u";
-        };
-      };
-
       autorandr.enable = true;
-
       dunst = {
         enable = true;
         iconTheme.package = pkgs.dracula-icon-theme;
@@ -933,71 +833,6 @@ bspwm-reset-monitors.js
           };
         };
       };
-
-      polybar =
-        let
-          polybar_cava = pkgs.writeShellApplication {
-            name = "polybar_cava";
-            # runtimeInputs = [ pkgs.coreutils pkgs.cava pkgs.gnused ];
-            text = builtins.readFile ./domain/polybar/cava.sh;
-          };
-        in {
-          enable = true;
-          package = (pkgs.polybar.override {
-            alsaSupport = true;
-            iwSupport = true;
-            githubSupport = true;
-            pulseSupport = true;
-            mpdSupport = true;
-          });
-          config = ./domain/polybar/config.ini;
-          script = ''
-export PATH=$PATH:/home/dz/Projects/dz-bspwm/bin:${lib.makeBinPath [ pkgs.coreutils pkgs.systemd pkgs.which pkgs.bspwm pkgs.nodejs pkgs.pamixer pkgs.pulseaudio polybar_cava ]}
-
-for m in $(polybar --list-monitors | cut -d":" -f1); do
-    MONITOR=$m polybar --reload example &
-done
-          '';
-        };
-
-      redshift = {
-        enable = true;
-        tray = true;
-        latitude = 41.86;
-        longitude = -88.12;
-      };
-
-      picom = {
-        enable = true;
-        package = pkgs.picom;
-        backend = "glx";
-        vSync = true;
-        extraArgs = ["--config" "/home/dz/.config/picom/final.conf"];
-        settings = {
-          shadow = true;
-          shadow-radius = 50;
-          shadow-opacity = 0.35;
-          shadow-offset-x = -49;
-          shadow-offset-y = -47;
-          shadow-color = "#00020b";
-          frame-opacity = 0.95;
-          frame-opacity-for-same-colors = true;
-          inner-border-width = 1;
-          corner-radius = 13;
-          blur-method = "dual_kawase";
-          blur-strength = 10;
-          blur-background = true;
-          blur-background-frame = true;
-          dithered-present = false;
-          detect-client-opacity = true;
-          detect-transient = true;
-          detect-client-leader = true;
-          glx-no-stencil = true;
-          glx-no-rebind-pixmap = true;
-          use-damage = true;
-          xrender-sync-fence = true;
-        };
-      };
     };
 
     # The state version is required and should stay at the version you
@@ -1006,35 +841,6 @@ done
   };
 
   users.groups.voiders.members = [ "dz" "mopidy" ];
-
-  systemd.user.services.picom.wantedBy = [];
-  systemd.user.services.polybar.wantedBy = [];
-  systemd.user.services.redshift.wantedBy = [];
-  systemd.user.services.bspwm-polybar = {
-    enable = true;
-    description = "control dzbspwm polybar module";
-    serviceConfig = {
-      Type = "exec";
-      ExecStart = "/home/dz/Projects/dz-bin/bspwm-polybar-watch";
-      Restart = "on-failure";
-      Environment="PATH=$PATH:${lib.makeBinPath [ pkgs.coreutils pkgs.bash pkgs.which pkgs.ps pkgs.nodejs pkgs.bspwm pkgs.polybar ]}:/home/dz/Projects/dz-bin:/home/dz/Projects/dz-bspwm/bin";
-    };
-    wantedBy = [];
-  };
-  /*
-  systemd.user.services.wezterm-mux = {
-    enable = true;
-    description = "control dzbspwm polybar module";
-    serviceConfig = {
-      Type = "exec";
-      ExecStart = "/home/dz/Projects/dz-bin/bspwm-polybar-watch";
-      Restart = "on-failure";
-      Environment="PATH=$PATH:${lib.makeBinPath [ pkgs.coreutils pkgs.bash pkgs.which pkgs.ps pkgs.nodejs pkgs.bspwm pkgs.polybar ]}:/home/dz/Projects/dz-bin:/home/dz/Projects/dz-bspwm/bin";
-    };
-    wantedBy = [];
-  };
-  */
-
   programs.dconf.enable = true;
 
   # Allow unfree packages
@@ -1043,7 +849,7 @@ done
 
 
   ## environment.sessionVariables.NIXOS_OZONE_WL = "1";
-  environment.pathsToLink = [ "/share/zsh" ];
+  environment.pathsToLink = [ "/share/zsh" ]; # idk why I did this..?
 
   # List packages installed in system profile. To search, run:
   # $ nix search wget
@@ -1226,20 +1032,6 @@ done
 
   programs.gamemode.enable = true;
 
-  programs.fish = { enable = true; };
-  # used as login shell and hijacked by fish for interactive use
-  programs.bash = {
-    /*
-    interactiveShellInit = ''
-      if [[ $(${pkgs.procps}/bin/ps --no-header --pid=$PPID --format=comm) != "fish" && -z ''${BASH_EXECUTION_STRING} ]]
-      then
-        shopt -q login_shell && LOGIN_OPTION='--login' || LOGIN_OPTION=""
-        exec ${pkgs.fish}/bin/fish $LOGIN_OPTION
-      fi
-    '';
-    */
-  };
-
   programs.xonsh = { enable = true; package = dz_xonsh; };
 
   programs.steam = {
@@ -1326,16 +1118,6 @@ done
       monospace = [ "MonaspiceKr Nerd Font Mono" ];
     };
   };
-
-/*
-  xdg.portal = {
-    enable = true;
-    extraPortals = [
-      pkgs.xdg-desktop-portal-kde
-      pkgs.xdg-desktop-portal-xapp
-    ];
-  };
-*/
 
   # This value determines the NixOS release from which the default
   # settings for stateful data, like file locations and database versions
