@@ -1,0 +1,21 @@
+[tool.poetry]
+name = "dz-xonsh"
+version = "0.1.0"
+description = ""
+authors = ["Mitch Dzugan <mitchdzugan@gmail.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.12"
+xonsh = "^0.18.4"
+xontrib-powerline3 = "^0.3.17"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+[project.scripts]
+dz_xonsh = "dz_xonsh.xonsh:main"
+xonsh-cat = "dz_xonsh.cat:cat"
+xonsh-uname = "dz_xonsh.xonsh:uname"
+xonsh-uptime = "dz_xonsh.xonsh:uptime"

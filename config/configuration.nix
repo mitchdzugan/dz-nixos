@@ -181,6 +181,7 @@ xinputSetTouchpadNaturalScroll
   dz_xonsh = pkgs.xonsh.override {
     extraPackages = ps: [
       ps.coconut
+      ps.pip
     ];
   };
 in {
@@ -365,6 +366,10 @@ ACTION=="change", SUBSYSTEM=="drm", RUN+="${pkgs.autorandr}/bin/autorandr -c"
         package = pkgs.bibata-cursors;
         name = "Bibata-Modern-Ice";
         size = 24;
+        hyprcursor = {
+          enable = true;
+          size = 24;
+        };
       };
       packages = [ pkgs.gimp pkgs.mpv ];
       ## sessionVariables.QT_QPA_PLATFORM = "wayland";
@@ -418,6 +423,29 @@ ACTION=="change", SUBSYSTEM=="drm", RUN+="${pkgs.autorandr}/bin/autorandr -c"
         enableCompletion = true;
         bashrcExtra = builtins.readFile ./domain/bash/bashrcExtra.sh;
         initExtra = builtins.readFile ./domain/bash/initExtra.sh;
+      };
+
+      fzf = {
+        enable = true;
+        enableZshIntegration = true;
+      };
+
+      zsh = {
+        enable = true;
+        enableCompletion = true;
+        enableVteIntegration = true;
+        autocd = true;
+        antidote = {
+          enable = true;
+          plugins = [
+            "romkatv/powerlevel10k"
+          ];
+        };
+        initExtra = ''
+          unsetopt BEEP
+          # # export FZF_COMPLETION_TRIGGER=""
+          source ~/.p10k.zsh
+        '';
       };
 
       kitty = {
@@ -788,7 +816,7 @@ ACTION=="change", SUBSYSTEM=="drm", RUN+="${pkgs.autorandr}/bin/autorandr -c"
           "noanim , wpaperd.*"
         ];
         "plugin:hyprtrails" = {
-          color = "rgba(bb44ccaa)";
+          color = "rgba(bb44cc44)";
         };
         "plugin:hyprwinwrap" = {
           class = "kitty-hww";
@@ -811,9 +839,8 @@ ACTION=="change", SUBSYSTEM=="drm", RUN+="${pkgs.autorandr}/bin/autorandr -c"
         };
         "plugin:dynamic-cursors" = {
           enabled = true;
-          mode = "stretch";
+          mode = "tilt";
           shake = {
-            nearest = false;
             effects = true;
             threshold = 4.5;
           };
@@ -919,6 +946,7 @@ ACTION=="change", SUBSYSTEM=="drm", RUN+="${pkgs.autorandr}/bin/autorandr -c"
       python-pkgs.mpd2
       python-pkgs.requests
       python-pkgs.xlib
+      python-pkgs.pip
     ]))
     qimgv
     ripgrep
