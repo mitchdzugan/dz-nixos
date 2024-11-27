@@ -420,40 +420,38 @@ ACTION=="change", SUBSYSTEM=="drm", RUN+="${pkgs.autorandr}/bin/autorandr -c"
 
       bash = {
         enable = true;
-        enableCompletion = true;
-        bashrcExtra = builtins.readFile ./domain/bash/bashrcExtra.sh;
-        initExtra = builtins.readFile ./domain/bash/initExtra.sh;
+        # enableCompletion = true;
+        # bashrcExtra = builtins.readFile ./domain/bash/bashrcExtra.sh;
+        # initExtra = builtins.readFile ./domain/bash/initExtra.sh;
       };
 
-      fzf = {
+      fish = {
         enable = true;
-        enableZshIntegration = true;
-      };
-
-      zsh = {
-        enable = true;
-        enableCompletion = true;
-        enableVteIntegration = true;
-        autocd = true;
-        antidote = {
-          enable = true;
-          plugins = [
-            "romkatv/powerlevel10k"
-          ];
+        functions = {
+          cdproj = "cd $(codeProject.py)";
         };
-        initExtra = ''
-          unsetopt BEEP
-          # # export FZF_COMPLETION_TRIGGER=""
-          source ~/.p10k.zsh
-        '';
+        interactiveShellInit = builtins.readFile (
+          ./domain/fish/interactiveShellInit.fish
+        );
+        plugins = with pkgs.fishPlugins; [
+          { name = "z"; src = z.src; }
+          { name = "grc"; src = grc.src; }
+          { name = "fzf"; src = fzf.src; }
+          { name = "tide"; src = tide.src; }
+          { name = "done"; src = done.src; }
+          { name = "bass"; src = bass.src; }
+          { name = "gruvbox"; src = gruvbox.src; }
+          { name = "autopair"; src = autopair.src; }
+        ];
       };
 
       kitty = {
         enable = true;
         shellIntegration = {
-          enableBashIntegration = true;
+          enableFishIntegration = true;
         };
         settings = {
+          shell = "fish";
           confirm_os_window_close = -1;
           cursor_trail = 1;
           cursor_blink_interval = "1.0 ease-in";
@@ -688,7 +686,7 @@ ACTION=="change", SUBSYSTEM=="drm", RUN+="${pkgs.autorandr}/bin/autorandr -c"
           "VGA-0, 1920x1080, auto-right, 1.0"
           "HDMI-A-1, 1920x1080, auto-right, 1.0"
         ];
-        exec-once = [ "wpaperd" "waybar" "nm-applet" ];
+        exec-once = [ "wpaperd" "waybar" "nm-applet" "blueman-applet" ];
         env = [
           "XCURSOR_SIZE,24"
           "HYPRCURSOR_SIZE,24"
