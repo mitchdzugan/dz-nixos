@@ -429,6 +429,49 @@ ACTION=="change", SUBSYSTEM=="drm", RUN+="${pkgs.autorandr}/bin/autorandr -c"
         enable = true;
         functions = {
           cdproj = "cd $(codeProject.py)";
+          _tide_item_rich_status = ''
+            if string match -qv 0 $_tide_pipestatus # If there is a failure anywhere in the pipestatus
+              if test "$_tide_pipestatus" = 1 # If simple failure
+                contains rich_character $_tide_left_items || tide_rich_status_bg_color=$tide_rich_status_bg_color_failure \
+                  tide_rich_status_color=$tide_rich_status_color_failure _tide_print_item rich_status $tide_rich_status_icon_failure' ' 1
+              else
+                fish_status_to_signal $_tide_pipestatus | string replace SIG "" | string join '|' | read -l out
+                test $_tide_status = 0 && _tide_print_item rich_status $tide_rich_status_icon' ' $out ||
+                  tide_rich_status_bg_color=$tide_rich_status_bg_color_failure tide_rich_status_color=$tide_rich_status_color_failure \
+                    _tide_print_item rich_status $tide_rich_status_icon_failure' ' $out
+              end
+            else if not contains rich_character $_tide_left_items
+              _tide_print_item rich_status $tide_rich_status_icon
+            end
+          '';
+          _tide_item_rich_character = ''
+            test $_tide_status = 0 \
+              && set -fx tide_rich_character_bg_color $tide_rich_character_bg0 \
+              || set -fx tide_rich_character_bg_color $tide_rich_character_bgX
+            test $_tide_status = 0 \
+              && set -fx tide_rich_character_color $tide_rich_character_color0 \
+              || set -fx tide_rich_character_color $tide_rich_character_colorX
+
+            _tide_print_item rich_character $tide_rich_character_char
+          '';
+          _tide_item_rich_context = ''
+            if set -q SSH_TTY
+              set -fx tide_rich_context_color $tide_rich_context_color_ssh
+            else if test "$EUID" = 0
+              set -fx tide_rich_context_color $tide_rich_context_color_root
+            else if test "$tide_context_always_display" = true
+              set -fx tide_rich_context_color $tide_rich_context_color_default
+            else
+              return
+            end
+
+            string match -qr "^(?<h>(\.?[^\.]*){0,$tide_context_hostname_parts})" $hostname
+            set -l fullstr "$(\
+              set_color $tide_rich_context_color_user && echo $USER)$(\
+              set_color $tide_rich_context_color && echo @)$(\
+              set_color $tide_rich_context_color_host && echo $h)"
+            _tide_print_item rich_context $fullstr
+          '';
         };
         interactiveShellInit = builtins.readFile (
           ./domain/fish/interactiveShellInit.fish
@@ -456,6 +499,8 @@ ACTION=="change", SUBSYSTEM=="drm", RUN+="${pkgs.autorandr}/bin/autorandr -c"
           cursor_trail = 1;
           cursor_blink_interval = "1.0 ease-in";
           dynamic_background_opacity = "yes";
+          background_opacity = 1.0;
+          /*
           background_opacity = 0.9;
           transparent_background_colors = lib.concatStrings [
             "#604b49@0.9 "
@@ -466,8 +511,104 @@ ACTION=="change", SUBSYSTEM=="drm", RUN+="${pkgs.autorandr}/bin/autorandr -c"
             "#6c7086@0.8 "
             "#181825@0.8 "
           ];
+          */
         };
         themeFile = "purpurite";
+      };
+
+      alacritty = {
+        enable = true;
+        settings = {
+          env.WINIT_X11_SCALE_FACTOR = "1.0";
+          window.opacity = 0.85;
+          colors.transparent_background_colors = true;
+          font.size = 11.0;
+          font.normal = { family = "MonaspiceKr Nerd Font Mono"; style = "Medium"; };
+          colors.primary = {
+            foreground = "#e0def4";
+            background = "#191724";
+            dim_foreground = "#908caa";
+            bright_foreground = "#e0def4";
+          };
+
+          colors.cursor = {
+            text = "#e0def4";
+            cursor = "#524f67";
+          };
+
+          colors.vi_mode_cursor = {
+            text = "#e0def4";
+            cursor = "#524f67";
+          };
+
+          colors.search.matches = {
+            foreground = "#908caa";
+            background = "#26233a";
+          };
+
+          colors.search.focused_match = {
+            foreground = "#191724";
+            background = "#ebbcba";
+          };
+
+          colors.hints.start = {
+            foreground = "#908caa";
+            background = "#1f1d2e";
+          };
+
+          colors.hints.end = {
+            foreground = "#6e6a86";
+            background = "#1f1d2e";
+          };
+
+          colors.line_indicator = {
+            foreground = "None";
+            background = "None";
+          };
+
+          colors.footer_bar = {
+            foreground = "#e0def4";
+            background = "#1f1d2e";
+          };
+
+          colors.selection = {
+            text = "#e0def4";
+            background = "#403d52";
+          };
+
+          colors.normal = {
+            black = "#26233a";
+            red = "#eb6f92";
+            green = "#31748f";
+            yellow = "#f6c177";
+            blue = "#9ccfd8";
+            magenta = "#c4a7e7";
+            cyan = "#ebbcba";
+            white = "#e0def4";
+          };
+
+          colors.bright = {
+            black = "#6e6a86";
+            red = "#eb6f92";
+            green = "#31748f";
+            yellow = "#f6c177";
+            blue = "#9ccfd8";
+            magenta = "#c4a7e7";
+            cyan = "#ebbcba";
+            white = "#e0def4";
+          };
+
+          colors.dim = {
+            black = "#6e6a86";
+            red = "#eb6f92";
+            green = "#31748f";
+            yellow = "#f6c177";
+            blue = "#9ccfd8";
+            magenta = "#c4a7e7";
+            cyan = "#ebbcba";
+            white = "#e0def4";
+          };
+        };
       };
 
       git = {
