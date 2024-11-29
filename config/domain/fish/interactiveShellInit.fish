@@ -78,6 +78,25 @@ function zdev
     set -l fish_init "begin; set $pidvar \$fish_pid; cd $wd; end"
     cd $ZDEV_NIXROOT
     clear
+    function sc
+      set -l txt $argv
+      set -l format set_color cyan
+      if string match -r -- "^-.*" $argv[1] >/dev/null 2>&1
+        set txt $argv[2..]
+        set format set_color $argv[1] cyan
+      end
+      set_color normal && set_color -b brblack && $format && echo $txt
+    end
+    echo (\
+      sc -o " --- Entering Nix Development Shell --- " \
+    )
+    echo -e (\
+      sc -d "   $(dirname (pwd))/" \
+    )(\
+      sc -o (basename (pwd)) \
+    )(\
+      sc " ⇽❰nixroot❱ " \
+    )
     if [ $nixtype = "flake" ]
       nix develop --command -- fish -C "$fish_init"
     else
