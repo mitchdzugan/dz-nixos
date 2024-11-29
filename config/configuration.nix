@@ -483,7 +483,7 @@ ACTION=="change", SUBSYSTEM=="drm", RUN+="${pkgs.autorandr}/bin/autorandr -c"
             else if test "$EUID" = 0
               set -fx tide_rich_context_color $tide_rich_context_color_root
               set ctxt_icon "󰞀"
-            else if test "$tide_context_always_display" = true
+            else if test "$tide_rich_context_always_display" = true
               set -fx tide_rich_context_color $tide_rich_context_color_default
               set ctxt_icon "󰍹"
             else
@@ -818,10 +818,22 @@ ACTION=="change", SUBSYSTEM=="drm", RUN+="${pkgs.autorandr}/bin/autorandr -c"
             "cava" = {
               cava_config = "/home/dz/.config/cava/config";
               hide_on_silence = true;
-              bars = 12;
-              format-icons = [ "▁" "▂" "▃" "▄" "▅" "▆" "▇" "█" ];
+              bars = 16;
+              format-icons = [
+                "<span foreground=\"#735cb8\">▁</span>"
+                "<span foreground=\"#8a5cb8\">▂</span>"
+                "<span foreground=\"#a15cb8\">▃</span>"
+                "<span foreground=\"#b85cb8\">▄</span>"
+                "<span foreground=\"#b85ca1\">▅</span>"
+                "<span foreground=\"#b85c8a\">▆</span>"
+                "<span foreground=\"#b85c73\">▇</span>"
+                "<span foreground=\"#b85c5c\">█</span>"
+              ];
               sleep_timer = 5;
               bar_delimiter = 0;
+              framerate = 60;
+              monstercat = true;
+              waves = true;
             };
           };
         };
