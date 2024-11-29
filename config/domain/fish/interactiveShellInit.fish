@@ -118,11 +118,11 @@ function configure_my_tide
   set -gx tide_cmd_duration_threshold 3000
   set -gx tide_rich_context_always_display true
   set -gx tide_rich_context_bg_color 2F1A33
-  set -gx tide_rich_context_color_user cyan
-  set -gx tide_rich_context_color_host magenta
-  set -gx tide_rich_context_color_default yellow
-  set -gx tide_rich_context_color_root yellow
-  set -gx tide_rich_context_color_ssh yellow
+  set -gx tide_rich_context_color_user bryellow
+  set -gx tide_rich_context_color_host brwhite
+  set -gx tide_rich_context_color_default brmagenta
+  set -gx tide_rich_context_color_root brmagenta
+  set -gx tide_rich_context_color_ssh brmagenta
   set -gx tide_rich_context_hostname_parts 1
   set -gx tide_crystal_bg_color 1C1C1C
   set -gx tide_crystal_color FFFFFF
