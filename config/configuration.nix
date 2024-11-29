@@ -449,9 +449,13 @@ ACTION=="change", SUBSYSTEM=="drm", RUN+="${pkgs.autorandr}/bin/autorandr -c"
                 set label $ZDEV_LABEL
               end
               set label (set_color $tide_znix_color_bright && echo $label)
-              set -l sep (set_color $tide_znix_color && echo ":")
-              set depth (set_color $tide_znix_color_bright && echo $depth)
-              _tide_print_item znix "$tide_znix_icon $label$sep$depth"
+              set -l full $label
+              if [ "$depth" != "1" ]
+                set -l sep (set_color $tide_znix_color && echo ":")
+                set depth (set_color $tide_znix_color_bright && echo $depth)
+                set full $label$sep$depth
+              end
+              _tide_print_item znix "$tide_znix_icon $full"
             end
           '';
           _tide_item_rich_status = ''
