@@ -1,6 +1,15 @@
 #!/usr/bin/env fish
 
-alias ls "grc ls --color=always --format=vertical --group-directories-first -p"
+function ls
+  set -l ls_bin (which ls)
+  set -l cmd $ls_bin
+  for arg in $argv
+    if string match -r -- "^-([^-].*l|l).*" $arg >/dev/null 2>&1
+      set cmd grc $ls_bin
+    end
+  end
+  $cmd --color=always --group-directories-first -p $argv
+end
 
 function fish_greeting
   fastfetch \
@@ -210,7 +219,19 @@ function configure_my_tide
   set -gx tide_pwd_icon ""
   set -gx tide_pwd_icon_home ""
   set -gx tide_pwd_icon_unwritable ""
-  set -gx tide_pwd_markers \x2ebzr\x1e\x2ecitc\x1e\x2egit\x1e\x2ehg\x1e\x2enode\x2dversion\x1e\x2epython\x2dversion\x1e\x2eruby\x2dversion\x1e\x2eshorten_folder_marker\x1e\x2esvn\x1e\x2eterraform\x1eCargo\x2etoml\x1ecomposer\x2ejson\x1eCVS\x1ego\x2emod\x1epackage\x2ejson\x1ebuild\x2ezig
+  set -gx tide_pwd_markers \
+    .bzr \
+    .citc \
+    .git \
+    .hg \
+    .svn \
+    .terraform \
+    package.json \
+    build.zig \
+    duneproject \
+    project.clj \
+    flake.nix \
+    shell.nix
   set -gx tide_python_bg_color 1C1C1C
   set -gx tide_python_color 00AFAF
   set -gx tide_python_icon \U000f0320

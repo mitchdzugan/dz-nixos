@@ -467,7 +467,7 @@ ACTION=="change", SUBSYSTEM=="drm", RUN+="${pkgs.autorandr}/bin/autorandr -c"
           '';
           _tide_item_zpe = ''
             set -l prev_sep $tide_right_prompt_separator_diff_color
-            set -gx tide_right_prompt_separator_diff_color "🯱"
+            set -gx tide_right_prompt_separator_diff_color "🬇"
             _tide_item_rich_character
             set -gx tide_right_prompt_separator_diff_color $prev_sep
           '';
@@ -524,8 +524,6 @@ ACTION=="change", SUBSYSTEM=="drm", RUN+="${pkgs.autorandr}/bin/autorandr -c"
           cursor_trail = 1;
           cursor_blink_interval = "1.0 ease-in";
           dynamic_background_opacity = "yes";
-          background_opacity = 1.0;
-          /*
           background_opacity = 0.9;
           transparent_background_colors = lib.concatStrings [
             "#604b49@0.9 "
@@ -536,7 +534,6 @@ ACTION=="change", SUBSYSTEM=="drm", RUN+="${pkgs.autorandr}/bin/autorandr -c"
             "#6c7086@0.8 "
             "#181825@0.8 "
           ];
-          */
         };
         themeFile = "purpurite";
       };
