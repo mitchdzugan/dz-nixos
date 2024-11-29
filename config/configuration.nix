@@ -178,11 +178,36 @@ xinputSetTouchpadNaturalScroll
     ];
     license = lib.licenses.bsd3;
   };
+  /*
   dz_xonsh = pkgs.xonsh.override {
     extraPackages = ps: [
       ps.coconut
+      (ps.buildPythonPackage rec {
+        name = "xontrib-powerline3";
+        pname = "xontrib-powerline3";
+        version = "0.3.17";
+        pyproject = true;
+        src = ps.fetchPypi {
+          pname = "xontrib-powerline3";
+          version = "0.3.17";
+          hash = "sha256-7BfGJnFh5348K41w0SF9z91PVmB5QAjRM2+hVBdWGI4=";
+        };
+        build-system = [
+          ps.setuptools
+          ps.setuptools-scm
+          ps.poetry-core
+        ];
+        dependencies = [
+          ps.attrs
+          ps.py
+          ps.setuptools
+          ps.six
+          ps.pluggy
+          ps.poetry-core
+        ];
+      })
     ];
-  };
+  };*/
 in {
   imports =
     [ # Include the results of the hardware scan.
@@ -191,6 +216,33 @@ in {
     ];
 
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
+  nixpkgs.overlays = [
+    /*
+    (final: prev: {
+      # Using mach-nix to fetch unpackaged xontrib plugins
+      # adapted from https://github.com/NixOS/nixpkgs/issues/75786#issuecomment-873654103
+      mach-nix = import (builtins.fetchGit {
+        url = "https://github.com/DavHau/mach-nix/";
+        ref = "refs/tags/3.5.0";
+        rev = "7e14360bde07dcae32e5e24f366c83272f52923f";
+      }) {
+        pkgs = final;
+      };
+
+      xonsh_pyenv = final.mach-nix.mkPython {
+        requirements = ''
+        coconut
+        '';
+      };
+
+      xonsh_with_plugins = final.xonsh.overridePythonAttrs (old: {
+        propagatedBuildInputs =
+          old.propagatedBuildInputs ++ (
+            final.xonsh_pyenv.python.pkgs.selectPkgs final.xonsh_pyenv.python.pkgs
+          );
+    });
+})*/
+  ];
 
   # Bootloader.
   boot.loader.systemd-boot.enable = true;
@@ -418,6 +470,29 @@ ACTION=="change", SUBSYSTEM=="drm", RUN+="${pkgs.autorandr}/bin/autorandr -c"
         enableCompletion = true;
         bashrcExtra = builtins.readFile ./domain/bash/bashrcExtra.sh;
         initExtra = builtins.readFile ./domain/bash/initExtra.sh;
+      };
+
+      fzf = {
+        enable = true;
+        enableZshIntegration = true;
+      };
+
+      zsh = {
+        enable = true;
+        enableCompletion = true;
+        enableVteIntegration = true;
+        autocd = true;
+        zplug = {
+          enable = true;
+          plugins = [
+            { name = "romkatv/powerlevel10k"; tags = ["as:theme" "depth:1"]; }
+          ];
+        };
+        initExtra = ''
+          unsetopt BEEP
+          # export FZF_COMPLETION_TRIGGER=""
+          source ~/.p10k.zsh
+        '';
       };
 
       kitty = {
@@ -919,6 +994,34 @@ ACTION=="change", SUBSYSTEM=="drm", RUN+="${pkgs.autorandr}/bin/autorandr -c"
       python-pkgs.mpd2
       python-pkgs.requests
       python-pkgs.xlib
+      /*
+      (python-pkgs.buildPythonPackage rec {
+        name = "xontrib-powerline3";
+        pname = "xontrib-powerline3";
+        version = "0.3.17";
+        pyproject = true;
+        src = python-pkgs.fetchPypi {
+          pname = "xontrib-powerline3";
+          version = "0.3.17";
+          hash = "sha256-7BfGJnFh5348K41w0SF9z91PVmB5QAjRM2+hVBdWGI4=";
+        };
+        build-system = [
+          python-pkgs.setuptools
+          python-pkgs.setuptools-scm
+          python-pkgs.poetry-core
+        ];
+        dependencies = [
+          python-pkgs.attrs
+          python-pkgs.py
+          python-pkgs.setuptools
+          python-pkgs.six
+          python-pkgs.pluggy
+          python-pkgs.poetry-core
+        ];
+        prePatch = ''
+          ${pkgs.gnused}/bin/sed -i '/^\s*"xonsh>=0.12",\s*$/d' pyproject.toml
+        '';
+      })*/
     ]))
     qimgv
     ripgrep
@@ -1036,7 +1139,7 @@ ACTION=="change", SUBSYSTEM=="drm", RUN+="${pkgs.autorandr}/bin/autorandr -c"
 
   programs.gamemode.enable = true;
 
-  programs.xonsh = { enable = true; package = dz_xonsh; };
+  programs.xonsh = { enable = true; package = pkgs.xonsh; };
 
   programs.steam = {
     enable = true;
