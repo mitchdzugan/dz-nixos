@@ -21,6 +21,7 @@ endif
 set expandtab
 set tabstop=2
 set shiftwidth=2
+set nowrap
 
 set t_ZH=␛[3m
 set t_ZR=␛[23m

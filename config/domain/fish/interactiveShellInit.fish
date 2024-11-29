@@ -24,23 +24,30 @@ function fish_greeting
 end
 
 function firsty
-  if [ $(count $argv) -eq 0 ]
-    return 1
+  set -lx tot (count $argv)
+  set -lx curr $argv[1]
+  set -lx rest $argv[2..]
+  function on_none
+    if [ $tot -lt 2 ]
+      echo $curr
+      return 1
+    else
+      firsty $rest
+    end
   end
-  set -l curr $argv[1]
-  set -l rest $argv[2..]
   if [ -z $curr ]
-    firsty $rest
-  else if [ $curr -eq 0 ]
-    firsty $rest
+    on_none $rest
+  else if [ "$curr" = "0" ]
+    on_none $rest
   else
     echo $curr
   end
 end
 
 function nixroot
-  set -l curr $(path resolve $argv[1])
-  set -l next $(path resolve "$curr/..")
+  set -l base (path resolve (firsty $argv[1] (pwd)))
+  set -l curr (path resolve (firsty $argv[2] $base))
+  set -l next (path resolve "$curr/..")
   if [ -f "$curr/flake.nix" ]
     echo flake $curr
   else if [ -f "$curr/shell.nix" ]
@@ -48,9 +55,37 @@ function nixroot
   else if [ -f "$curr/default.nix" ]
     echo pkg $curr
   else if [ $curr != $next ]
-    nixroot $next
+    nixroot $base $next
   else
-    echo "err@{$(pwd) is not in nix dir}" >&2
+    echo "err@{$base is not in nix dir}" >&2
+    return 1
+  end
+end
+
+function zdev
+  set -l wd (pwd)
+  set -l nixroot_data (string split " " (nixroot))
+  set -l nixtype $nixroot_data[1]
+  if [ "$status" = "0" ]
+    set -l curr_depth (firsty $ZDEV_DEPTH 0)
+    set -lx ZDEV_ACTIVE 1
+    set -lx ZDEV_DEPTH (math 1 + $curr_depth)
+    set -lx ZDEV_NIXROOT $nixroot_data[2]
+    set -lx ZDEV_LABEL (basename $ZDEV_NIXROOT)
+    set -lx ZDEV_ID "_"$ZDEV_DEPTH"_$(date +%s_%N)_"$fish_pid"_$(random)"
+    set -l pidvar "ZDEV_PID_$ZDEV_ID"
+    set -lx "$pidvar" ""
+    set -l fish_init "begin; set $pidvar \$fish_pid; cd $wd; end"
+    cd $ZDEV_NIXROOT
+    clear
+    if [ $nixtype = "flake" ]
+      nix develop --command -- fish -C "$fish_init"
+    else
+      nix-shell --run "fish -C \"$fish_init\""
+    end
+    cd $wd
+    clear
+  else
     return 1
   end
 end
@@ -105,7 +140,7 @@ function configure_my_tide
   set -gx tide_left_prompt_items \
     zvi_mode zpb zpwd zpp
   set -gx tide_right_prompt_items \
-    rich_status cmd_duration jobs git direnv node python nix_shell rich_context zpe
+    rich_status cmd_duration jobs git direnv node python znix rich_context zpe
   set -gx tide_aws_bg_color 1C1C1C
   set -gx tide_aws_color FF9900
   set -gx tide_aws_icon \uf270
@@ -187,9 +222,10 @@ function configure_my_tide
   set -gx tide_left_prompt_separator_diff_color ""
   set -gx tide_left_prompt_separator_same_color ""
   set -gx tide_left_prompt_suffix ""
-  set -gx tide_nix_shell_bg_color 1C1C1C
-  set -gx tide_nix_shell_color 7EBAE4
-  set -gx tide_nix_shell_icon \uf313
+  set -gx tide_znix_bg_color 1A2A32
+  set -gx tide_znix_color 466880
+  set -gx tide_znix_color_bright 7EBAE4
+  set -gx tide_znix_icon ""
   set -gx tide_node_bg_color 1C1C1C
   set -gx tide_node_color 44883E
   set -gx tide_node_icon \ue24f
@@ -289,3 +325,4 @@ if [ $TERM = "xterm-kitty" ]
   set -gx COLORTERM truecolor
 end
 fish_vi_key_bindings
+set -x fish_pid_interactive $fish_pid

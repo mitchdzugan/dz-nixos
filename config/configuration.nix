@@ -429,6 +429,29 @@ ACTION=="change", SUBSYSTEM=="drm", RUN+="${pkgs.autorandr}/bin/autorandr -c"
         enable = true;
         functions = {
           cdproj = "cd $(codeProject.py)";
+          _zdev_is_active = ''
+            if [ "$ZDEV_ACTIVE" != "1" ]
+              return 1
+            end
+            set -l pidvar "ZDEV_PID_$ZDEV_ID"
+            if [ "$$pidvar" != "$fish_pid_interactive" ]
+              return 1
+            end
+          '';
+          _tide_item_znix = ''
+            if set -q IN_NIX_SHELL
+              set -l depth "?"
+              set -l label $IN_NIX_SHELL
+              if _zdev_is_active
+                set depth $ZDEV_DEPTH
+                set label $ZDEV_LABEL
+              end
+              set label (set_color $tide_znix_color_bright && echo $label)
+              set -l sep (set_color $tide_znix_color && echo ":")
+              set depth (set_color $tide_znix_color_bright && echo $depth)
+              _tide_print_item znix "$tide_znix_icon $label$sep$depth"
+            end
+          '';
           _tide_item_rich_status = ''
             if string match -qv 0 $_tide_pipestatus # If there is a failure anywhere in the pipestatus
               fish_status_to_signal $_tide_pipestatus | string replace SIG "" | string join '|' | read -l out
@@ -823,9 +846,11 @@ ACTION=="change", SUBSYSTEM=="drm", RUN+="${pkgs.autorandr}/bin/autorandr -c"
               ];
               sleep_timer = 5;
               bar_delimiter = 0;
-              framerate = 60;
-              monstercat = true;
-              waves = true;
+              framerate = 30;
+              monstercat = false;
+              waves = false;
+              autosens = 0;
+              sensitivity = 4;
             };
           };
         };
