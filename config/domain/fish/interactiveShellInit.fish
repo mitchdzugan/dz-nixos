@@ -75,7 +75,7 @@ function zdev
     set -lx ZDEV_ID "_"$ZDEV_DEPTH"_$(date +%s_%N)_"$fish_pid"_$(random)"
     set -l pidvar "ZDEV_PID_$ZDEV_ID"
     set -lx "$pidvar" ""
-    set -l fish_init "begin; set $pidvar \$fish_pid; cd $wd; end"
+    set -l fish_init "begin; set $pidvar (get_fish_pid); cd $wd; end"
     cd $ZDEV_NIXROOT
     clear
     function sc
@@ -100,7 +100,7 @@ function zdev
     if [ $nixtype = "flake" ]
       nix develop --command -- fish -C "$fish_init"
     else
-      nix-shell --run "fish -C \"$fish_init\""
+      nix-shell --command "fish -C \"$fish_init\""
     end
     cd $wd
     clear

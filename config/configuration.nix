@@ -428,6 +428,8 @@ ACTION=="change", SUBSYSTEM=="drm", RUN+="${pkgs.autorandr}/bin/autorandr -c"
       fish = {
         enable = true;
         functions = {
+          get_fish_pid = "echo $fish_pid";
+          get_fish_pid_interactive = "echo $fish_pid_interactive";
           cdproj = "cd $(codeProject.py)";
           _zdev_is_active = ''
             if [ "$ZDEV_ACTIVE" != "1" ]
