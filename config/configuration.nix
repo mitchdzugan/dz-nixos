@@ -431,15 +431,10 @@ ACTION=="change", SUBSYSTEM=="drm", RUN+="${pkgs.autorandr}/bin/autorandr -c"
           cdproj = "cd $(codeProject.py)";
           _tide_item_rich_status = ''
             if string match -qv 0 $_tide_pipestatus # If there is a failure anywhere in the pipestatus
-              if test "$_tide_pipestatus" = 1 # If simple failure
-                contains zpb $_tide_left_items || tide_rich_status_bg_color=$tide_rich_status_bg_color_failure \
-                  tide_rich_status_color=$tide_rich_status_color_failure _tide_print_item rich_status $tide_rich_status_icon_failure' ' 1
-              else
-                fish_status_to_signal $_tide_pipestatus | string replace SIG "" | string join '|' | read -l out
-                test $_tide_status = 0 && _tide_print_item rich_status $tide_rich_status_icon' ' $out ||
-                  tide_rich_status_bg_color=$tide_rich_status_bg_color_failure tide_rich_status_color=$tide_rich_status_color_failure \
-                    _tide_print_item rich_status $tide_rich_status_icon_failure' ' $out
-              end
+              fish_status_to_signal $_tide_pipestatus | string replace SIG "" | string join '|' | read -l out
+              test $_tide_status = 0 && _tide_print_item rich_status $tide_rich_status_icon' ' $out ||
+                tide_rich_status_bg_color=$tide_rich_status_bg_color_failure tide_rich_status_color=$tide_rich_status_color_failure \
+                  _tide_print_item rich_status $tide_rich_status_icon_failure' ' $out
             else if not contains zpb $_tide_left_items
               _tide_print_item rich_status $tide_rich_status_icon
             end
