@@ -87,16 +87,16 @@ alias zscp="_zssh_cmd scp"
 
 function mk_vi_mode_icon
   echo "$(\
-    set_color 100912 && echo "🮌")$(\
+    set_color 100912 && echo "")$(\
     set_color $argv[2] && echo $argv[1])$(\
-    set_color 2F1A33 && echo 🮍🮔)"
+    set_color 2F1A33 && echo "")"
 end
 
 function configure_my_tide
   set -gx tide_left_prompt_items \
-    vi_mode pwd rich_character
+    zvi_mode zpb zpwd zpp
   set -gx tide_right_prompt_items \
-    rich_status cmd_duration jobs git direnv node python nix_shell rich_context
+    rich_status cmd_duration jobs git direnv node python nix_shell rich_context zpe
   set -gx tide_aws_bg_color 1C1C1C
   set -gx tide_aws_color FF9900
   set -gx tide_aws_icon \uf270
@@ -104,7 +104,7 @@ function configure_my_tide
   set -gx tide_rich_character_bgX DD4444
   set -gx tide_rich_character_color0 2F1A33
   set -gx tide_rich_character_colorX 2F1A33
-  set -gx tide_rich_character_char "🭪"
+  set -gx tide_rich_character_char ""
   set -gx tide_character_color 5FD700
   set -gx tide_character_color_failure FF0000
   set -gx tide_character_icon \u276f
@@ -120,9 +120,9 @@ function configure_my_tide
   set -gx tide_rich_context_bg_color 2F1A33
   set -gx tide_rich_context_color_user cyan
   set -gx tide_rich_context_color_host magenta
-  set -gx tide_rich_context_color_default brblack
-  set -gx tide_rich_context_color_root brblack
-  set -gx tide_rich_context_color_ssh brblack
+  set -gx tide_rich_context_color_default yellow
+  set -gx tide_rich_context_color_root yellow
+  set -gx tide_rich_context_color_ssh yellow
   set -gx tide_rich_context_hostname_parts 1
   set -gx tide_crystal_bg_color 1C1C1C
   set -gx tide_crystal_color FFFFFF
@@ -146,9 +146,9 @@ function configure_my_tide
   set -gx tide_gcloud_color 4285F4
   set -gx tide_gcloud_icon \U000f02ad
   set -gx tide_git_bg_color 100912
-  set -gx tide_git_bg_color 777
-  set -gx tide_git_bg_color_unstable 777
-  set -gx tide_git_bg_color_urgent 777
+  set -gx tide_git_bg_color 2B331A
+  set -gx tide_git_bg_color_unstable $tide_git_bg_color
+  set -gx tide_git_bg_color_urgent $tide_git_bg_color
   set -gx tide_git_color_branch 5FD700
   set -gx tide_git_color_conflicted FF0000
   set -gx tide_git_color_dirty D7AF00
@@ -174,7 +174,7 @@ function configure_my_tide
   set -gx tide_kubectl_color 326CE5
   set -gx tide_kubectl_icon \U000f10fe
   set -gx tide_left_prompt_frame_enabled false
-  set -gx tide_left_prompt_prefix
+  set -gx tide_left_prompt_prefix ""
   set -gx tide_left_prompt_separator_diff_color ""
   set -gx tide_left_prompt_separator_same_color ""
   set -gx tide_left_prompt_suffix ""
@@ -217,8 +217,8 @@ function configure_my_tide
   set -gx tide_right_prompt_frame_enabled false
   set -gx tide_right_prompt_prefix "🭨"
   set -gx tide_right_prompt_prefix "🮔"
-  set -gx tide_right_prompt_separator_diff_color "🭉🭁"
-  set -gx tide_right_prompt_separator_same_color " 🭰"
+  set -gx tide_right_prompt_separator_diff_color "🮍🮔"
+  set -gx tide_right_prompt_separator_same_color "🭦🬾"
   set -gx tide_right_prompt_suffix
   set -gx tide_ruby_bg_color 1C1C1C
   set -gx tide_ruby_color B31209
@@ -246,21 +246,17 @@ function configure_my_tide
   set -gx tide_toolbox_color 613583
   set -gx tide_toolbox_icon \ue24f
   set -gx tide_vi_mode_bg_color_default 1A332F
-  set -gx tide_vi_mode_bg_color_insert 333333
+  set -gx tide_vi_mode_bg_color_insert 332F1A
   set -gx tide_vi_mode_bg_color_replace 331A1E
-  set -gx tide_vi_mode_bg_color_visual 332F1A
-  # set -gx tide_vi_mode_color_default 7693B0
-  # set -gx tide_vi_mode_color_insert B0B0B0
-  # set -gx tide_vi_mode_color_replace B07693
-  # set -gx tide_vi_mode_color_visual 93B076
+  set -gx tide_vi_mode_bg_color_visual 444444
   set -gx tide_vi_mode_color_default B0B0B0
   set -gx tide_vi_mode_color_insert B0B0B0
   set -gx tide_vi_mode_color_replace B0B0B0
   set -gx tide_vi_mode_color_visual B0B0B0
-  set -gx tide_vi_mode_icon_default (mk_vi_mode_icon N 7693B0)
-  set -gx tide_vi_mode_icon_insert  (mk_vi_mode_icon I B0B0B0)
-  set -gx tide_vi_mode_icon_replace (mk_vi_mode_icon R B07693)
-  set -gx tide_vi_mode_icon_visual  (mk_vi_mode_icon V 93B076)
+  set -gx tide_vi_mode_icon_default (mk_vi_mode_icon N $tide_vi_mode_color_default)
+  set -gx tide_vi_mode_icon_insert  (mk_vi_mode_icon I $tide_vi_mode_color_insert)
+  set -gx tide_vi_mode_icon_replace (mk_vi_mode_icon R $tide_vi_mode_color_replace)
+  set -gx tide_vi_mode_icon_visual  (mk_vi_mode_icon V $tide_vi_mode_color_visual)
   set -gx tide_zig_bg_color 1C1C1C
   set -gx tide_zig_color F7A41D
   set -gx tide_zig_icon \ue6a9
@@ -268,3 +264,7 @@ function configure_my_tide
 end
 
 configure_my_tide
+if [ $TERM = "xterm-kitty" ]
+  set -gx COLORTERM truecolor
+end
+fish_vi_key_bindings
