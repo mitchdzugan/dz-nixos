@@ -936,7 +936,7 @@ ACTION=="change", SUBSYSTEM=="drm", RUN+="${pkgs.autorandr}/bin/autorandr -c"
             natural_scroll = true;
           };
         };
-        "$mod" = "SUPER";
+        "$mod" = "ALT";
         bind = [
           "$mod, 36, exec, kitty"
           "$mod, W, exec, firefox"
