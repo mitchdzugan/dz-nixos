@@ -972,8 +972,8 @@ ACTION=="change", SUBSYSTEM=="drm", RUN+="${pkgs.autorandr}/bin/autorandr -c"
               (d: [
                 "$mod, ${d.k}, movefocus, ${d.c}"
                 "$mod SHIFT, ${d.k}, movewindow, ${d.c}"
-                "$mod ALT, ${d.k}, swapwindow, ${d.c}"
                 "$mod CTRL, ${d.k}, resizewindowpixel, ${d.r},activewindow"
+                "$mod CTRL SHIFT, ${d.k}, swapwindow, ${d.c}"
               ])
               [
                 { c = "u"; k = "up";    r = "0 -10"; }
