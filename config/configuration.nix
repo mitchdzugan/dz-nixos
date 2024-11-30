@@ -676,6 +676,26 @@ ACTION=="change", SUBSYSTEM=="drm", RUN+="${pkgs.autorandr}/bin/autorandr -c"
       neovim = import ./domain/nvim/config.nix { lib = lib; pkgs = pkgs; };
       # neovide = import ./domain/nvim/neovide.nix;
 
+      tmux = {
+        enable = true;
+        clock24 = true;
+        plugins = with pkgs.tmuxPlugins; [
+          {
+            plugin = rose-pine;
+            extraConfig = ''
+              set -g @rose_pine_variant 'main'
+              set -gq allow-passthrough on
+              set -g visual-activity off
+            '';
+          }
+        ];
+
+        extraConfig = ''
+          set -g mouse on
+          set -g allow-passthrough on
+        '';
+      };
+
       firefox = {
         enable = true;
         policies = {
@@ -1002,6 +1022,8 @@ ACTION=="change", SUBSYSTEM=="drm", RUN+="${pkgs.autorandr}/bin/autorandr -c"
         windowrulev2 = [
           "suppressevent maximize, class:.*"
           "float, class:(float_.*)"
+          "float, class:(Ztr)"
+          "center 1, class:(Ztr)"
           "float, class:(ztr)"
           "center 1, class:(ztr)"
         ];
@@ -1332,8 +1354,19 @@ ACTION=="change", SUBSYSTEM=="drm", RUN+="${pkgs.autorandr}/bin/autorandr -c"
     liberation_ttf
     monaspace
     mplus-outline-fonts.githubRelease
-    (nerdfonts.override { fonts = [ "ComicShannsMono" "Monaspace" "NerdFontsSymbolsOnly" ]; })
-    noto-fonts
+    nerd-fonts.comic-shanns-mono
+    nerd-fonts.daddy-time-mono
+    nerd-fonts.go-mono
+    nerd-fonts.heavy-data
+    nerd-fonts.monaspace
+    nerd-fonts.open-dyslexic
+    nerd-fonts.proggy-clean-tt
+    nerd-fonts.recursive-mono
+    nerd-fonts.sauce-code-pro
+    nerd-fonts.space-mono
+    nerd-fonts.symbols-only
+    nerd-fonts.terminess-ttf
+    nerd-fonts.ubuntu-sans
     noto-fonts-cjk-sans
     noto-fonts-emoji
     powerline-fonts
