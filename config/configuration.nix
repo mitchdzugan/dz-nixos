@@ -242,8 +242,8 @@ in {
   services.displayManager.sddm.theme = "sddm-dz";
   services.displayManager.sddm.settings = {
     Theme = {
-      CursorSize = 24;
-      CursorTheme = "catppuccin-mocha-rosewater-cursors";
+      CursorSize = 32;
+      CursorTheme = "BreezeX-RosePineDawn-Linux";
     };
   };
   services.xserver.displayManager.setupCommands = "${pkgs.autorandr}/bin/autorandr -c";
@@ -363,10 +363,11 @@ ACTION=="change", SUBSYSTEM=="drm", RUN+="${pkgs.autorandr}/bin/autorandr -c"
       pointerCursor = {
         gtk.enable = true;
         x11.enable = true;
-        package = pkgs.catppuccin-cursors.mochaRosewater; # bibata-cursors;
-        name = "catppuccin-mocha-rosewater-cursors";
-        size = 24;
-        # hyprcursor = { enable = true; size = 24; };
+        # package = pkgs.catppuccin-cursors.mochaRosewater; # bibata-cursors;
+        package = pkgs.rose-pine-cursor;
+        name = "BreezeX-RosePineDawn-Linux";
+        size = 32;
+        hyprcursor = { enable = true; size = 32; };
       };
       packages = [ pkgs.gimp pkgs.mpv ];
       ## sessionVariables.QT_QPA_PLATFORM = "wayland";
@@ -912,11 +913,11 @@ ACTION=="change", SUBSYSTEM=="drm", RUN+="${pkgs.autorandr}/bin/autorandr -c"
           "waybar"
           "nm-applet"
           "blueman-applet"
-          "hyprctl setcursor cattpuccin-mocha-rosewater-cursors 24"
+          "hyprctl setcursor BreezeX-RosePineDawn-Linux 32"
         ];
         env = [
-          "XCURSOR_SIZE,24"
-          "HYPRCURSOR_SIZE,24"
+          "XCURSOR_SIZE,32"
+          "HYPRCURSOR_SIZE,32"
         ];
         general = {
           gaps_in = 4;
@@ -1068,8 +1069,7 @@ ACTION=="change", SUBSYSTEM=="drm", RUN+="${pkgs.autorandr}/bin/autorandr -c"
           enabled = true;
           mode = "tilt";
           shake = {
-            effects = true;
-            threshold = 4.5;
+            enabled = false;
           };
         };
       };
@@ -1119,6 +1119,7 @@ ACTION=="change", SUBSYSTEM=="drm", RUN+="${pkgs.autorandr}/bin/autorandr -c"
     bc
     bibata-cursors
     catppuccin-cursors.mochaRosewater
+    rose-pine-cursor
     brightnessctl
     cargo
     # cava
