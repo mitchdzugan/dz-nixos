@@ -491,7 +491,7 @@ ACTION=="change", SUBSYSTEM=="drm", RUN+="${pkgs.autorandr}/bin/autorandr -c"
           '';
           _tide_item_zpe = ''
             set -l prev_sep $tide_right_prompt_separator_diff_color
-            set -gx tide_right_prompt_separator_diff_color "🬇"
+            set -gx tide_right_prompt_separator_diff_color "🮍"
             _tide_item_rich_character
             set -gx tide_right_prompt_separator_diff_color $prev_sep
           '';
@@ -679,20 +679,21 @@ ACTION=="change", SUBSYSTEM=="drm", RUN+="${pkgs.autorandr}/bin/autorandr -c"
       tmux = {
         enable = true;
         clock24 = true;
+        mouse = true;
+        escapeTime = 0;
+        keyMode = "vi";
         plugins = with pkgs.tmuxPlugins; [
           {
             plugin = rose-pine;
             extraConfig = ''
               set -g @rose_pine_variant 'main'
-              set -gq allow-passthrough on
-              set -g visual-activity off
             '';
           }
         ];
 
         extraConfig = ''
-          set -g mouse on
           set -g allow-passthrough on
+          set -g default-shell ${pkgs.fish}/bin/fish
         '';
       };
 
@@ -713,8 +714,10 @@ ACTION=="change", SUBSYSTEM=="drm", RUN+="${pkgs.autorandr}/bin/autorandr -c"
               "browser.tabs.inTitlebar" = 0;
               "full-screen-api.ignore-widgets" = true;
               "full-screen-api.exit-on.windowRaise" = false;
+              /*
               "extensions.activeThemeId" = with config.nur.repos.rycee;
                 firefox-addons.dracula-dark-colorscheme.addonId;
+              */
             };
             userChrome = builtins.readFile ./domain/firefox/userChrome.css;
             extensions = with config.nur.repos.rycee.firefox-addons; [
@@ -896,7 +899,7 @@ ACTION=="change", SUBSYSTEM=="drm", RUN+="${pkgs.autorandr}/bin/autorandr -c"
       enable = true;
       package = hyprland.packages.${pkgs.stdenv.hostPlatform.system}.hyprland;
       plugins = with hyprland-plugins.packages.${pkgs.stdenv.hostPlatform.system}; [
-        hyprland-dyncursors.packages.${pkgs.stdenv.hostPlatform.system}.hypr-dynamic-cursors
+        # hyprland-dyncursors.packages.${pkgs.stdenv.hostPlatform.system}.hypr-dynamic-cursors
         hyprland-hyprfocus.packages.${pkgs.stdenv.hostPlatform.system}.hyprfocus
         hyprtrails
         hyprwinwrap

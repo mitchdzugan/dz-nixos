@@ -12,15 +12,32 @@ function ls
 end
 
 function fish_greeting
-  fastfetch \
-    --separator-output-color black \
-    --logo-width 37 \
-    --logo-height 17 \
-    --logo-padding-left 1 \
-    --logo-padding-top 3 \
-    --logo-padding-right 3 \
-    --logo-type kitty-direct \
-    --logo ~/.config/fastfetch/logo.nix.2.png
+  #### config
+  set -l tw 38
+  set -l th 20
+  set -l pr 1
+  set -l pt 1
+  ####
+  set -l pix_dims (kitten icat --print-window-size | string split x)
+  set -l cw (tput cols)
+  set -l ch (tput lines)
+  set -l pw $pix_dims[1]
+  set -l ph $pix_dims[2]
+  set -l w (math "floor(38 * $pw / $cw)")
+  set -l h (math "floor(20 * $ph / $ch)")
+  set -l lw (math "$pr + $tw")
+  set -l lh (math "$pt + $th")
+
+  begin
+    kitten icat \
+      --align=left \
+      --use-window-size $tw,$th,$w,$h \
+      ~/.config/fastfetch/logo.nix.3.png
+  end | fastfetch \
+    --raw - \
+    --logo-width $lw \
+    --logo-height $lh \
+    --separator-output-color black
 end
 
 function firsty
@@ -97,6 +114,7 @@ function zdev
     )(\
       sc " ⇽❰nixroot❱ " \
     )
+    set_color normal
     if [ $nixtype = "flake" ]
       nix develop --command -- fish -C "$fish_init"
     else
@@ -136,7 +154,7 @@ function _zssh_cmd
   set -l cmd $argv[1]
   set -l final
   for arg in $argv[2..]
-    set final $final $(_wrap_zssh_arg $arg)
+    set final $final (firsty (_wrap_zssh_arg $arg) $arg)
   end
   if [ $cmd = "ssh" ]
     set final $final -t fish

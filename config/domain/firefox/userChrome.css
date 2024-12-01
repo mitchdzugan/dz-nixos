@@ -2,6 +2,10 @@ toolbox#navigator-toolbox {
 	flex-direction: row-reverse !important;
 }
 
+toolbox#navigator-toolbox toolbar#toolbar-menubar {
+	display: none !important;
+}
+
 toolbar#PersonalToolbar {
 	display: none !important;
 }
