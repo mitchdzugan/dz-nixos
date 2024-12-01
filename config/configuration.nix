@@ -243,7 +243,7 @@ in {
   services.displayManager.sddm.settings = {
     Theme = {
       CursorSize = 24;
-      CursorTheme = "Bibata-Modern-Ice";
+      CursorTheme = "catppuccin-mocha-rosewater-cursors";
     };
   };
   services.xserver.displayManager.setupCommands = "${pkgs.autorandr}/bin/autorandr -c";
@@ -363,13 +363,10 @@ ACTION=="change", SUBSYSTEM=="drm", RUN+="${pkgs.autorandr}/bin/autorandr -c"
       pointerCursor = {
         gtk.enable = true;
         x11.enable = true;
-        package = pkgs.bibata-cursors;
-        name = "Bibata-Modern-Ice";
+        package = pkgs.catppuccin-cursors.mochaRosewater; # bibata-cursors;
+        name = "catppuccin-mocha-rosewater-cursors";
         size = 24;
-        hyprcursor = {
-          enable = true;
-          size = 24;
-        };
+        # hyprcursor = { enable = true; size = 24; };
       };
       packages = [ pkgs.gimp pkgs.mpv ];
       ## sessionVariables.QT_QPA_PLATFORM = "wayland";
@@ -899,7 +896,7 @@ ACTION=="change", SUBSYSTEM=="drm", RUN+="${pkgs.autorandr}/bin/autorandr -c"
       enable = true;
       package = hyprland.packages.${pkgs.stdenv.hostPlatform.system}.hyprland;
       plugins = with hyprland-plugins.packages.${pkgs.stdenv.hostPlatform.system}; [
-        # hyprland-dyncursors.packages.${pkgs.stdenv.hostPlatform.system}.hypr-dynamic-cursors
+        hyprland-dyncursors.packages.${pkgs.stdenv.hostPlatform.system}.hypr-dynamic-cursors
         hyprland-hyprfocus.packages.${pkgs.stdenv.hostPlatform.system}.hyprfocus
         hyprtrails
         hyprwinwrap
@@ -910,7 +907,13 @@ ACTION=="change", SUBSYSTEM=="drm", RUN+="${pkgs.autorandr}/bin/autorandr -c"
           "VGA-0, 1920x1080, auto-right, 1.0"
           "HDMI-A-1, 1920x1080, auto-right, 1.0"
         ];
-        exec-once = [ "wpaperd" "waybar" "nm-applet" "blueman-applet" ];
+        exec-once = [
+          "wpaperd"
+          "waybar"
+          "nm-applet"
+          "blueman-applet"
+          "hyprctl setcursor cattpuccin-mocha-rosewater-cursors 24"
+        ];
         env = [
           "XCURSOR_SIZE,24"
           "HYPRCURSOR_SIZE,24"
@@ -1115,6 +1118,7 @@ ACTION=="change", SUBSYSTEM=="drm", RUN+="${pkgs.autorandr}/bin/autorandr -c"
     blesh
     bc
     bibata-cursors
+    catppuccin-cursors.mochaRosewater
     brightnessctl
     cargo
     # cava
