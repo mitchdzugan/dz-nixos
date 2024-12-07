@@ -34,6 +34,7 @@ autocmd BufReadPost * if @% !~# '\.git[\/\\]COMMIT_EDITMSG$' && line("'\"") > 1 
 " catppuccin-latte, catppuccin-frappe, catppuccin-macchiato, catppuccin-mocha
 colorscheme catppuccin-mocha
 " colorscheme rose-pine-main
+" colorscheme tokyodark
 
 syntax on
 if has('termguicolors')

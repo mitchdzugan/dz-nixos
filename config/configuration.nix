@@ -1118,6 +1118,8 @@ ACTION=="change", SUBSYSTEM=="drm", RUN+="${pkgs.autorandr}/bin/autorandr -c"
       '';
       rules = {
         ztr = {
+          border = false;
+          focus = false;
           state = "floating";
           center = true;
         };
@@ -1169,6 +1171,10 @@ ACTION=="change", SUBSYSTEM=="drm", RUN+="${pkgs.autorandr}/bin/autorandr -c"
           "super + {1-9,0,equal}" = "bspwm-focus-desktop.js {1-9,10,f}";
           "super + shift + {1-9,0,plus}" = "bspwm-move-to-desktop.js -d {1-9,10,f}";
           "super + {Left,Right,Up,Down}" = "bspc node -f {west,east,north,south}";
+          "super + ctrl + Left" = "bspc node -z left -10 0 || bspc node -z right -10 0";
+          "super + ctrl + Right" = "bspc node -z left 10 0 || bspc node -z right 10 0";
+          "super + ctrl + Up" = "bspc node -z top 0 -10 || bspc node -z bottom 0 -10";
+          "super + ctrl + Down" = "bspc node -z top 0 10 || bspc node -z bottom 0 10";
           "XF86MonBrightnessUp" = "brightnessUp";
           "XF86MonBrightnessDown" = "brightnessDown";
           "XF86AudioRaiseVolume" = "volumeUp";
@@ -1189,7 +1195,7 @@ ACTION=="change", SUBSYSTEM=="drm", RUN+="${pkgs.autorandr}/bin/autorandr -c"
         let
           polybar_cava = pkgs.writeShellApplication {
             name = "polybar_cava";
-            # runtimeInputs = [ pkgs.coreutils pkgs.cava pkgs.gnused ];
+            runtimeInputs = [ pkgs.coreutils pkgs.cava pkgs.gnused ];
             text = builtins.readFile ./domain/polybar/cava.sh;
           };
           extraBinPath = lib.makeBinPath [
@@ -1305,8 +1311,8 @@ ACTION=="change", SUBSYSTEM=="drm", RUN+="${pkgs.autorandr}/bin/autorandr -c"
     rose-pine-cursor
     brightnessctl
     cargo
-    # cava
-    # cavalier
+    cava
+    cavalier
     clojure-lsp
     coreutils
     discord
