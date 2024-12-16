@@ -31,7 +31,7 @@
     nixosConfigurations.<%= $(hostname) %> = nixpkgs.lib.nixosSystem {
       system = "x86_64-linux";
       specialArgs = attrs // { hostname = "<%= $(hostname) %>"; };
-      modules = [ nur.nixosModules.nur ./configuration.nix ];
+      modules = [ nur.modules.nixos.default ./configuration.nix ];
     };
   };
 }

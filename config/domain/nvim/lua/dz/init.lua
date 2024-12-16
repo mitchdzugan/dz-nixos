@@ -301,3 +301,5 @@ require('neoscroll').setup({})
 local lspconfig = require('lspconfig')
 lspconfig.hls.setup({ filetypes = { 'haskell', 'lhaskell', 'cabal' } })
 lspconfig.rust_analyzer.setup{}
+lspconfig.clojure_lsp.setup{}
+lspconfig.ocamllsp.setup{}

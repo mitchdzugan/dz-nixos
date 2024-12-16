@@ -1,7 +1,8 @@
 { config, pkgs, lib, hostname, home-manager,
   hyprland, hyprland-plugins, hyprland-hyprfocus, hyprland-dyncursors,
-  wezterm-flake, ssbm, sddm-dz, ...
+  wezterm-flake, ssbm, sddm-dz, nur, ...
 }: let
+  nixospkgs = pkgs;
   lg_hdmi_fingerprint = "00ffffffffffff001e6d6e77f48c0400041f010380462778ea8cb5af4f43ab260e5054210800d1c06140010101010101010101010101e9e800a0a0a0535030203500b9882100001a000000fd0030901ee63c000a202020202020000000fc004c4720554c545241474541520a000000ff003130344e544a4a38533232380a01b8020349f1230907074d100403011f13123f5d5e5f60616d030c002000b83c20006001020367d85dc401788003e30f00186d1a00000205309000045a445a44e305c000e60605015a5a446fc200a0a0a0555030203500b9882100001a5aa000a0a0a0465030203a00b9882100001a565e00a0a0a0295030203500b9882100001aed";
   acer_vga_fingerprint = "00ffffffffffff0004726f04c33a1060011a010368351e78ee0565a756529c270f5054b30c00714f818081c081009500b300d1c00101023a801871382d40582c45000f282100001e000000fd00384b1f4b12000a202020202020000000fc005232343048590a202020202020000000ff005434424141303031323430300a003a";
   acer_hdmi_fingerprint = "00ffffffffffff0004726f04c33a1060011a010380351e78ee0565a756529c270f5054b30c00714f818081c081009500b300d1c00101023a801871382d40582c45000f282100001e000000fd00384b1f4b12000a202020202020000000fc005232343048590a202020202020000000ff005434424141303031323430300a012102031cf1499001030412131f0514230907078301000065030c001000023a801871382d40582c45000f282100001e011d007251d01e206e2855000f282100001e8c0ad08a20e02d10103e96000f2821000018d60980a020e02d10086022000f28210808180000000000000000000000000000000000000000000000000000002e";
@@ -742,7 +743,7 @@ ACTION=="change", SUBSYSTEM=="drm", RUN+="${pkgs.autorandr}/bin/autorandr -c"
               */
             };
             userChrome = builtins.readFile ./domain/firefox/userChrome.css;
-            extensions = with config.nur.repos.rycee.firefox-addons; [
+            extensions = with nixospkgs.nur.repos.rycee.firefox-addons; [
               dracula-dark-colorscheme
               ublock-origin
               video-downloadhelper
@@ -921,10 +922,10 @@ ACTION=="change", SUBSYSTEM=="drm", RUN+="${pkgs.autorandr}/bin/autorandr -c"
       enable = true;
       package = hyprland.packages.${pkgs.stdenv.hostPlatform.system}.hyprland;
       plugins = with hyprland-plugins.packages.${pkgs.stdenv.hostPlatform.system}; [
-        hyprland-dyncursors.packages.${pkgs.stdenv.hostPlatform.system}.hypr-dynamic-cursors
-        hyprland-hyprfocus.packages.${pkgs.stdenv.hostPlatform.system}.hyprfocus
-        hyprtrails
-        hyprwinwrap
+        # hyprland-dyncursors.packages.${pkgs.stdenv.hostPlatform.system}.hypr-dynamic-cursors
+        # hyprland-hyprfocus.packages.${pkgs.stdenv.hostPlatform.system}.hyprfocus
+        # hyprtrails
+        # hyprwinwrap
       ];
       settings = {
         monitor = [
@@ -1067,6 +1068,7 @@ ACTION=="change", SUBSYSTEM=="drm", RUN+="${pkgs.autorandr}/bin/autorandr -c"
           "ignorezero , rofi"
           "noanim , wpaperd.*"
         ];
+          /*
         "plugin:hyprtrails" = {
           color = "rgba(bb44cc44)";
         };
@@ -1078,7 +1080,6 @@ ACTION=="change", SUBSYSTEM=="drm", RUN+="${pkgs.autorandr}/bin/autorandr -c"
           animate_floating = "yes";
           animate_workspacechange = "yes";
           focus_animation = "shrink";
-          /*
           bezier = ["realsmooth, 0.28,0.29,.69,1.08"];
           shrink = {
             shrink_percentage = 0.8;
@@ -1087,7 +1088,6 @@ ACTION=="change", SUBSYSTEM=="drm", RUN+="${pkgs.autorandr}/bin/autorandr -c"
             out_bezier = "realsmooth";
             out_speed = 2;
           };
-          */
         };
         "plugin:dynamic-cursors" = {
           enabled = true;
@@ -1096,6 +1096,7 @@ ACTION=="change", SUBSYSTEM=="drm", RUN+="${pkgs.autorandr}/bin/autorandr -c"
             enabled = false;
           };
         };
+          */
       };
     };
 
@@ -1389,7 +1390,6 @@ ACTION=="change", SUBSYSTEM=="drm", RUN+="${pkgs.autorandr}/bin/autorandr -c"
     unzip
     vim
     vlc
-    volnoti
     vscode
     waybar
     waybox
@@ -1521,10 +1521,12 @@ ACTION=="change", SUBSYSTEM=="drm", RUN+="${pkgs.autorandr}/bin/autorandr -c"
     '';
   };
 
+  /*
   services.emacs = {
     enable = true;
     package = pkgs.emacs;
   };
+  */
 
   services.autorandr = {
     enable = true;
