@@ -82,7 +82,7 @@ end
 function zdev
   set -l wd (pwd)
   set -l nixroot_data (string split " " (nixroot))
-  set -l nixtype $nixroot_data[1]
+  set -lx nixtype $nixroot_data[1]
   if [ "$status" = "0" ]
     set -l curr_depth (firsty $ZDEV_DEPTH 0)
     set -lx ZDEV_ACTIVE 1
@@ -92,7 +92,7 @@ function zdev
     set -lx ZDEV_ID "_"$ZDEV_DEPTH"_$(date +%s_%N)_"$fish_pid"_$(random)"
     set -l pidvar "ZDEV_PID_$ZDEV_ID"
     set -lx "$pidvar" ""
-    set -l fish_init "begin; set $pidvar (get_fish_pid); cd $wd; end"
+    set -lx fish_init "begin; set $pidvar (get_fish_pid); cd $wd; end"
     cd $ZDEV_NIXROOT
     clear
     function sc
@@ -115,13 +115,17 @@ function zdev
       sc " ⇽❰nixroot❱ " \
     )
     set_color normal
-    if [ $nixtype = "flake" ]
-      nix develop --command -- fish -C "$fish_init"
-    else
-      nix-shell --command "fish -C \"$fish_init\""
+    function nix_fish
+      if [ $nixtype = "flake" ]
+        nix develop --command -- fish -C "$fish_init"
+      else
+        nix-shell --command "fish -C \"$fish_init\""
+      end
+    end
+    if nix_fish
+      clear
     end
     cd $wd
-    clear
   else
     return 1
   end

@@ -1318,6 +1318,7 @@ ACTION=="change", SUBSYSTEM=="drm", RUN+="${pkgs.autorandr}/bin/autorandr -c"
     coreutils
     discord
     dmenu
+    emacs
     esh
     fastfetch
     fd
@@ -1449,6 +1450,7 @@ ACTION=="change", SUBSYSTEM=="drm", RUN+="${pkgs.autorandr}/bin/autorandr -c"
       };
     })
     xmonadctl
+    xpra
     xorg.xev
     yarn
   ];
