@@ -35,7 +35,7 @@ set background=dark
 " catppuccin-latte, catppuccin-frappe, catppuccin-macchiato, catppuccin-mocha
 " colorscheme catppuccin-mocha
 " colorscheme aylin
-colorscheme kanagawa-wave
+" colorscheme kanagawa-wave
 " colorscheme rose-pine-main
 " colorscheme tokyodark
 "-
@@ -53,7 +53,7 @@ colorscheme kanagawa-wave
 " hi! CursorLineNr cterm=none
 "-
 
-set list lcs=trail:·,tab:░░,lead:░
+set list lcs=trail:·,tab:⬞⬞,lead:⬞
 
 syntax on
 if has('termguicolors')

@@ -144,6 +144,11 @@
         "af6c8fb9faaae2fa7aa16dd83b1b425c2b372891"
         )
       (fromGitHub
+        "maxmx03/fluoromachine.nvim"
+        "HEAD"
+        "d638ea221b4c6636978f49c1987d10ff2733c23d"
+        )
+      (fromGitHub
         "Dan7h3x/signup.nvim"
         "HEAD"
         "2b21a2aa51efbdeb9454a3f5d62659368d87d420"

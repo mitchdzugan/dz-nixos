@@ -662,6 +662,7 @@ ACTION=="change", SUBSYSTEM=="drm", RUN+="${pkgs.autorandr}/bin/autorandr -c"
         userEmail = "mitchdzugan@gmail.com";
         extraConfig = {
           init.defaultBranch = "main";
+          pull.rebase = false;
         };
       };
 

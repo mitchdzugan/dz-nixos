@@ -47,12 +47,14 @@ require('tabby.tabline').set(function(line)
     end),
     {
       lsep,
-      hl = colors.combine(colors.bg_to_fg(theme.tab), fg_to_bg(theme.tab)),
+      -- hl = colors.combine(colors.bg_to_fg(theme.tab), fg_to_bg(theme.tab)),
+      hl = colors.combine(theme.active_tab, fg_to_bg(theme.tab)),
     },
     line.spacer(),
     {
       rsep,
-      hl = colors.combine(colors.bg_to_fg(theme.tab), fg_to_bg(theme.tab)),
+      -- hl = colors.combine(colors.bg_to_fg(theme.tab), fg_to_bg(theme.tab)),
+      hl = colors.combine(theme.active_tab, fg_to_bg(theme.tab)),
     },
     line.wins_in_tab(line.api.get_current_tab()).foreach(function(win)
       win_printing_count = win_printing_count + 1

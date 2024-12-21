@@ -1,3 +1,10 @@
+require("fluoromachine").setup({
+  glow = true,
+  theme = 'delta',
+  transparent = false,
+})
+vim.cmd.colorscheme 'fluoromachine'
+
 require("nvim-tree").setup({
   hijack_cursor = true,
   hijack_netrw = false,
@@ -292,14 +299,14 @@ require("dz.wk.init")
 require("tidy").setup({ filetype_exclude = { "markdown", "diff" } })
 
 local ibl_highlight = {
-    "Whitespace",
-    "Comment",
+    "@markup.environment",
+    "@string",
     -- "CursorColumn",
     -- "@operator",
 }
 require("ibl").setup({
-  indent = { char = "", highlight = ibl_highlight },
-  scope = { enabled = false },
+  indent = { char = "⋮", highlight = ibl_highlight },
+  scope = { enabled = false, char = "⋮", highlight = {"@label"} },
   whitespace = {
     highlight = ibl_highlight,
     remove_blankline_trail = true,
