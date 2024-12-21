@@ -1314,7 +1314,10 @@ ACTION=="change", SUBSYSTEM=="drm", RUN+="${pkgs.autorandr}/bin/autorandr -c"
     cargo
     cava
     cavalier
+    clojure
     clojure-lsp
+    clj-kondo
+    joker
     coreutils
     discord
     dmenu

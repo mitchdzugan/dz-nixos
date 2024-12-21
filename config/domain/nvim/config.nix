@@ -27,6 +27,7 @@
         dockerfile
         elixir
         erlang
+        fennel
         gitignore
         graphql
         haskell
@@ -72,6 +73,8 @@
     };
   in
     with pkgs.vimPlugins; [
+      aurora
+      aylin-vim
       catppuccin-nvim
       cmp-nvim-lsp
       cmp-buffer
@@ -83,7 +86,11 @@
       guess-indent-nvim
       image-nvim
       indent-blankline-nvim
+      kanagawa-nvim
+      lualine-lsp-progress
       lualine-nvim
+      lspkind-nvim
+      lsp_lines-nvim
       mini-icons
       neoscroll-nvim
       netrw-nvim
@@ -91,10 +98,12 @@
       nvim-cmp
       nvim-cursorline
       nvim-lspconfig
+      nvim-navic
       nvim-paredit
       nvim-tree-lua
       nvim-treesitter-with-plugins
       nvim-web-devicons
+      oxocarbon-nvim
       plenary-nvim
       render-markdown-nvim
       rose-pine
@@ -123,6 +132,21 @@
         "bluz71/vim-moonfly-colors"
         "HEAD"
         "63f20d657c9fd46ecdd75bd45c321f74ef9b11fe"
+        )
+      (fromGitHub
+        "dgox16/oldworld.nvim"
+        "HEAD"
+        "1b8e1b2052b5591386187206a9afbe9e7fdbb35f"
+        )
+      (fromGitHub
+        "fynnfluegge/monet.nvim"
+        "HEAD"
+        "af6c8fb9faaae2fa7aa16dd83b1b425c2b372891"
+        )
+      (fromGitHub
+        "Dan7h3x/signup.nvim"
+        "HEAD"
+        "2b21a2aa51efbdeb9454a3f5d62659368d87d420"
         )
     ];
 }

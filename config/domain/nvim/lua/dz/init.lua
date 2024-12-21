@@ -64,7 +64,49 @@ vim.g.rainbow_delimiters = {
   },
 }
 
-require('lualine').setup()
+require('signup').setup({ })
+require('nvim-navic').setup({ lsp = { auto_attach = true } })
+require('lualine').setup({
+  options = {
+    icons_enabled = true,
+    theme = 'auto',
+    component_separators = { left = '', right = ''},
+    section_separators = { left = '', right = ''},
+    disabled_filetypes = {
+      statusline = {},
+      winbar = {},
+    },
+    ignore_focus = {},
+    always_divide_middle = true,
+    always_show_tabline = true,
+    globalstatus = false,
+    refresh = {
+      statusline = 100,
+      tabline = 100,
+      winbar = 100,
+    }
+  },
+  sections = {
+    lualine_a = {'mode'},
+    lualine_b = {'branch', 'diff', 'diagnostics'},
+    lualine_c = {'filename', 'lsp_progress', 'navic'},
+    lualine_x = {'encoding', 'fileformat', 'filetype'},
+    lualine_y = {'progress'},
+    lualine_z = {'location'}
+  },
+  inactive_sections = {
+    lualine_a = {},
+    lualine_b = {},
+    lualine_c = {'filename'},
+    lualine_x = {'location'},
+    lualine_y = {},
+    lualine_z = {}
+  },
+  tabline = {},
+  winbar = {},
+  inactive_winbar = {},
+  extensions = {}
+})
 require("nvim-paredit").setup({
   use_default_keys = false,
   indent = {
@@ -248,15 +290,20 @@ require("dz.tabline")
 require("dz.wk.init")
 
 require("tidy").setup({ filetype_exclude = { "markdown", "diff" } })
+
+local ibl_highlight = {
+    "Whitespace",
+    "Comment",
+    -- "CursorColumn",
+    -- "@operator",
+}
 require("ibl").setup({
-  indent = {
-    highlight = { "LineNr" },
+  indent = { char = "", highlight = ibl_highlight },
+  scope = { enabled = false },
+  whitespace = {
+    highlight = ibl_highlight,
+    remove_blankline_trail = true,
   },
-  scope = {
-    show_start = false,
-    show_end = false,
-    highlight = { "CursorLineFold" },
-  }
 })
 require('gitsigns').setup()
 require("tokyodark").setup({})
@@ -303,3 +350,45 @@ lspconfig.hls.setup({ filetypes = { 'haskell', 'lhaskell', 'cabal' } })
 lspconfig.rust_analyzer.setup{}
 lspconfig.clojure_lsp.setup{}
 lspconfig.ocamllsp.setup{}
+lspconfig.fennel_ls.setup{}
+require('lspkind').init({
+    -- defines how annotations are shown
+    -- default: symbol
+    -- options: 'text', 'text_symbol', 'symbol_text', 'symbol'
+    mode = 'text',
+    -- default symbol map
+    -- can be either 'default' (requires nerd-fonts font) or
+    -- 'codicons' for codicon preset (requires vscode-codicons font)
+    preset = 'default',
+    -- override preset symbols
+    symbol_map = {
+      Text = "󰉿",
+      Method = "󰆧",
+      Function = "󰊕",
+      Constructor = "",
+      Field = "󰜢",
+      Variable = "󰀫",
+      Class = "󰠱",
+      Interface = "",
+      Module = "",
+      Property = "󰜢",
+      Unit = "󰑭",
+      Value = "󰎠",
+      Enum = "",
+      Keyword = "󰌋",
+      Snippet = "",
+      Color = "󰏘",
+      File = "󰈙",
+      Reference = "󰈇",
+      Folder = "󰉋",
+      EnumMember = "",
+      Constant = "󰏿",
+      Struct = "󰙅",
+      Event = "",
+      Operator = "󰆕",
+      TypeParameter = "",
+    },
+})
+
+vim.diagnostic.config({ virtual_text = false })
+require("lsp_lines").setup()

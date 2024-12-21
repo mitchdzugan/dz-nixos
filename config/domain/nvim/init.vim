@@ -31,10 +31,25 @@ let maplocalleader = ","
 
 autocmd BufReadPost * if @% !~# '\.git[\/\\]COMMIT_EDITMSG$' && line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g`\"" | endif
 
+set background=dark
 " catppuccin-latte, catppuccin-frappe, catppuccin-macchiato, catppuccin-mocha
-colorscheme catppuccin-mocha
+" colorscheme catppuccin-mocha
+" colorscheme aylin
 " colorscheme rose-pine-main
 " colorscheme tokyodark
+" set background=dark
+" colorscheme oxocarbon
+let g:aurora_italic = 1
+let g:aurora_transparent = 1
+let g:aurora_bold = 1
+let g:aurora_darker = 1
+colorscheme aurora
+hi! TabLineSel gui=none
+hi! TabLineSel cterm=none
+hi! CursorLineNr gui=none
+hi! CursorLineNr cterm=none
+
+set list lcs=trail:·,tab:░░,lead:░
 
 syntax on
 if has('termguicolors')
