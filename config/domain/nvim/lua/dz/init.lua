@@ -298,17 +298,17 @@ require("dz.wk.init")
 
 require("tidy").setup({ filetype_exclude = { "markdown", "diff" } })
 
-vim.api.nvim_set_hl(0, "temp_ibl_dz1", { ctermfg = 13, fg = "#6a344d" })
-vim.api.nvim_set_hl(0, "temp_ibl_dz2", { ctermfg = 12, fg = "#2b5355" })
+vim.api.nvim_set_hl(0, "temp_ibl_dz1", { ctermfg = 13, fg = "#343536" })
+vim.api.nvim_set_hl(0, "temp_ibl_dz2", { ctermfg = 12, fg = "#372639" })
+-- vim.api.nvim_set_hl(0, "temp_ibl_dz3", { ctermfg = 11, fg = "#29353d" })
 local ibl_highlight = {
     "temp_ibl_dz1",
     "temp_ibl_dz2",
-    -- "CursorColumn",
-    -- "@operator",
+    -- "temp_ibl_dz3",
 }
 require("ibl").setup({
-  indent = { char = "⋮", highlight = ibl_highlight },
-  scope = { enabled = false, char = "⋮", highlight = {"@label"} },
+  indent = { char = "", highlight = ibl_highlight },
+  scope = { enabled = false, char = "█", highlight = {"@label"} },
   whitespace = {
     highlight = ibl_highlight,
     remove_blankline_trail = true,

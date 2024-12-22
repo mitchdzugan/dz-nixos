@@ -53,7 +53,7 @@ set background=dark
 " hi! CursorLineNr cterm=none
 "-
 
-set list lcs=trail:·,tab:⬞⬞,lead:⬞
+set list lcs=trail:·,tab:██,lead:█
 
 syntax on
 if has('termguicolors')
