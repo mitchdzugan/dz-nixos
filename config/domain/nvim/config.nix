@@ -113,6 +113,7 @@
       tabby-nvim
       telescope-nvim
       venn-nvim
+      vim-dispatch
       vim-jack-in
       vim-vsnip
       which-key-nvim
