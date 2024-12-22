@@ -1,5 +1,5 @@
 require("fluoromachine").setup({
-  glow = true,
+  glow = false,
   theme = 'retrowave',
   transparent = false,
 })
@@ -298,17 +298,16 @@ require("dz.wk.init")
 
 require("tidy").setup({ filetype_exclude = { "markdown", "diff" } })
 
-vim.api.nvim_set_hl(0, "temp_ibl_dz1", { ctermfg = 13, fg = "#343536" })
-vim.api.nvim_set_hl(0, "temp_ibl_dz2", { ctermfg = 12, fg = "#372639" })
--- vim.api.nvim_set_hl(0, "temp_ibl_dz3", { ctermfg = 11, fg = "#29353d" })
+vim.api.nvim_set_hl(0, "temp_ibl_dz1", { ctermfg = 13, fg = "#4a4a3e" })
+vim.api.nvim_set_hl(0, "temp_ibl_dz2", { ctermfg = 12, fg = "#483151" })
+vim.api.nvim_set_hl(0, "temp_ibl_dz3", { ctermfg = 11, fg = "#37474d" })
 local ibl_highlight = {
     "temp_ibl_dz1",
     "temp_ibl_dz2",
-    -- "temp_ibl_dz3",
+    "temp_ibl_dz3",
 }
 require("ibl").setup({
   indent = { char = "", highlight = ibl_highlight },
-  scope = { enabled = false, char = "█", highlight = {"@label"} },
   whitespace = {
     highlight = ibl_highlight,
     remove_blankline_trail = true,
@@ -402,3 +401,13 @@ require('lspkind').init({
 vim.diagnostic.config({ virtual_text = false })
 require("lsp_lines").setup()
 require("nvim-autopairs").setup {}
+
+local keyopts = { noremap = true, silent = true }
+vim.keymap.set({'n', 'v', 'o'}, '<c-h>', require('tree-climber').goto_parent, keyopts)
+vim.keymap.set({'n', 'v', 'o'}, '<c-l>', require('tree-climber').goto_child, keyopts)
+vim.keymap.set({'n', 'v', 'o'}, '<c-j>', require('tree-climber').goto_next, keyopts)
+vim.keymap.set({'n', 'v', 'o'}, '<c-k>', require('tree-climber').goto_prev, keyopts)
+vim.keymap.set({'v', 'o'}, 'in', require('tree-climber').select_node, keyopts)
+-- vim.keymap.set('n', '<c-K>', require('tree-climber').swap_prev, keyopts)
+-- vim.keymap.set('n', '<c-J>', require('tree-climber').swap_next, keyopts)
+-- vim.keymap.set('n', '<c-H>', require('tree-climber').highlight_node, keyopts)

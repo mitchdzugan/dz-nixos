@@ -81,6 +81,7 @@
       cmp-path
       cmp-cmdline
       cmp-vsnip
+      conjure
       dracula-nvim
       gitsigns-nvim
       guess-indent-nvim
@@ -112,6 +113,7 @@
       tabby-nvim
       telescope-nvim
       venn-nvim
+      vim-jack-in
       vim-vsnip
       which-key-nvim
       (fromGitHub
@@ -153,6 +155,11 @@
         "Dan7h3x/signup.nvim"
         "HEAD"
         "2b21a2aa51efbdeb9454a3f5d62659368d87d420"
+        )
+      (fromGitHub
+        "drybalka/tree-climber.nvim"
+        "HEAD"
+        "9b0c8c8358f575f924008945c74fd4f40d814cd7"
         )
     ];
 }
