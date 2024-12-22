@@ -298,10 +298,11 @@ require("dz.wk.init")
 
 require("tidy").setup({ filetype_exclude = { "markdown", "diff" } })
 
-vim.api.nvim_set_hl(0, "temp_ibl_dz1", { ctermfg = 13, fg = "#b16286" })
+vim.api.nvim_set_hl(0, "temp_ibl_dz1", { ctermfg = 13, fg = "#6a344d" })
+vim.api.nvim_set_hl(0, "temp_ibl_dz2", { ctermfg = 12, fg = "#2b5355" })
 local ibl_highlight = {
-    "@markup.environment",
     "temp_ibl_dz1",
+    "temp_ibl_dz2",
     -- "CursorColumn",
     -- "@operator",
 }
