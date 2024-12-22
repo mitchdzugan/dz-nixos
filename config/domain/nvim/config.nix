@@ -95,6 +95,7 @@
       neoscroll-nvim
       netrw-nvim
       nui-nvim
+      nvim-autopairs
       nvim-cmp
       nvim-cursorline
       nvim-lspconfig

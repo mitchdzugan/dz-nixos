@@ -399,3 +399,4 @@ require('lspkind').init({
 
 vim.diagnostic.config({ virtual_text = false })
 require("lsp_lines").setup()
+require("nvim-autopairs").setup {}
