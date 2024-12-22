@@ -1,6 +1,6 @@
 require("fluoromachine").setup({
   glow = true,
-  theme = 'delta',
+  theme = 'retrowave',
   transparent = false,
 })
 vim.cmd.colorscheme 'fluoromachine'
@@ -298,9 +298,10 @@ require("dz.wk.init")
 
 require("tidy").setup({ filetype_exclude = { "markdown", "diff" } })
 
+vim.api.nvim_set_hl(0, "temp_ibl_dz1", { ctermfg = 13, fg = "#b16286" })
 local ibl_highlight = {
     "@markup.environment",
-    "@string",
+    "temp_ibl_dz1",
     -- "CursorColumn",
     -- "@operator",
 }

@@ -1331,6 +1331,7 @@ ACTION=="change", SUBSYSTEM=="drm", RUN+="${pkgs.autorandr}/bin/autorandr -c"
     fzf
     gcc
     gh
+    github-desktop
     gjs
     glrnvim
     gnum4
