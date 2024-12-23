@@ -1345,6 +1345,7 @@ ACTION=="change", SUBSYSTEM=="drm", RUN+="${pkgs.autorandr}/bin/autorandr -c"
     haskell-language-server
     heroku
     htop
+    jetbrains.idea-community-bin
     jq
     jp2a
     killall
