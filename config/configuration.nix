@@ -1350,6 +1350,7 @@ ACTION=="change", SUBSYSTEM=="drm", RUN+="${pkgs.autorandr}/bin/autorandr -c"
     jp2a
     killall
     kitty
+    lapce
     libnotify
     mpc-cli
     ncmpcpp

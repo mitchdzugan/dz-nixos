@@ -78,6 +78,7 @@
       catppuccin-nvim
       cmp-nvim-lsp
       cmp-buffer
+      cmp-conjure
       cmp-path
       cmp-cmdline
       cmp-vsnip
