@@ -163,5 +163,10 @@
         "HEAD"
         "9b0c8c8358f575f924008945c74fd4f40d814cd7"
         )
+      (fromGitHub
+        "shellRaining/hlchunk.nvim"
+        "HEAD"
+        "5465dd33ade8676d63f6e8493252283060cd72ca"
+        )
     ];
 }

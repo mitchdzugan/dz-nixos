@@ -1,6 +1,6 @@
 { config, pkgs, lib, hostname, home-manager,
   hyprland, hyprland-plugins, hyprland-hyprfocus, hyprland-dyncursors,
-  wezterm-flake, ssbm, sddm-dz, nur, ...
+  wezterm-flake, ssbm, sddm-dz, nur, jsim-flake, rep-flake, ...
 }: let
   nixospkgs = pkgs;
   lg_hdmi_fingerprint = "00ffffffffffff001e6d6e77f48c0400041f010380462778ea8cb5af4f43ab260e5054210800d1c06140010101010101010101010101e9e800a0a0a0535030203500b9882100001a000000fd0030901ee63c000a202020202020000000fc004c4720554c545241474541520a000000ff003130344e544a4a38533232380a01b8020349f1230907074d100403011f13123f5d5e5f60616d030c002000b83c20006001020367d85dc401788003e30f00186d1a00000205309000045a445a44e305c000e60605015a5a446fc200a0a0a0555030203500b9882100001a5aa000a0a0a0465030203a00b9882100001a565e00a0a0a0295030203500b9882100001aed";
@@ -1305,6 +1305,7 @@ ACTION=="change", SUBSYSTEM=="drm", RUN+="${pkgs.autorandr}/bin/autorandr -c"
     alsa-utils
     any-nix-shell
     ascii-image-converter
+    babashka
     bat
     blesh
     bc
@@ -1335,8 +1336,10 @@ ACTION=="change", SUBSYSTEM=="drm", RUN+="${pkgs.autorandr}/bin/autorandr -c"
     gjs
     glrnvim
     gnum4
+    gnumake
     gnused
     grc
+    gradle
     grim
     gtk-server
     gtk3
@@ -1348,10 +1351,12 @@ ACTION=="change", SUBSYSTEM=="drm", RUN+="${pkgs.autorandr}/bin/autorandr -c"
     jetbrains.idea-community-bin
     jq
     jp2a
+    jsim-flake.packages.${pkgs.hostPlatform.system}.jsim
     killall
     kitty
     lapce
     libnotify
+    maven
     mpc-cli
     ncmpcpp
     networkmanagerapplet
@@ -1376,6 +1381,7 @@ ACTION=="change", SUBSYSTEM=="drm", RUN+="${pkgs.autorandr}/bin/autorandr -c"
       python-pkgs.pip
     ]))
     qimgv
+    rep-flake.packages.${pkgs.hostPlatform.system}.rep
     ripgrep
     rofi-wayland
     rust-analyzer
@@ -1399,6 +1405,7 @@ ACTION=="change", SUBSYSTEM=="drm", RUN+="${pkgs.autorandr}/bin/autorandr -c"
     vim
     vlc
     vscode
+    watchexec
     waybar
     waybox
     wev
@@ -1460,6 +1467,22 @@ ACTION=="change", SUBSYSTEM=="drm", RUN+="${pkgs.autorandr}/bin/autorandr -c"
     xpra
     xorg.xev
     yarn
+    (writeShellScriptBin "uu" ''
+      base=$(pwd)
+      while true; do
+        if [ -f "$(pwd)/$1" ]; then
+          eval $2
+          exit 0
+        elif [ "$(pwd)" = "/" ]; then
+          >&2 echo $3
+          exit 1
+        fi
+        cd ..
+      done
+    '')
+    (writeShellScriptBin "bp" ''
+      uu "bb.edn" "bb $@" "not in a bb project [$(pwd)]"
+    '')
   ];
 
   # Some programs need SUID wrappers, can be configured further or are

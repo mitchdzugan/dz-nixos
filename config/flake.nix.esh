@@ -26,6 +26,10 @@
     };
     nur.url = "github:nix-community/NUR";
     ssbm.url = "github:mitchdzugan/ssbm-nix";
+    jsim-flake.url = "github:mitchdzugan/jsim";
+    jsim-flake.inputs.nixpkgs.follows = "nixpkgs";
+    rep-flake.url = "github:eraserhd/rep";
+    rep-flake.inputs.nixpkgs.follows = "nixpkgs";
   };
   outputs = { self, nixpkgs, nur, ... }@attrs: {
     nixosConfigurations.<%= $(hostname) %> = nixpkgs.lib.nixosSystem {

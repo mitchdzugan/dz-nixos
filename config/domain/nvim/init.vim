@@ -52,6 +52,7 @@ set background=dark
 " hi! CursorLineNr gui=none
 " hi! CursorLineNr cterm=none
 "-
+
 set list lcs=trail:·,tab:🮙🮙,lead:🮙
 
 syntax on

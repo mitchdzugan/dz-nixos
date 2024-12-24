@@ -306,6 +306,32 @@ local ibl_highlight = {
     "temp_ibl_dz2",
     "temp_ibl_dz3",
 }
+require('hlchunk').setup({
+  chunk = {
+    enable = true,
+    use_treesitter = true,
+    -- priority = 3,
+  },
+  indent = {
+    enable = false,
+    chars = { '🮙', '🮘' },
+    style = { "#4a4a3e", "#483151", "#37474d" },
+    use_treesitter = true,
+    priority = 1,
+  },
+  line_num = {
+    enable = true,
+    use_treesitter = true,
+    -- priority = 2,
+  },
+  blank = {
+    enable = false,
+    chars = { '🮙', '🮘' },
+    style = { { fg = "#4a4a3e" }, { fg = "#483151" }, { fg = "#37474d" } },
+    use_treesitter = true,
+    -- priority = 4,
+  },
+})
 require("ibl").setup({
   indent = { char = "", highlight = ibl_highlight },
   whitespace = {
