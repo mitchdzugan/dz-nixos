@@ -154,15 +154,17 @@
         "d638ea221b4c6636978f49c1987d10ff2733c23d"
         )
       (fromGitHub
-        "Dan7h3x/signup.nvim"
+       "Dan7h3x/signup.nvim"
         "HEAD"
         "2b21a2aa51efbdeb9454a3f5d62659368d87d420"
         )
+      /*
       (fromGitHub
         "drybalka/tree-climber.nvim"
         "HEAD"
         "9b0c8c8358f575f924008945c74fd4f40d814cd7"
         )
+      */
       (fromGitHub
         "shellRaining/hlchunk.nvim"
         "HEAD"

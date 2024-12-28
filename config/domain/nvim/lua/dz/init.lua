@@ -315,7 +315,7 @@ require('hlchunk').setup({
   indent = {
     enable = false,
     chars = { '🮙', '🮘' },
-    style = { "#4a4a3e", "#483151", "#37474d" },
+    style = { "#4a4a3d", "#483151", "#37474d" },
     use_treesitter = true,
     priority = 1,
   },

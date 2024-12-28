@@ -2,6 +2,8 @@
   description = "NixOS configuration for <%= $(hostname) %>";
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
+    zn-nix.url = "github:mitchdzugan/zn.nix";
+    zn-nix.inputs.nixpkgs.follows = "nixpkgs";
     sddm-dz.url = "github:mitchdzugan/sddm-dz";
     sddm-dz.inputs.nixpkgs.follows = "nixpkgs";
     gtk-server.url = "github:mitchdzugan/gtk-server_4-nix";
@@ -26,10 +28,6 @@
     };
     nur.url = "github:nix-community/NUR";
     ssbm.url = "github:mitchdzugan/ssbm-nix";
-    jsim-flake.url = "github:mitchdzugan/jsim";
-    jsim-flake.inputs.nixpkgs.follows = "nixpkgs";
-    rep-flake.url = "github:eraserhd/rep";
-    rep-flake.inputs.nixpkgs.follows = "nixpkgs";
   };
   outputs = { self, nixpkgs, nur, ... }@attrs: {
     nixosConfigurations.<%= $(hostname) %> = nixpkgs.lib.nixosSystem {
