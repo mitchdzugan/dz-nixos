@@ -1468,6 +1468,7 @@ ACTION=="change", SUBSYSTEM=="drm", RUN+="${pkgs.autorandr}/bin/autorandr -c"
     xorg.xev
     yarn
     zn.zflake
+    zprint
     (writeShellScriptBin "uu" ''
       base=$(pwd)
       while true; do
