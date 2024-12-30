@@ -1,9 +1,9 @@
-require("fluoromachine").setup({
-  glow = false,
-  theme = 'retrowave',
-  transparent = false,
-})
-vim.cmd.colorscheme 'fluoromachine'
+-- require("fluoromachine").setup({
+--   glow = false,
+--   theme = 'retrowave',
+--   transparent = false,
+-- })
+-- vim.cmd.colorscheme 'fluoromachine'
 
 require("nvim-tree").setup({
   hijack_cursor = true,
@@ -297,6 +297,15 @@ require("dz.tabline")
 require("dz.wk.init")
 
 require("tidy").setup({ filetype_exclude = { "markdown", "diff" } })
+
+local hooks = require "ibl.hooks"
+-- create the highlight groups in the highlight setup hook, so they are reset
+-- every time the colorscheme changes
+hooks.register(hooks.type.HIGHLIGHT_SETUP, function()
+  vim.api.nvim_set_hl(0, "temp_ibl_dz1", { ctermfg = 13, fg = "#4a4a3e" })
+  vim.api.nvim_set_hl(0, "temp_ibl_dz2", { ctermfg = 12, fg = "#483151" })
+  vim.api.nvim_set_hl(0, "temp_ibl_dz3", { ctermfg = 11, fg = "#37474d" })
+end)
 
 vim.api.nvim_set_hl(0, "temp_ibl_dz1", { ctermfg = 13, fg = "#4a4a3e" })
 vim.api.nvim_set_hl(0, "temp_ibl_dz2", { ctermfg = 12, fg = "#483151" })
