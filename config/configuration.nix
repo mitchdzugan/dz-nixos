@@ -1349,7 +1349,12 @@ ACTION=="change", SUBSYSTEM=="drm", RUN+="${pkgs.autorandr}/bin/autorandr -c"
     haskell-language-server
     heroku
     htop
-    jetbrains.idea-community-bin
+    (jetbrains.idea-community-bin.override {
+      vmopts = ''
+        -Dconsole.encoding=UTF-8
+        -Dfile.encoding=UTF-8
+      '';
+    })
     jq
     jp2a
     zn.jsim
@@ -1382,6 +1387,7 @@ ACTION=="change", SUBSYSTEM=="drm", RUN+="${pkgs.autorandr}/bin/autorandr -c"
     ]))
     qimgv
     zn.rep
+    zn.wait-for
     ripgrep
     rofi-wayland
     rust-analyzer
