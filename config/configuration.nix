@@ -1,6 +1,6 @@
 { config, pkgs, lib, hostname, home-manager, zn-nix,
   hyprland, hyprland-plugins, hyprland-hyprfocus, hyprland-dyncursors,
-  wezterm-flake, ssbm, sddm-dz, nur, ...
+  wezterm-flake, ssbm, sddm-dz, zkg, zkm, ztr, nur, ...
 }: let
   nixospkgs = pkgs;
   zn = zn-nix.mk-zn pkgs.system;
@@ -396,6 +396,10 @@ ACTION=="change", SUBSYSTEM=="drm", RUN+="${pkgs.autorandr}/bin/autorandr -c"
       };
       "nvim/lua" = {
         source = hm.config.lib.file.mkOutOfStoreSymlink ./domain/nvim/lua;
+        recursive = true;
+      };
+      "nvim/filetype.vim" = {
+        source = hm.config.lib.file.mkOutOfStoreSymlink ./domain/nvim/filetype.vim;
         recursive = true;
       };
       "xmonad/xmonad.hs" = {
@@ -1387,6 +1391,7 @@ ACTION=="change", SUBSYSTEM=="drm", RUN+="${pkgs.autorandr}/bin/autorandr -c"
     ]))
     qimgv
     zn.rep
+    zn.reply
     zn.wait-for
     ripgrep
     rofi-wayland
@@ -1474,6 +1479,9 @@ ACTION=="change", SUBSYSTEM=="drm", RUN+="${pkgs.autorandr}/bin/autorandr -c"
     xorg.xev
     yarn
     zn.zflake
+    zkg.packages.${pkgs.hostPlatform.system}.zkg
+    zkm.packages.${pkgs.hostPlatform.system}.zkm
+    ztr.packages.${pkgs.hostPlatform.system}.ztr
     zprint
     (writeShellScriptBin "uu" ''
       base=$(pwd)

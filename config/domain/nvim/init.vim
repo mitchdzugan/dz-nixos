@@ -42,15 +42,15 @@ set background=dark
 " set background=dark
 " colorscheme oxocarbon
 "-
-let g:aurora_italic = 1
-let g:aurora_transparent = 1
-let g:aurora_bold = 1
-let g:aurora_darker = 1
-colorscheme aurora
-hi! TabLineSel gui=none
-hi! TabLineSel cterm=none
-hi! CursorLineNr gui=none
-hi! CursorLineNr cterm=none
+"let g:aurora_italic = 1
+"let g:aurora_transparent = 1
+"let g:aurora_bold = 1
+"let g:aurora_darker = 1
+"colorscheme aurora
+"hi! TabLineSel gui=none
+"hi! TabLineSel cterm=none
+"hi! CursorLineNr gui=none
+"hi! CursorLineNr cterm=none
 "-
 
 set list lcs=trail:·,tab:🮙🮙,lead:🮙

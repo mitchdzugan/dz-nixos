@@ -4,6 +4,12 @@
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
     zn-nix.url = "github:mitchdzugan/zn.nix";
     zn-nix.inputs.nixpkgs.follows = "nixpkgs";
+    zkg.url = "github:mitchdzugan/zkg";
+    zkg.inputs.nixpkgs.follows = "nixpkgs";
+    zkm.url = "github:mitchdzugan/zkm";
+    zkm.inputs.nixpkgs.follows = "nixpkgs";
+    ztr.url = "github:mitchdzugan/ztr";
+    ztr.inputs.nixpkgs.follows = "nixpkgs";
     sddm-dz.url = "github:mitchdzugan/sddm-dz";
     sddm-dz.inputs.nixpkgs.follows = "nixpkgs";
     gtk-server.url = "github:mitchdzugan/gtk-server_4-nix";

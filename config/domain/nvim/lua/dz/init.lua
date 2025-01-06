@@ -1,9 +1,9 @@
--- require("fluoromachine").setup({
---   glow = false,
---   theme = 'retrowave',
---   transparent = false,
--- })
--- vim.cmd.colorscheme 'fluoromachine'
+require("fluoromachine").setup({
+  glow = true,
+  theme = 'delta',
+  transparent = false,
+})
+vim.cmd.colorscheme 'fluoromachine'
 
 require("nvim-tree").setup({
   hijack_cursor = true,
@@ -61,13 +61,13 @@ vim.g.rainbow_delimiters = {
     lua = 'rainbow-blocks',
   },
   highlight = {
-    'RainbowDelimiterRed',
-    'RainbowDelimiterYellow',
     'RainbowDelimiterBlue',
+    'RainbowDelimiterViolet',
     'RainbowDelimiterOrange',
     'RainbowDelimiterGreen',
-    'RainbowDelimiterViolet',
     'RainbowDelimiterCyan',
+    'RainbowDelimiterRed',
+    'RainbowDelimiterYellow',
   },
 }
 
@@ -434,7 +434,11 @@ require('lspkind').init({
     },
 })
 
-vim.diagnostic.config({ virtual_text = false })
+vim.diagnostic.config({
+  virtual_text = false,
+  signs = false,
+  underline = false,
+})
 require("lsp_lines").setup()
 require("nvim-autopairs").setup {}
 
