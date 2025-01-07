@@ -755,6 +755,27 @@ ACTION=="change", SUBSYSTEM=="drm", RUN+="${pkgs.autorandr}/bin/autorandr -c"
               video-downloadhelper
             ];
           };
+          streaming = {
+            id = 1;
+            name = "streaming";
+            isDefault = false;
+            settings = {
+              "browser.tabs.inTitlebar" = 0;
+              "full-screen-api.ignore-widgets" = true;
+              "full-screen-api.exit-on.windowRaise" = false;
+              /*
+              "extensions.activeThemeId" = with config.nur.repos.rycee;
+                firefox-addons.dracula-dark-colorscheme.addonId;
+              */
+            };
+            userChrome = builtins.readFile ./domain/firefox/userChrome.css;
+            extensions = with nixospkgs.nur.repos.rycee.firefox-addons; [
+              dracula-dark-colorscheme
+              i-auto-fullscreen
+              ublock-origin
+              video-downloadhelper
+            ];
+          };
         };
       };
 
@@ -1168,7 +1189,7 @@ ACTION=="change", SUBSYSTEM=="drm", RUN+="${pkgs.autorandr}/bin/autorandr -c"
         keybindings = {
           "super + shift + q" = "bspc quit";
           "super + q" = "bspc node --close";
-          "super + space" = "dzKeyMenu";
+          "super + space" = "home.zkm";
           "super + slash" = "openApp";
           "super + Return" = "kitty";
           "super + w" = "firefox";

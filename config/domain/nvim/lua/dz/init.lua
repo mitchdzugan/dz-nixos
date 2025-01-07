@@ -1,9 +1,9 @@
-require("fluoromachine").setup({
-  glow = true,
-  theme = 'delta',
-  transparent = false,
-})
-vim.cmd.colorscheme 'fluoromachine'
+-- require("fluoromachine").setup({
+  -- glow = true,
+  -- theme = 'delta',
+  -- transparent = false,
+-- })
+-- vim.cmd.colorscheme 'fluoromachine'
 
 require("nvim-tree").setup({
   hijack_cursor = true,
@@ -436,8 +436,6 @@ require('lspkind').init({
 
 vim.diagnostic.config({
   virtual_text = false,
-  signs = false,
-  underline = false,
 })
 require("lsp_lines").setup()
 require("nvim-autopairs").setup {}
