@@ -1145,6 +1145,9 @@ ACTION=="change", SUBSYSTEM=="drm", RUN+="${pkgs.autorandr}/bin/autorandr -c"
         bspwm-reset-monitors.js
       '';
       rules = {
+        float_kitty = {
+          state = "floating";
+        };
         ztr = {
           border = false;
           focus = false;
