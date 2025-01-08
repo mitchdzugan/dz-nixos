@@ -244,8 +244,8 @@ in {
   services.displayManager.sddm.theme = "sddm-dz";
   services.displayManager.sddm.settings = {
     Theme = {
-      CursorSize = 32;
-      CursorTheme = "BreezeX-RosePineDawn-Linux";
+      CursorSize = 24;
+      CursorTheme = "Bibata-Modern-Ice";
     };
   };
   services.xserver.displayManager.setupCommands = "${pkgs.autorandr}/bin/autorandr -c";
@@ -365,11 +365,10 @@ ACTION=="change", SUBSYSTEM=="drm", RUN+="${pkgs.autorandr}/bin/autorandr -c"
       pointerCursor = {
         gtk.enable = true;
         x11.enable = true;
-        # package = pkgs.catppuccin-cursors.mochaRosewater; # bibata-cursors;
-        package = pkgs.rose-pine-cursor;
-        name = "BreezeX-RosePineDawn-Linux";
-        size = 32;
-        hyprcursor = { enable = true; size = 32; };
+        package = pkgs.bibata-cursors;
+        name = "Bibata-Modern-Ice";
+        size = 24;
+        hyprcursor = { enable = true; size = 24; };
       };
       packages = [ pkgs.gimp pkgs.mpv ];
       ## sessionVariables.QT_QPA_PLATFORM = "wayland";
@@ -560,7 +559,8 @@ ACTION=="change", SUBSYSTEM=="drm", RUN+="${pkgs.autorandr}/bin/autorandr -c"
             "#4b4e6c@0.9 "
             "#11111b@0.8 "
             "#6c7086@0.8 "
-            "#181825@0.8 "
+            # "#181825@0.8 "
+            "#1e1e2e@0.9"
           ];
         };
         themeFile = "purpurite";
@@ -1146,6 +1146,7 @@ ACTION=="change", SUBSYSTEM=="drm", RUN+="${pkgs.autorandr}/bin/autorandr -c"
       '';
       rules = {
         float_kitty = {
+          rectangle="960x540+480+254";
           state = "floating";
         };
         ztr = {
@@ -1420,6 +1421,7 @@ ACTION=="change", SUBSYSTEM=="drm", RUN+="${pkgs.autorandr}/bin/autorandr -c"
     ripgrep
     rofi-wayland
     rust-analyzer
+    screenkey
     scrot
     ### Need the thing
     sddm-chili-theme

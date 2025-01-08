@@ -350,7 +350,10 @@ require("ibl").setup({
 })
 require('gitsigns').setup()
 require("tokyodark").setup({})
-require("image").setup({ backend = "kitty" })
+require("image").setup({
+  backend = "kitty",
+  window_overlap_clear_enabled = true,
+})
 require("netrw").setup({})
 require('guess-indent').setup({})
 

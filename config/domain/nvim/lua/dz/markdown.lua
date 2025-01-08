@@ -156,7 +156,7 @@ end
 local function mk_date_str(offset_, from_time_)
     offset = ((offset_ ~= nil) and offset_) or 0
     from_time = ((from_time_ ~= nil) and from_time_) or os.time(os.date("!*t"))
-    return pretty_date(from_time + (offset * 60 * 60 * 24))
+    return pretty_date(from_time + (offset * 60 * 60 * 24) - (6 * 60 * 60))
 end
 local function mk_todo_filename(offset)
     if (offset == nil) then return mk_date_str() end
@@ -187,4 +187,3 @@ end,{})
 vim.api.nvim_create_user_command('TodoOpenDayAfter',function()
   pcall(open_todo(1))
 end,{})
-

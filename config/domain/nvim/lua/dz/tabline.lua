@@ -60,7 +60,7 @@ require('tabby.tabline').set(function(line)
       win_printing_count = win_printing_count + 1
       local is_last = win_count == win_printing_count
       return {
-        line.sep(lsep, colors.bg_to_fg(theme.tab), theme.fill),
+        line.sep(lsep, colors.bg_to_fg(theme.tab), theme.tab),
         win.is_current() and '' or '',
         win.buf_name(),
         ((is_last and " ") or line.sep(rsep, colors.bg_to_fg(theme.tab), theme.fill)),
