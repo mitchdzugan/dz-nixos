@@ -1,6 +1,9 @@
 { config, pkgs, lib, hostname, home-manager, zn-nix,
+  /*
   hyprland, hyprland-plugins, hyprland-hyprfocus, hyprland-dyncursors,
-  wezterm-flake, ssbm, sddm-dz, zkg, zkm, ztr, nur, ...
+  wezterm-flake,
+  */
+  ssbm, sddm-dz, zkg, zkm, ztr, nur, ...
 }: let
   nixospkgs = pkgs;
   zn = zn-nix.mk-zn pkgs.system;
@@ -288,12 +291,14 @@ in {
   };
   services.xserver.windowManager.bspwm.enable = true;
   services.xserver.desktopManager.gnome.enable = true;
+  /*
   programs.hyprland = {
     enable = true;
     package = hyprland.packages.${pkgs.stdenv.hostPlatform.system}.hyprland;
     portalPackage =
       hyprland.packages.${pkgs.stdenv.hostPlatform.system}.xdg-desktop-portal-hyprland;
   };
+  */
 
   # Configure keymap in X11
   services.xserver.xkb = {
@@ -678,6 +683,7 @@ ACTION=="change", SUBSYSTEM=="drm", RUN+="${pkgs.autorandr}/bin/autorandr -c"
         nix-direnv.enable = true;
       };
 
+      /*
       wezterm = {
         enable = true;
         package = wezterm-flake.packages."${pkgs.system}".default;
@@ -701,6 +707,7 @@ ACTION=="change", SUBSYSTEM=="drm", RUN+="${pkgs.autorandr}/bin/autorandr -c"
           }
         '';
       };
+      */
 
       neovim = import ./domain/nvim/config.nix { lib = lib; pkgs = pkgs; };
       # neovide = import ./domain/nvim/neovide.nix;
@@ -779,6 +786,7 @@ ACTION=="change", SUBSYSTEM=="drm", RUN+="${pkgs.autorandr}/bin/autorandr -c"
         };
       };
 
+      /*
       waybar = {
         enable = true;
         style = builtins.readFile ./domain/hypr/waybar.style.css;
@@ -943,8 +951,10 @@ ACTION=="change", SUBSYSTEM=="drm", RUN+="${pkgs.autorandr}/bin/autorandr -c"
           };
         };
       };
+      */
     };
 
+    /*
     wayland.windowManager.hyprland = {
       enable = true;
       package = hyprland.packages.${pkgs.stdenv.hostPlatform.system}.hyprland;
@@ -1123,9 +1133,10 @@ ACTION=="change", SUBSYSTEM=="drm", RUN+="${pkgs.autorandr}/bin/autorandr -c"
             enabled = false;
           };
         };
-          */
+          * /
       };
     };
+    */
 
     xsession.windowManager.bspwm = {
       enable = true;
@@ -1236,7 +1247,7 @@ ACTION=="change", SUBSYSTEM=="drm", RUN+="${pkgs.autorandr}/bin/autorandr -c"
             pkgs.which
             pkgs.bspwm
             pkgs.nodejs
-            pkgs.pamixer
+            /* pkgs.pamixer */
             pkgs.pulseaudio
             polybar_cava
           ];
@@ -1352,6 +1363,7 @@ ACTION=="change", SUBSYSTEM=="drm", RUN+="${pkgs.autorandr}/bin/autorandr -c"
     joker
     coreutils
     discord
+    distrobox
     dmenu
     emacs
     esh
@@ -1399,7 +1411,7 @@ ACTION=="change", SUBSYSTEM=="drm", RUN+="${pkgs.autorandr}/bin/autorandr -c"
     nix-prefetch-github
     nodejs
     nwjs-sdk
-    pamixer
+    /* pamixer */
     pavucontrol
     lxqt.pavucontrol-qt
     perl
@@ -1654,6 +1666,11 @@ ACTION=="change", SUBSYSTEM=="drm", RUN+="${pkgs.autorandr}/bin/autorandr -c"
       sansSerif = [ "Ubuntu" ];
       monospace = [ "MonaspiceKr Nerd Font Mono" ];
     };
+  };
+
+  virtualisation.podman = {
+    enable = true;
+    dockerCompat = true;
   };
 
   # This value determines the NixOS release from which the default
