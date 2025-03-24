@@ -127,6 +127,7 @@ require('render-markdown').setup({
     heading = { enabled = false },
     checkbox = { enabled = false },
     render_modes = { "n", "c", 'i' },
+    -- file_types = { "markdown" },
     bullet = {
         enabled = true,
         icons = { '●', '○', '', '' },
@@ -136,7 +137,7 @@ require('render-markdown').setup({
         highlight = 'RenderMarkdownBullet',
     },
     custom_handlers = {
-        markdown = { parse = parse_markdown_extended, extends = true },
+        -- markdown = { parse = parse_markdown_extended, extends = true },
     },
 })
 

@@ -1,6 +1,6 @@
 { config, pkgs, lib, hostname, home-manager, zn-nix,
-  /*
   hyprland, hyprland-plugins, hyprland-hyprfocus, hyprland-dyncursors,
+  /*
   wezterm-flake,
   */
   ssbm, sddm-dz, zkg, zkm, ztr, nur, ...
@@ -291,14 +291,12 @@ in {
   };
   services.xserver.windowManager.bspwm.enable = true;
   services.xserver.desktopManager.gnome.enable = true;
-  /*
   programs.hyprland = {
     enable = true;
     package = hyprland.packages.${pkgs.stdenv.hostPlatform.system}.hyprland;
     portalPackage =
       hyprland.packages.${pkgs.stdenv.hostPlatform.system}.xdg-desktop-portal-hyprland;
   };
-  */
 
   # Configure keymap in X11
   services.xserver.xkb = {
@@ -786,7 +784,6 @@ ACTION=="change", SUBSYSTEM=="drm", RUN+="${pkgs.autorandr}/bin/autorandr -c"
         };
       };
 
-      /*
       waybar = {
         enable = true;
         style = builtins.readFile ./domain/hypr/waybar.style.css;
@@ -951,18 +948,16 @@ ACTION=="change", SUBSYSTEM=="drm", RUN+="${pkgs.autorandr}/bin/autorandr -c"
           };
         };
       };
-      */
     };
 
-    /*
     wayland.windowManager.hyprland = {
       enable = true;
       package = hyprland.packages.${pkgs.stdenv.hostPlatform.system}.hyprland;
       plugins = with hyprland-plugins.packages.${pkgs.stdenv.hostPlatform.system}; [
-        # hyprland-dyncursors.packages.${pkgs.stdenv.hostPlatform.system}.hypr-dynamic-cursors
-        # hyprland-hyprfocus.packages.${pkgs.stdenv.hostPlatform.system}.hyprfocus
-        # hyprtrails
-        # hyprwinwrap
+        hyprland-dyncursors.packages.${pkgs.stdenv.hostPlatform.system}.hypr-dynamic-cursors
+        /* hyprland-hyprfocus.packages.${pkgs.stdenv.hostPlatform.system}.hyprfocus */
+        hyprtrails
+        hyprwinwrap
       ];
       settings = {
         monitor = [
@@ -990,6 +985,23 @@ ACTION=="change", SUBSYSTEM=="drm", RUN+="${pkgs.autorandr}/bin/autorandr -c"
           resize_on_border = false;
           allow_tearing = false;
           layout = "dwindle";
+        };
+        group = {
+          "col.border_active" = "rgba(33ccffee) rgba(ff33ccee) rgba(ccff33ee) 45deg";
+          "col.border_inactive" = "rgba(595959aa)";
+          groupbar = {
+            font_family = "monospace";
+            font_size = 11;
+            height = 13;
+            gaps_in = 1;
+            gaps_out = 3;
+            indicator_height = 0;
+            gradients = true;
+            rounding = 0;
+            gradient_rounding = 5;
+            "col.active" = "rgba(1e1e2fff) rgba(2a273fff)";
+            "col.inactive" = "rgba(1e1e2faa) rgba(2a273faa)";
+          };
         };
         decoration = {
           rounding = 10;
@@ -1040,7 +1052,8 @@ ACTION=="change", SUBSYSTEM=="drm", RUN+="${pkgs.autorandr}/bin/autorandr -c"
           "$mod, E, exec, $fileManager"
           "$mod, V, togglefloating,"
           "$mod, F, fullscreen"
-          "$mod, space, exec, dzKeyMenu"
+          "$mod, G, togglegroup"
+          "$mod, space, exec, home.zkm"
           "$mod, slash, exec, openApp"
           "$mod, P, pseudo, # dwindle"
           "$mod, J, togglesplit, # dwindle"
@@ -1105,7 +1118,6 @@ ACTION=="change", SUBSYSTEM=="drm", RUN+="${pkgs.autorandr}/bin/autorandr -c"
           "ignorezero , rofi"
           "noanim , wpaperd.*"
         ];
-          /*
         "plugin:hyprtrails" = {
           color = "rgba(bb44cc44)";
         };
@@ -1133,10 +1145,8 @@ ACTION=="change", SUBSYSTEM=="drm", RUN+="${pkgs.autorandr}/bin/autorandr -c"
             enabled = false;
           };
         };
-          * /
       };
     };
-    */
 
     xsession.windowManager.bspwm = {
       enable = true;
@@ -1557,6 +1567,7 @@ ACTION=="change", SUBSYSTEM=="drm", RUN+="${pkgs.autorandr}/bin/autorandr -c"
   # networking.firewall.allowedUDPPorts = [ ... ];
   # Or disable the firewall altogether.
   # networking.firewall.enable = false;
+  networking.firewall = { enable = false; };
 
   hardware.system76.enableAll = hostname == "mitch-desktop";
 

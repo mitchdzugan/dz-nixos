@@ -13,7 +13,7 @@
   extraLuaConfig = ''require("dz.init")'';
   plugins = let
     markdownWithQueries = pkgs.vimPlugins.nvim-treesitter-parsers.markdown.overrideAttrs { installQueries = true; };
-    orgWithQueries = pkgs.vimPlugins.nvim-treesitter-parsers.org.overrideAttrs { installQueries = true; };
+    /* orgWithQueries = pkgs.vimPlugins.nvim-treesitter-parsers.org.overrideAttrs { installQueries = true; }; */
     nvim-treesitter-with-plugins = pkgs.vimPlugins.nvim-treesitter.withPlugins (treesitter-plugins:
       with treesitter-plugins; [
         bash
@@ -46,7 +46,7 @@
         ocaml
         ocaml_interface
         ocamllex
-        orgWithQueries
+        /* orgWithQueries */
         purescript
         python
         rasi
