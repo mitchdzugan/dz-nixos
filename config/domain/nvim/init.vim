@@ -33,7 +33,7 @@ autocmd BufReadPost * if @% !~# '\.git[\/\\]COMMIT_EDITMSG$' && line("'\"") > 1 
 
 set background=dark
 " catppuccin-latte, catppuccin-frappe, catppuccin-macchiato, catppuccin-mocha
-colorscheme catppuccin-mocha
+" colorscheme catppuccin-mocha
 " colorscheme moonfly
 " colorscheme kanagawa-wave
 " colorscheme rose-pine-main

@@ -1,9 +1,9 @@
--- require("fluoromachine").setup({
-  -- glow = true,
-  -- theme = 'delta',
-  -- transparent = false,
--- })
--- vim.cmd.colorscheme 'fluoromachine'
+require("fluoromachine").setup({
+  glow = true,
+  theme = 'delta',
+  transparent = false,
+})
+vim.cmd.colorscheme 'fluoromachine'
 
 require("nvim-tree").setup({
   hijack_cursor = true,
