@@ -358,7 +358,7 @@ ACTION=="change", SUBSYSTEM=="drm", RUN+="${pkgs.autorandr}/bin/autorandr -c"
   users.users.dz = {
     isNormalUser = true;
     description = "Mitch Dzugan";
-    extraGroups = [ "audio" "networkmanager" "wheel" ];
+    extraGroups = [ "audio" "networkmanager" "wheel" "docker" ];
     packages = with pkgs; [ ];
     shell = pkgs.bash;
   };
@@ -970,6 +970,7 @@ ACTION=="change", SUBSYSTEM=="drm", RUN+="${pkgs.autorandr}/bin/autorandr -c"
           "waybar"
           "nm-applet"
           "blueman-applet"
+          "hyprsunset"
           "hyprctl setcursor BreezeX-RosePineDawn-Linux 32"
         ];
         env = [
@@ -1074,7 +1075,13 @@ ACTION=="change", SUBSYSTEM=="drm", RUN+="${pkgs.autorandr}/bin/autorandr -c"
               )
               10
           )
-        ) ++ (
+        );
+        binde = [
+          ",122, exec, bash -c volumeDown"
+          ",123, exec, bash -c volumeUp"
+          ",232, exec, bash -c brightnessDown"
+          ",233, exec, bash -c brightnessUp"
+        ] ++ (
           builtins.concatLists (
             builtins.map
               (d: [
@@ -1091,12 +1098,6 @@ ACTION=="change", SUBSYSTEM=="drm", RUN+="${pkgs.autorandr}/bin/autorandr -c"
               ]
           )
         );
-        binde = [
-          ",122, exec, bash -c volumeDown"
-          ",123, exec, bash -c volumeUp"
-          ",232, exec, bash -c brightnessDown"
-          ",233, exec, bash -c brightnessUp"
-        ];
         bindm = [
           "$mod, mouse:272, movewindow"
           "$mod SHIFT, mouse:272, resizewindow"
@@ -1372,9 +1373,13 @@ ACTION=="change", SUBSYSTEM=="drm", RUN+="${pkgs.autorandr}/bin/autorandr -c"
     clj-kondo
     joker
     coreutils
+    csharp-ls
+    dbeaver-bin
     discord
     distrobox
     dmenu
+    docker-compose
+    dotnet-sdk
     emacs
     esh
     fastfetch
@@ -1400,6 +1405,7 @@ ACTION=="change", SUBSYSTEM=="drm", RUN+="${pkgs.autorandr}/bin/autorandr -c"
     haskell-language-server
     heroku
     htop
+    hyprsunset
     (jetbrains.idea-community-bin.override {
       vmopts = ''
         -Dconsole.encoding=UTF-8
@@ -1681,8 +1687,10 @@ ACTION=="change", SUBSYSTEM=="drm", RUN+="${pkgs.autorandr}/bin/autorandr -c"
 
   virtualisation.podman = {
     enable = true;
-    dockerCompat = true;
+    dockerCompat = false;
   };
+
+  virtualisation.docker.enable = true;
 
   # This value determines the NixOS release from which the default
   # settings for stateful data, like file locations and database versions
